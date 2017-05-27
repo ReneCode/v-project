@@ -13,7 +13,7 @@
         </li>
       </ul>
 
-      <p class="navbar-text title">{{title}}</p>
+      <div class="navbar-text title">{{title}}</div>
 
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -30,9 +30,11 @@
 <script>
 export default {
   name: 'headline',
+  props: [
+    'title'
+  ],
   data () {
     return {
-      title: 'header title',
       loggedIn: false
     }
   },
@@ -60,5 +62,10 @@ export default {
 </script>
 
 <style>
-
+.title {
+  color: #3ee;
+  font-size: 18px;
+  line-height: 20px;
+  padding-left: 40px;
+}
 </style>

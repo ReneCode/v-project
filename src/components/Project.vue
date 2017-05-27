@@ -1,14 +1,11 @@
 <template>
   <div>
-    <headline></headline>
+    <headline :title="projectName"></headline>
 
-        <div class="headline-gap"></div>
-
-    <h1>Project</h1>
-    <h3>{{ projectId }}</h3>
+    <div class="headline-gap"></div>
 
     <ul>
-     <li v-for="page in pages">{{page.id}}</li>
+     <li v-for="page in pages">{{page.properties[11000]}} {{page.properties[11011]}}</li>
     </ul>
   </div>
 </template>
@@ -25,6 +22,7 @@ export default {
   data() {
     return {
       projectId: 0,
+      projectName: "",
       pages: [{name: "abc"}]
     }
   },
@@ -35,6 +33,11 @@ export default {
     projectService.getPages(this.projectId)
     .then((pages) => {
       this.pages = pages;
+    })
+
+    projectService.getProject(this.projectId)
+    .then(project => {
+      this.projectName = project.name;
     })
   },
 

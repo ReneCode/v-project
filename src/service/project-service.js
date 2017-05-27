@@ -2,6 +2,7 @@
 
 import Vue from "vue";
 import { UrlService } from "./url-service";
+import convertProperties from "./convert-properties"
 
 export class ProjectService {
 
@@ -16,9 +17,23 @@ export class ProjectService {
             const url = this.urlService.getUrl("projects");
             Vue.http.get(url)
                 .then((response) => {
-                    resolve(response.body);
+                    resolve(convertProperties(response.body));
                 },
                 (err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    getProject(projectId) {
+        return new Promise((resolve, reject) => {
+            const url = this.urlService.getUrl("projectById", projectId);
+            Vue.http.get(url)
+                .then((response) => {
+                    resolve(convertProperties(response.body));
+                },
+                (err) => {
+                    console.log(err);
                     reject(err);
                 });
         });
@@ -29,7 +44,7 @@ export class ProjectService {
             const url = this.urlService.getUrl("pagesByProjectId", projectId);
             Vue.http.get(url)
                 .then((response) => {
-                    resolve(response.body);
+                    resolve(convertProperties(response.body));
                 })
                 .catch((err) => {
                     reject(err);

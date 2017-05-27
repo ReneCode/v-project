@@ -3,7 +3,6 @@
   <headline></headline>
       <div class="headline-gap"></div>
 
-    <h1>{{ title }}</h1>
     <li v-for="project in projects">
       <router-link :to="'/project/' + project.id">{{project.name}}</router-link>
     </li>
@@ -22,7 +21,6 @@ export default {
   },
   data () {
     return {
-      title: 'Projects',
       projects: []
     }
   },

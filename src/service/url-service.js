@@ -1,20 +1,20 @@
+/* eslint-disable key-spacing */
 export class UrlService {
 
   urls = {};
 
   constructor() {
-    const host = environment.backendHost;
+    const host = "http://localhost:3000"; // environment.backendHost;
 
     this.urls = {
       projects:                   `${host}/api/v1/projects`,
       projectById:                `${host}/api/v1/projects/{1}`,
 
-      pagesByProjectId:           `${host}/api/v1/{1}/pages`,
-      pageByProjectIdAndPageId:   `${host}/api/v1/{1}/pages/{2}`,
+      pagesByProjectId:           `${host}/api/v1/projects/{1}/pages`,
+      pageByProjectIdAndPageId:   `${host}/api/v1/projects/{1}/pages/{2}`,
 
-      svgByProjectIdAndSortId:    `${host}/api/v1/{1}/svg/{2}.svg`
+      svgByProjectIdAndSortId:    `${host}/api/v1/projects/{1}/svg/{2}.svg`
     };
-
   }
 
   getUrl(type, ...args) {

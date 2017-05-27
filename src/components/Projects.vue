@@ -3,13 +3,17 @@
   <headline></headline>
       <div class="headline-gap"></div>
 
-    <h1>{{ msg }}</h1>
-    
+    <h1>{{ title }}</h1>
+    <li v-for="project in projects">
+      <router-link :to="'/project/' + project.id">{{project.name}}</router-link>
+    </li>
   </div>
 </template>
 
 <script>
 import Headline from './Headline.vue'
+// import ProjectService from '../service/project-service';
+import { ProjectService } from '../service/project-service';
 
 export default {
   name: 'hello',
@@ -18,7 +22,25 @@ export default {
   },
   data () {
     return {
-      msg: 'Projects'
+      title: 'Projects',
+      projects: []
+    }
+  },
+
+  beforeMount() {
+    this.loadProjects();
+  },
+
+  methods: {
+    loadProjects() {
+      const projectService = new ProjectService();
+      projectService.getProjects()
+      .then((projects) => {
+        this.projects = projects;
+      },
+      (err) => {
+        console.log("error", err);
+      });
     }
   }
 }
@@ -26,5 +48,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.headline-gap {
+    margin-top: 50px;
+}
 </style>

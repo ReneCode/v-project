@@ -2,7 +2,7 @@
 </template>
 
 <script>
-import auth from '../service/auth'
+import auth from '../service/auth-service'
 
 export default {
   name: '',

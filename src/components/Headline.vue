@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import auth from '../service/auth'
+import auth from '../service/auth-service'
 
 export default {
   name: 'headline',
@@ -48,7 +48,6 @@ export default {
   },
 
   created() {
-    console.log("##", auth)
   },
 
   methods: {

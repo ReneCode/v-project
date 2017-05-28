@@ -11,25 +11,54 @@ const CLIENT_ID = 'bJGXNSwOrFznt6ZYey6xDOsSb2IOGw6K';
 const CLIENT_DOMAIN = 'relang.eu.auth0.com';
 const REDIRECT = 'http://localhost:8080/callback';
 // const SCOPE = 'read:project';
-// const AUDIENCE = 'abc'; // https://epl-projectservice.azurewebsites.net/';
+// const AUDIENCE = 'https://epl-projectservice.azurewebsites.net/';
 
 const options = {
   auth: {
     redirect: true,
     redirectUrl: REDIRECT,
     responseType: 'token id_token'
+//    audience: AUDIENCE,
   }
+//  oidcConformat: true
 }
 
 class AuthService {
-  lock = new Auth0Lock(CLIENT_ID, CLIENT_DOMAIN, options);
+  lock = undefined;
+  router = undefined;
 
-  router = new Router({
-    mode: 'history'
-  });
+  constructor() {
+    this.lock = new Auth0Lock(CLIENT_ID, CLIENT_DOMAIN, options);
+
+    this.router = new Router({
+      mode: 'history'
+    });
+
+    const self = this;
+    this.lock.on("authenticated", function (authResult) {
+      console.log("## auth:", authResult);
+
+      // Use the token in authResult to getUserInfo() and save it to localStorage
+      self.lock.getUserInfo(authResult.accessToken, function (error, profile) {
+        debugger;
+        if (error) {
+          // Handle error
+          return;
+        }
+
+        localStorage.setItem('accessToken', authResult.accessToken);
+        localStorage.setItem('profile', JSON.stringify(profile));
+      });
+    });
+  }
 
   login() {
-    this.lock.show();
+    this.lock.show((err, profile, idToken, tok) => {
+      if (err) {
+        throw err;
+      }
+      debugger;
+    });
   }
 
   logout() {

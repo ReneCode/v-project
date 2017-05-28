@@ -1,20 +1,27 @@
 /* eslint-disable indent */
 
-import Vue from "vue";
 import { UrlService } from "./url-service";
+import auth from "./auth-service";
+import axios from 'axios';
 
 export class ProjectService {
 
     urlService = undefined;
+    http = undefined;
 
     constructor() {
         this.urlService = new UrlService();
+        this.http = axios.create({
+            headers: {
+                Authorization: "Bearer " + auth.getAccessToken()
+            }
+        })
     }
 
     getProjects() {
         return new Promise((resolve, reject) => {
             const url = this.urlService.getUrl("projects");
-            Vue.http.get(url)
+            this.http.get(url)
                 .then((response) => {
                     resolve(response.body);
                 },
@@ -27,7 +34,7 @@ export class ProjectService {
     getProject(projectId) {
         return new Promise((resolve, reject) => {
             const url = this.urlService.getUrl("projectById", projectId);
-            Vue.http.get(url)
+            axios.get(url)
                 .then((response) => {
                     resolve(response.body);
                 },
@@ -41,7 +48,7 @@ export class ProjectService {
     getPages(projectId) {
         return new Promise((resolve, reject) => {
             const url = this.urlService.getUrl("pagesByProjectId", projectId);
-            Vue.http.get(url)
+            axios.get(url)
                 .then((response) => {
                     resolve(response.body);
                 })

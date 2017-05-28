@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { isLoggedIn, login, logout } from '../service/auth'
+import auth from '../service/auth'
 
 export default {
   name: 'headline',
@@ -37,7 +37,7 @@ export default {
   ],
   data () {
     return {
-      loggedIn: false
+      a: 5
     }
   },
   computed: {
@@ -47,15 +47,19 @@ export default {
     }
   },
 
+  created() {
+    console.log("##", auth)
+  },
+
   methods: {
     login() {
-      login();
+      auth.login();
     },
     logout() {
-      logout();
+      auth.logout();
     },
     isLoggedIn() {
-      return isLoggedIn();
+      return auth.isLoggedIn();
     }
   }
 }

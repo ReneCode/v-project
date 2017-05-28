@@ -2,15 +2,15 @@
 </template>
 
 <script>
-import { setIdToken, setAccessToken } from '../service/auth'
+import auth from '../service/auth'
 
 export default {
   name: '',
 
   mounted() {
     this.$nextTick(() => {
-      setAccessToken();
-      setIdToken();
+      auth.setAccessToken();
+      auth.setIdToken();
       window.location.href = '/';
     })
   }

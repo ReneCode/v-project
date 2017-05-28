@@ -9,67 +9,86 @@ const ACCESS_TOKEN_KEY = 'access_token';
 // auth0 Client "v-project"  settings
 const CLIENT_ID = 'bJGXNSwOrFznt6ZYey6xDOsSb2IOGw6K';
 const CLIENT_DOMAIN = 'relang.eu.auth0.com';
-const REDIRECT = 'http://localhost:8080/callback';
+// const REDIRECT = 'http://localhost:8080/callback';
 // const SCOPE = 'read:project';
 // const AUDIENCE = 'https://epl-projectservice.azurewebsites.net/';
-
-const options = {
-  auth: {
-    redirect: true,
-    redirectUrl: REDIRECT,
-    responseType: 'token id_token'
-//    audience: AUDIENCE,
-  }
-//  oidcConformat: true
-}
 
 class AuthService {
   lock = undefined;
   router = undefined;
 
   constructor() {
-    this.lock = new Auth0Lock(CLIENT_ID, CLIENT_DOMAIN, options);
+    // const options = {
+    //   auth: {
+    //     redirect: true,
+    //     redirectUrl: REDIRECT,
+    //     responseType: 'token id_token'
+    //   }
+    // }
+    this.lock = new Auth0Lock(CLIENT_ID, CLIENT_DOMAIN);
 
     this.router = new Router({
       mode: 'history'
     });
+    /*
+        const self = this;
+        this.lock.on("authenticated", function (authResult) {
+          console.log("## auth:", authResult);
 
-    const self = this;
-    this.lock.on("authenticated", function (authResult) {
-      console.log("## auth:", authResult);
-
-      // Use the token in authResult to getUserInfo() and save it to localStorage
-      self.lock.getUserInfo(authResult.accessToken, function (error, profile) {
-        debugger;
-        if (error) {
-          // Handle error
-          return;
-        }
-
-        localStorage.setItem('accessToken', authResult.accessToken);
-        localStorage.setItem('profile', JSON.stringify(profile));
-      });
-    });
+          // Use the token in authResult to getUserInfo() and save it to localStorage
+          self.lock.getUserInfo(authResult.accessToken, function (error, profile) {
+            console.log("got user info")
+            if (error) {
+              // Handle error
+              return;
+            }
+            localStorage.setItem('accessToken', authResult.accessToken);
+            localStorage.setItem('profile', JSON.stringify(profile));
+          });
+        });
+        */
   }
 
   login() {
-    this.lock.show((err, profile, idToken, tok) => {
-      if (err) {
-        throw err;
+    // const opt = {
+    //   redirect: true,
+    //   callbackURL: REDIRECT,
+    //   responseType: 'token'
+    // }
+    // this.lock.showSignin(opt);
+
+    this.lock.show((error, profile, idToken) => {
+      if (error) {
+        console.log(error);
       }
-      debugger;
+      localStorage.setItem("profile", JSON.stringify(profile));
+      localStorage.setItem("id_token", idToken);
     });
   }
 
   logout() {
     this.clearIdToken();
     this.clearAccessToken();
+
     this.router.go('/');
   }
 
   isLoggedIn() {
-    const idToken = this.getIdToken();
+    let idToken = this.getIdToken();
+    if (idToken === "null") {
+      return false;
+    }
     return !!idToken && !this.isTokenExpired(idToken);
+  }
+
+  getUserName() {
+    if (this.isLoggedIn()) {
+      const profile = JSON.parse(localStorage.getItem('profile'));
+      if (profile) {
+        return profile.name;
+      }
+    }
+    return null;
   }
 
   // Get and store access_token in local storage
@@ -108,8 +127,9 @@ class AuthService {
 
   getTokenExpirationDate(encodedToken) {
     const token = decode(encodedToken);
-    if (!token.exp) { return null; }
-
+    if (!token.exp) {
+      return null;
+    }
     const date = new Date(0);
     date.setUTCSeconds(token.exp);
 
@@ -118,6 +138,9 @@ class AuthService {
 
   isTokenExpired(token) {
     const expirationDate = this.getTokenExpirationDate(token);
+    if (expirationDate == null) {
+      return true;
+    }
     return expirationDate < new Date();
   }
 }

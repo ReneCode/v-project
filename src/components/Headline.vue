@@ -3,13 +3,13 @@
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed"></button>
-      <a href="#" class="navbar-brand">CS2</a>
+      <a href="/" class="navbar-brand">CS2</a>
     </div>
 
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-left">
         <li>
-          <router-link to="projects">Projects</router-link>
+          <router-link to="/projects">Projects</router-link>
         </li>
       </ul>
 
@@ -41,9 +41,9 @@ export default {
     }
   },
   computed: {
-
     username() {
-      return "abc";
+      console.log("get user name");
+      return auth.getUserName();
     }
   },
 

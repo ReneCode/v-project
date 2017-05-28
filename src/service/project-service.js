@@ -7,23 +7,26 @@ import axios from 'axios';
 export class ProjectService {
 
     urlService = undefined;
-    http = undefined;
+    httpOption = undefined;
 
     constructor() {
         this.urlService = new UrlService();
-        this.http = axios.create({
+        // axios.defaults.headers.common['Authorization'] = "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3JlbGFuZy5ldS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NThjMzFmZjc0ZjIyMDkzZjkyN2VjNDY2IiwiYXVkIjoidVE1QVNkYlZjdVVhUmpUU2FSd0tLTUs0MGdqbDQ0ZnAiLCJleHAiOjE0OTYwMzc0NjIsImlhdCI6MTQ5NjAwMTQ2Mn0.Lj6XNGfeNcwXhhwdFfkpLMo2wAMki-5npej1GL8zVPQ";
+        axios.defaults.headers.common['Authorization'] = "Bearer " + auth.getIdToken();
+        this.httpOption = {
             headers: {
-                Authorization: "Bearer " + auth.getAccessToken()
+                "Content-Type": 'application/json'
             }
-        })
+        };
     }
 
     getProjects() {
         return new Promise((resolve, reject) => {
             const url = this.urlService.getUrl("projects");
-            this.http.get(url)
+            console.log(url);
+            axios.get(url)
                 .then((response) => {
-                    resolve(response.body);
+                    resolve(response.data);
                 },
                 (err) => {
                     reject(err);
@@ -36,7 +39,7 @@ export class ProjectService {
             const url = this.urlService.getUrl("projectById", projectId);
             axios.get(url)
                 .then((response) => {
-                    resolve(response.body);
+                    resolve(response.data);
                 },
                 (err) => {
                     console.log(err);
@@ -50,7 +53,7 @@ export class ProjectService {
             const url = this.urlService.getUrl("pagesByProjectId", projectId);
             axios.get(url)
                 .then((response) => {
-                    resolve(response.body);
+                    resolve(response.data);
                 })
                 .catch((err) => {
                     reject(err);

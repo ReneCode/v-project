@@ -17,8 +17,8 @@
 
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href="#" v-if="!authenticated" v-on:click="login()">Login</a>
-          <a href="#" v-if="authenticated" v-on:click="logout()">Logout</a>
+          <a href="#" v-if="isLoggedIn()" v-on:click="logout()">Logout</a>
+          <a href="#" v-if="!isLoggedIn()" v-on:click="login()">Login</a>
         </li>
       </ul>
       <p class="navbar-text navbar-right">{{username}}</p>
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import { isLoggedIn, login, logout } from '../service/auth'
+
 export default {
   name: 'headline',
   props: [
@@ -39,9 +41,7 @@ export default {
     }
   },
   computed: {
-    authenticated() {
-      return this.loggedIn;
-    },
+
     username() {
       return "abc";
     }
@@ -49,13 +49,13 @@ export default {
 
   methods: {
     login() {
-      this.loggedIn = true;
-      console.log("login")
+      login();
     },
-
     logout() {
-      this.loggedIn = false;
-      console.log("logout")
+      logout();
+    },
+    isLoggedIn() {
+      return isLoggedIn();
     }
   }
 }

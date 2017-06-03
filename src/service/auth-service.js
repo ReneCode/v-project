@@ -8,7 +8,7 @@ const PROFILE_KEY = 'profile';
 
 const CLIENT_ID = 'bJGXNSwOrFznt6ZYey6xDOsSb2IOGw6K';
 const CLIENT_DOMAIN = 'relang.eu.auth0.com';
-const REDIRECT = 'http://localhost:8080/callback';
+const REDIRECT = `${window.location.origin}/callback`;
 
 class AuthService {
   lock = undefined;

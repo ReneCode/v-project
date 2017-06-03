@@ -1,10 +1,11 @@
 /* eslint-disable key-spacing */
+
 export class UrlService {
 
   urls = {};
 
   constructor() {
-    const host = "http://localhost:3000"; // environment.backendHost;
+    const host = process.env.BACKEND_HOST;
 
     this.urls = {
       projects:                   `${host}/api/v1/projects`,

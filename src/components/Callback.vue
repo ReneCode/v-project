@@ -9,9 +9,7 @@ export default {
 
   mounted() {
     this.$nextTick(() => {
-      auth.setAccessToken();
-      auth.setIdToken();
-      window.location.href = '/';
+      auth.setIdTokenFromLocation();
     })
   }
 }

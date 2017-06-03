@@ -17,8 +17,8 @@
 
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href="#" v-if="isLoggedIn()" v-on:click="logout()">Logout</a>
-          <a href="#" v-if="!isLoggedIn()" v-on:click="login()">Login</a>
+          <a href="#" v-show="isLoggedIn" v-on:click="logout()">Logout</a>
+          <a href="#" v-show="!isLoggedIn" v-on:click="login()">Login</a>
         </li>
       </ul>
       <p class="navbar-text navbar-right">{{username}}</p>
@@ -42,9 +42,13 @@ export default {
   },
   computed: {
     username() {
-      console.log("get user name");
       return auth.getUserName();
+    },
+
+    isLoggedIn() {
+      return auth.isLoggedIn();
     }
+
   },
 
   created() {
@@ -56,9 +60,6 @@ export default {
     },
     logout() {
       auth.logout();
-    },
-    isLoggedIn() {
-      return auth.isLoggedIn();
     }
   }
 }

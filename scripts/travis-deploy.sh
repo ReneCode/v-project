@@ -16,8 +16,10 @@ git config user.name ${GIT_NAME}
 
 # copy new files
 cp -r ../dist/. .
-# copy web.config to root
-# cp ../dist/assets/web.config .
+
+# move web.config to root
+mv ../dist/web.config .
+
 git add .
 git commit -am"${gitCommitMessage}"
 git push > /dev/null 2>&1

@@ -1,6 +1,6 @@
 <template>
   <div>
-  <router-link :to="'/project/' + project.id">{{project.name}} / {{countPages}}</router-link>
+  <router-link :to="'/project/' + project.id">{{project.name}} [{{project.version}}] / {{countPages}}</router-link>
   </div>
 </template>
 

@@ -49,7 +49,6 @@ export class ProjectService {
                     resolve(response.data);
                 })
                 .catch((err) => {
-                    console.log(err);
                     reject(err);
                 });
         });
@@ -65,7 +64,6 @@ export class ProjectService {
             }
             this.authAxios.get(url, options)
                 .then((response) => {
-                    console.log(response.data);
                     resolve(response.data);
                 })
                 .catch((err) => {

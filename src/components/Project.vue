@@ -1,29 +1,33 @@
 <template>
   <div>
-    <headline :title="projectName"></headline>
+    <headline :title="title"></headline>
 
     <div class="headline-gap"></div>
 
-    <ul>
-     <li v-for="page in pages">{{page.properties[11000]}} {{page.properties[11011]}}</li>
-    </ul>
+    <div class="flex-container">
+     <div v-for="page in pages" class="flex-item page-preview" v-on:click="selectPage(page)">
+       <page-preview :page="page" />
+     </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Headline from './Headline.vue'
+import PagePreview from './PagePreview.vue'
 import { ProjectService } from "../service/project-service";
 
 export default {
   name: 'project',
   components: {
-    Headline
+    Headline,
+    PagePreview
   },
   data() {
     return {
       projectId: 0,
-      projectName: "",
-      pages: [{name: "abc"}]
+      title: "",
+      pages: []
     }
   },
 
@@ -37,7 +41,7 @@ export default {
 
     projectService.getProject(this.projectId)
     .then(project => {
-      this.projectName = project.name;
+      this.title = `${project.name} [${project.version}]`;
     })
   },
 
@@ -47,6 +51,8 @@ export default {
   },
 
   methods: {
+    selectPage(page) {
+    }
   }
 }
 </script>
@@ -56,4 +62,29 @@ export default {
 .headline-gap {
     margin-top: 50px;
 }
+
+.flex-container {
+  margin: 30px auto;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.flex-item {
+  border: 1px solid #bbb;
+  margin: 10px;
+  height: 150px;
+  width: 200px;
+  background-color: #eaeaea;
+}
+
+.page-preview {
+  cursor: pointer;
+  font-size: 12px;
+}
+
 </style>

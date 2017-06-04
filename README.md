@@ -1,5 +1,7 @@
 # v-project
 
+[![Build Status](https://travis-ci.org/ReneCode/v-project.svg?branch=master)](https://travis-ci.org/ReneCode/v-project)
+
 > A Vue.js project
 
 ## Build Setup

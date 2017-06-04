@@ -16,6 +16,8 @@ git config user.name ${GIT_NAME}
 
 # copy new files
 cp -r ../dist/. .
+rm ./static/js/*.map
+rm ./static/css/*.map
 
 # move web.config to root
 mv ./static/web.config .

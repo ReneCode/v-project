@@ -18,7 +18,7 @@ git config user.name ${GIT_NAME}
 cp -r ../dist/. .
 
 # move web.config to root
-mv ../dist/web.config .
+mv ./static/web.config .
 
 git add .
 git commit -am"${gitCommitMessage}"

@@ -13,6 +13,7 @@
         </li>
       </ul>
 
+      <router-link to="/hello">Hello</router-link>
       <div class="navbar-text title">{{title}}</div>
 
       <ul class="nav navbar-nav navbar-right">

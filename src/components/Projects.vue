@@ -1,23 +1,27 @@
 <template>
   <div>
   <headline></headline>
-      <div class="headline-gap"></div>
+    <div class="headline-gap"></div>
 
-    <li v-for="project in projects">
-      <router-link :to="'/project/' + project.id">{{project.name}}</router-link>
-    </li>
+    <div class="flex-container">
+      <div v-for="project in projects" class="flex-item project-preview" v-on:click="selectProject(project)">
+        <project-preview  :project="project">
+        </project-preview>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Headline from './Headline.vue'
-// import ProjectService from '../service/project-service';
+import ProjectPreview from './ProjectPreview';
 import { ProjectService } from '../service/project-service';
 
 export default {
   name: 'hello',
   components: {
-    Headline
+    Headline,
+    ProjectPreview
   },
   data () {
     return {
@@ -39,6 +43,10 @@ export default {
       (err) => {
         console.log("error", err);
       });
+    },
+
+    selectProject(project) {
+      console.log("project:", project.name);
     }
   }
 }
@@ -48,5 +56,28 @@ export default {
 <style scoped>
 .headline-gap {
     margin-top: 50px;
+}
+
+.flex-container {
+  margin: 30px auto;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.flex-item {
+  border: 1px solid #bbb;
+  margin: 10px;
+  height: 200px;
+  width: 300px;
+  background-color: #eaeaea;
+}
+
+.project-preview {
+  cursor: pointer;
 }
 </style>

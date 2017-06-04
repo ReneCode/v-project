@@ -55,6 +55,25 @@ export class ProjectService {
         });
     }
 
+    countPages(projectId) {
+        return new Promise((resolve, reject) => {
+            const url = this.urlService.getUrl("pagesByProjectId", projectId);
+            const options = {
+                params: {
+                    meta: "count"
+                }
+            }
+            this.authAxios.get(url, options)
+                .then((response) => {
+                    console.log(response.data);
+                    resolve(response.data);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
     getPages(projectId) {
         return new Promise((resolve, reject) => {
             const url = this.urlService.getUrl("pagesByProjectId", projectId);

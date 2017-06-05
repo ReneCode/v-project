@@ -13,7 +13,7 @@ export default {
   name: 'home',
   data () {
     return {
-      msg: 'Welcome to App'
+      msg: 'Welcome to the Vue App'
     }
   },
   components: {

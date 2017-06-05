@@ -20,7 +20,8 @@ export default {
   ],
   data () {
     return {
-      value: ''
+      value: '',
+      timeoutId: undefined
     }
   },
   components: {
@@ -31,7 +32,12 @@ export default {
       this.$emit('search', this.value);
     },
     keyUp() {
-      this.$emit('search', this.value);
+      if (this.timeoutId) {
+        clearTimeout(this.timeoutId);
+      }
+      this.timeoutId = setTimeout(() => {
+        this.$emit('search', this.value);
+      }, 300);
     }
   }
 }

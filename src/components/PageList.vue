@@ -7,7 +7,7 @@
     <search title="Pages" @search="onSearch" />
 
     <div class="flex-container">
-     <div v-for="page in pages" class="flex-item page-preview" v-on:click="selectPage(page)">
+     <div v-for="page in filteredPages" class="flex-item page-preview" v-on:click="selectPage(page)">
        <page-card :page="page" />
      </div>
     </div>
@@ -32,7 +32,21 @@ export default {
     return {
       projectId: 0,
       title: "",
-      pages: []
+      pages: [],
+      searchValue: ''
+    }
+  },
+
+  computed: {
+    filteredPages() {
+      const val = this.searchValue.toUpperCase();
+      return this.pages.filter((p) => {
+        if (!p.properties) {
+          return true;
+        }
+        return p.properties[11000].toUpperCase().indexOf(val) >= 0 ||
+               p.properties[11011].toUpperCase().indexOf(val) >= 0;
+      });
     }
   },
 
@@ -50,11 +64,6 @@ export default {
     })
   },
 
-  computed() {
-    return {
-    }
-  },
-
   methods: {
     selectPage(page) {
       const urlService = new UrlService();
@@ -63,6 +72,8 @@ export default {
     },
 
     onSearch(value) {
+      console.log("page search");
+      this.searchValue = value;
     }
   }
 }

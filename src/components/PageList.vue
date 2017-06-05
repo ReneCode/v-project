@@ -4,9 +4,11 @@
 
     <div class="headline-gap"></div>
 
+    <search title="Pages" @search="onSearch" />
+
     <div class="flex-container">
      <div v-for="page in pages" class="flex-item page-preview" v-on:click="selectPage(page)">
-       <page-preview :page="page" />
+       <page-card :page="page" />
      </div>
     </div>
   </div>
@@ -14,14 +16,17 @@
 
 <script>
 import Headline from './Headline.vue'
-import PagePreview from './PagePreview.vue'
+import PageCard from './PageCard.vue'
+import Search from './Search.vue'
 import { ProjectService } from "../service/project-service";
+import { UrlService } from "../service/url-service";
 
 export default {
-  name: 'project',
+  name: '',
   components: {
     Headline,
-    PagePreview
+    PageCard,
+    Search
   },
   data() {
     return {
@@ -52,6 +57,12 @@ export default {
 
   methods: {
     selectPage(page) {
+      const urlService = new UrlService();
+      const link = urlService.getLink('pageByProjectIdAndPageId', this.projectId, page.id);
+      this.$router.push(link);
+    },
+
+    onSearch(value) {
     }
   }
 }

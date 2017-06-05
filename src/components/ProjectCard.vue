@@ -1,17 +1,17 @@
 <template>
   <div>
-  {{page.properties[11000]}} {{page.properties[11011]}}
+  {{project.name}} [{{project.version}}] / {{countPages}}
   </div>
 </template>
 
 <script>
-// import { ProjectService } from "../service/project-service";
+import { ProjectService } from "../service/project-service";
 
 export default {
-  name: 'page-preview',
+  name: 'project-card',
   components: {
   },
-  props: ['page'],
+  props: ['project'],
 
   data() {
     return {
@@ -20,7 +20,10 @@ export default {
   },
 
   beforeMount() {
-//    let projectService = new ProjectService();
+    let projectService = new ProjectService();
+    projectService.countPages(this.project.id).then(count => {
+      this.countPages = count;
+    });
   },
 
   computed: {

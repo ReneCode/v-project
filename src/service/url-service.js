@@ -3,6 +3,7 @@
 export class UrlService {
 
   urls = {};
+  links = {};
 
   constructor() {
     const host = process.env.BACKEND_HOST;
@@ -16,6 +17,19 @@ export class UrlService {
 
       svgByProjectIdAndSortId:    `${host}/api/v1/projects/{1}/svg/{2}.svg`
     };
+
+    this.links = {
+      projectByProjectId:          '/project/{1}',
+      pageByProjectIdAndPageId:    '/project/{1}/page/{2}'
+    }
+  }
+
+  getLink(type, ...args) {
+    let link = this.links[type];
+    if (!link) {
+      throw Error("bad link type:" + type);
+    }
+    return this.fillParameter(link, ...args);
   }
 
   getUrl(type, ...args) {
@@ -23,15 +37,18 @@ export class UrlService {
     if (!url) {
       throw Error("bad url type:" + type);
     }
+    return this.fillParameter(url, ...args);
+  }
 
+  fillParameter(text, ...args) {
     const count = args.length;
     for (let i = 0; i < count; i++) {
       const arg = args[i];
       const replace = "{" + (i + 1) + "}";
-      url = url.replace(replace, arg);
+      text = text.replace(replace, arg);
     }
 
-    return url;
+    return text;
   }
 
 }

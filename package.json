@@ -12,12 +12,13 @@
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
-    "mocha": "mocha test/**/*.test.js"
+    "mocha": "mocha --compilers js:babel-core/register test/**/*.test.js"
   },
   "dependencies": {
     "auth0-js": "^8.7.0",
     "auth0-lock": "^10.16.0",
     "axios": "^0.16.1",
+    "debounce": "^1.0.2",
     "jwt-decode": "^2.2.0",
     "vue": "^2.3.3",
     "vue-router": "^2.3.1"

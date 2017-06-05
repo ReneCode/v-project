@@ -3,10 +3,12 @@
   <headline></headline>
     <div class="headline-gap"></div>
 
+    <search title="Projects" @search="onSearch" />
+
     <div class="flex-container">
       <div v-for="project in projects" class="flex-item project-preview" v-on:click="selectProject(project)">
-        <project-preview  :project="project">
-        </project-preview>
+        <project-card :project="project">
+        </project-card>
       </div>
     </div>
   </div>
@@ -14,14 +16,17 @@
 
 <script>
 import Headline from './Headline.vue'
-import ProjectPreview from './ProjectPreview';
+import ProjectCard from './ProjectCard';
+import Search from './Search';
+import { UrlService } from '../service/url-service'
 import { ProjectService } from '../service/project-service';
 
 export default {
-  name: 'hello',
+  name: '',
   components: {
     Headline,
-    ProjectPreview
+    ProjectCard,
+    Search
   },
   data () {
     return {
@@ -46,7 +51,13 @@ export default {
     },
 
     selectProject(project) {
-      console.log("project:", project.name);
+      const urlService = new UrlService();
+      const link = urlService.getLink('projectByProjectId', project.id);
+      this.$router.push(link);
+    },
+
+    onSearch(value) {
+      console.log("# search:", value);
     }
   }
 }

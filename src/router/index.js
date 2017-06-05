@@ -2,8 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Hello from '@/components/Hello'
 import Home from '@/components/Home'
-import Projects from '@/components/Projects'
-import Project from '@/components/Project'
+import ProjectsList from '@/components/ProjectsList'
+import PageList from '@/components/PageList'
+import Page from '@/components/Page'
 import Callback from '@/components/Callback'
 
 import authService from '../service/auth-service';
@@ -24,8 +25,9 @@ export default new Router({
   mode: 'history',
   routes: [
     { path: '/hello', name: 'hello', component: Hello },
-    { path: '/projects', name: 'projects', component: Projects, beforeEnter: requireAuth },
-    { path: '/project/:id', name: 'project', component: Project },
+    { path: '/projects', name: 'projects', component: ProjectsList, beforeEnter: requireAuth },
+    { path: '/project/:id', name: 'project', component: PageList },
+    { path: '/project/:id/page/:pageId', name: 'page', component: Page },
     { path: '/', name: 'home', component: Home },
     { path: '/callback', component: Callback }]
 });

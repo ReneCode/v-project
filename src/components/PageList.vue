@@ -51,7 +51,7 @@ export default {
   },
 
   beforeMount() {
-    this.projectId = this.$route.params.id;
+    this.projectId = this.$route.params.projectId;
     const projectService = new ProjectService();
     projectService.getPages(this.projectId)
     .then((pages) => {

@@ -90,4 +90,30 @@ export class ProjectService {
         //   console.log("error", err);
         // });
     }
+
+    getPage(projectId, pageId) {
+        return new Promise((resolve, reject) => {
+            const url = this.urlService.getUrl('pageByProjectIdAndPageId', projectId, pageId);
+            this.authAxios.get(url)
+                .then((response) => {
+                    resolve(response.data);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
+
+    getSvg(projectId, svgName) {
+        return new Promise((resolve, reject) => {
+            const url = this.urlService.getUrl('svgByProjectIdAndSortId', projectId, svgName);
+            this.authAxios.get(url)
+                .then((response) => {
+                    resolve(response.data);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        });
+    }
 }

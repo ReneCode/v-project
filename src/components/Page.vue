@@ -3,15 +3,14 @@
     <headline :title="title"></headline>
     <div class="headline-gap"></div>
     <div class="svg-frame">
-    <render-svg :svg="svg"></render-svg>
+    <page-svg :projectId="projectId" :pageId="pageId" :width="600" :height="400"></page-svg>
     </div>
   </div>
 </template>
 
 <script>
 import Headline from './Headline.vue'
-import RenderSvg from './RenderSvg.vue'
-import { ProjectService } from '../service/project-service'
+import PageSvg from './PageSvg.vue'
 
 export default {
   name: '',
@@ -20,37 +19,17 @@ export default {
       title: undefined,
       projectId: undefined,
       pageId: undefined,
-      projectService: undefined,
-      svg: undefined
+      projectService: undefined
     }
   },
   components: {
     Headline,
-    RenderSvg
+    PageSvg
   },
   beforeMount() {
     this.projectId = this.$route.params.projectId;
     this.pageId = this.$route.params.pageId;
-    this.projectService = new ProjectService();
-
-    this.projectService.getPage(this.projectId, this.pageId)
-      .then((page) => {
-        this.title = `${page.properties[11000]} ${page.properties[11011]}`;
-        this.page = page;
-        return page.sortId;
-      })
-      .then((sortId) => {
-        return this.projectService.getSvg(this.projectId, sortId)
-      })
-      .then((svg) => {
-        this.svg = svg;
-      });
   }
-
-  // render: function(createElement) {
-  //   console.log("render")
-  //   return createElement(this.rawSvg);
-  // }
 
 }
 </script>

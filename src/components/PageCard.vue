@@ -1,34 +1,20 @@
 <template>
   <div class="name">
   {{page.properties[11000]}} {{page.properties[11011]}}
+  <page-svg :page_="page" :width="190" :height="130"></page-svg>
+
   </div>
 </template>
 
 <script>
-// import { ProjectService } from "../service/project-service";
+import PageSvg from './PageSvg.vue'
 
 export default {
   name: 'page-card',
   components: {
+    PageSvg
   },
-  props: ['page'],
-
-  data() {
-    return {
-      countPages: 0
-    }
-  },
-
-  beforeMount() {
-//    let projectService = new ProjectService();
-  },
-
-  computed: {
-  },
-
-  methods: {
-
-  }
+  props: ['page']
 }
 </script>
 

@@ -13,6 +13,12 @@
         </li>
       </ul>
 
+      <ul v-if="DEBUG_MODE" class="nav navbar-nav navbar-left">
+        <li>
+          <router-link to="/hello">Hello</router-link>
+        </li>
+      </ul>
+
       <div class="navbar-text title">{{title}}</div>
 
       <ul class="nav navbar-nav navbar-right">
@@ -37,7 +43,7 @@ export default {
   ],
   data () {
     return {
-      a: 5
+      DEBUG_MODE: false
     }
   },
   computed: {

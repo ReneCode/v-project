@@ -1,5 +1,8 @@
 <template>
-  <render-svg :svg="svg" :width="width" :height="height">
+  <render-svg 
+    v-on:mouse-wheel-up="onMouseWheelUp" 
+    v-on:mouse-wheel-down="onMouseWheelDown" 
+  :svg="svg" :width="width" :height="height">
   </render-svg>
 </template>
 
@@ -36,6 +39,14 @@ export default {
   },
 
   methods: {
+    onMouseWheelUp(ev) {
+      console.log("up")
+    },
+
+    onMouseWheelDown(ev) {
+      console.log("down")
+    },
+
     getPageData(page) {
       this.title = `${page.properties[11000]} ${page.properties[11011]}`;
       return this.projectService.getSvg(page.projectId, page.sortId)

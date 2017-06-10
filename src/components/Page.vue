@@ -2,15 +2,16 @@
   <div>
     <headline :title="title"></headline>
     <div class="headline-gap"></div>
-    <div class="svg-frame">
-    <page-svg :projectId="projectId" :pageId="pageId" :width="600" :height="400"></page-svg>
-    </div>
+    <page-svg class="svg-frame"
+      :projectId="projectId" :pageId="pageId" :width="600" :height="400">
+      </page-svg>
   </div>
 </template>
 
 <script>
 import Headline from './Headline.vue'
 import PageSvg from './PageSvg.vue'
+import MouseWheel from '../directives/MouseWheel'
 
 export default {
   name: '',
@@ -24,11 +25,18 @@ export default {
   },
   components: {
     Headline,
-    PageSvg
+    PageSvg,
+    MouseWheel
   },
   beforeMount() {
     this.projectId = this.$route.params.projectId;
     this.pageId = this.$route.params.pageId;
+  },
+
+  methods: {
+    onMouseWheel(v) {
+      console.log("on mouse wheel:", v);
+    }
   }
 
 }

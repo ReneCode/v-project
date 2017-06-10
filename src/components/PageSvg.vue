@@ -1,16 +1,18 @@
+wait for svg-loader directive until svg is loaded
+
 <template>
-  <svg width="1200" height="700" :viewBox="viewBox">
-    <g v-svg-loader="{svg:svg, callback:svgCallback}">
-      <!--<render-svg v-on:mouse-wheel-up="onMouseWheelUp" v-on:mouse-wheel-down="onMouseWheelDown" :svg="svg" :width="width" :height="height">
-      </render-svg>-->
+  <svg width="1200" height="700" :viewBox="viewBox" v-on:wheel="onMouseWheel">
+    <g :transform="transform">
+      <g v-if="svg" v-svg-loader="{svg:svg, callback:svgLoaderCallback}">
+      </g>
     </g>
   </svg>
 </template>
 
 <script>
-import RenderSvg from './RenderSvg.vue'
 import { ProjectService } from '../service/project-service'
 import SvgLoader from '../directives/svg-loader'
+import SvgTransformer from '../util/svg-transformer'
 
 export default {
   name: 'page-svg',
@@ -22,11 +24,11 @@ export default {
   data() {
     return {
       svg: undefined,
-      viewBox: ""
+      viewBox: undefined,
+      transform: undefined
     }
   },
   components: {
-    RenderSvg,
     SvgLoader
   },
   beforeMount() {
@@ -42,20 +44,34 @@ export default {
     }
   },
 
+  mounted() {
+    this.svgTransformer = new SvgTransformer(this.$el, this.updateTransform)
+  },
+
   methods: {
-    svgCallback(ev) {
+    updateTransform(transform) {
+      this.transform = transform;
+    },
+    svgLoaderCallback(ev) {
       switch (ev.msg) {
         case "viewBox":
           this.viewBox = ev.val;
       }
-      console.log("callback:", ev);
     },
-    onMouseWheelUp(ev) {
-      console.log("up")
-    },
-
-    onMouseWheelDown(ev) {
-      console.log("down")
+    onMouseWheel(ev) {
+      const event = window.event || ev; // old IE support
+      const delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
+      if (delta > 0) {
+        this.svgTransformer.zoomIn(event);
+      } else if (delta < 0) {
+        this.svgTransformer.zoomOut(event);
+      }
+      // for IE
+      event.returnValue = false;
+      // for Chrome and Firefox
+      if (event.preventDefault) {
+        event.preventDefault();
+      }
     },
 
     getPageData(page) {

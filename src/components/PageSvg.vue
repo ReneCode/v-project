@@ -1,14 +1,16 @@
 <template>
-  <render-svg 
-    v-on:mouse-wheel-up="onMouseWheelUp" 
-    v-on:mouse-wheel-down="onMouseWheelDown" 
-  :svg="svg" :width="width" :height="height">
-  </render-svg>
+  <svg width="1200" height="700" :viewBox="viewBox">
+    <g v-svg-loader="{svg:svg, callback:svgCallback}">
+      <!--<render-svg v-on:mouse-wheel-up="onMouseWheelUp" v-on:mouse-wheel-down="onMouseWheelDown" :svg="svg" :width="width" :height="height">
+      </render-svg>-->
+    </g>
+  </svg>
 </template>
 
 <script>
 import RenderSvg from './RenderSvg.vue'
 import { ProjectService } from '../service/project-service'
+import SvgLoader from '../directives/svg-loader'
 
 export default {
   name: 'page-svg',
@@ -19,11 +21,13 @@ export default {
   ],
   data() {
     return {
-      svg: undefined
+      svg: undefined,
+      viewBox: ""
     }
   },
   components: {
-    RenderSvg
+    RenderSvg,
+    SvgLoader
   },
   beforeMount() {
     this.projectService = new ProjectService();
@@ -39,6 +43,13 @@ export default {
   },
 
   methods: {
+    svgCallback(ev) {
+      switch (ev.msg) {
+        case "viewBox":
+          this.viewBox = ev.val;
+      }
+      console.log("callback:", ev);
+    },
     onMouseWheelUp(ev) {
       console.log("up")
     },

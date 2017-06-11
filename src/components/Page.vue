@@ -3,7 +3,7 @@
     <headline :title="title"></headline>
     <div class="headline-gap"></div>
     <page-svg class="svg-page"
-      :projectId="projectId" :pageId="pageId" :width="600" :height="400">
+      :projectId="projectId" :pageId="pageId" :width="600" :height="400" >
       </page-svg>
   </div>
 </template>
@@ -45,6 +45,7 @@ export default {
 .svg-page {
   text-align: center;
   padding: 10px;
+  background-color: #eee;
 }
 </style>
 

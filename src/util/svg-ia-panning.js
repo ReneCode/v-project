@@ -2,10 +2,12 @@
 class SvgInteractionPanning {
   constructor(svgTransformer) {
     this.svgTransformer = svgTransformer;
+    this.counter = 0;
   }
 
   onMouseDown(event) {
-    this.startPoint = this.svgTransformer.getSVGPoint(event);
+    this.startTranslate = this.svgTransformer.getTranslate();
+    this.startPoint = this.svgTransformer.getPoint(event);
   }
 
   onMouseUp(event) {
@@ -14,12 +16,13 @@ class SvgInteractionPanning {
   }
   onMouseMove(event) {
     if (this.startPoint) {
-      let currentPoint = this.svgTransformer.getSVGPoint(event);
-      let delta = {
-        x: currentPoint.x - this.startPoint.x,
-        y: currentPoint.y - this.startPoint.y
+      this.counter++;
+      let currentPoint = this.svgTransformer.getPoint(event);
+      let newTranslate = {
+        x: currentPoint.x - this.startPoint.x + this.startTranslate.x,
+        y: currentPoint.y - this.startPoint.y + this.startTranslate.y
       }
-      this.svgTransformer.pan(delta);
+      this.svgTransformer.setTranslate(newTranslate);
     }
   }
 }

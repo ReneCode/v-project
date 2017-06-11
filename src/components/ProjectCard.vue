@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { ProjectService } from "../service/project-service";
+import { ProjectService } from "../services/project-service";
 
 export default {
   name: 'project-card',

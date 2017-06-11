@@ -1,7 +1,7 @@
 
 require('chai').should();
 
-import { UrlService } from '../../../src/service/url-service';
+import { UrlService } from '../../../src/services/url-service';
 
 describe('UrlService', () => {
   var urlService = new UrlService();

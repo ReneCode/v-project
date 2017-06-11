@@ -1,7 +1,7 @@
-wait for svg-loader directive until svg is loaded
+// wait for svg-loader directive until svg is loaded
 
 <template>
-  <svg width="1200" height="700" :viewBox="viewBox" v-on:wheel="onMouseWheel">
+  <svg width="1200" height="700" :viewBox="viewBox" >
     <g :transform="transform">
       <g v-if="svg" v-svg-loader="{svg:svg, callback:svgLoaderCallback}">
       </g>
@@ -10,9 +10,10 @@ wait for svg-loader directive until svg is loaded
 </template>
 
 <script>
-import { ProjectService } from '../service/project-service'
+import { ProjectService } from '../services/project-service'
 import SvgLoader from '../directives/svg-loader'
 import SvgTransformer from '../util/svg-transformer'
+import SvgInteraction from '../util/svg-interaction'
 
 export default {
   name: 'page-svg',
@@ -46,6 +47,7 @@ export default {
 
   mounted() {
     this.svgTransformer = new SvgTransformer(this.$el, this.updateTransform)
+    this.svgInteraction = new SvgInteraction(this.$el, this.svgTransformer);
   },
 
   methods: {
@@ -56,21 +58,6 @@ export default {
       switch (ev.msg) {
         case "viewBox":
           this.viewBox = ev.val;
-      }
-    },
-    onMouseWheel(ev) {
-      const event = window.event || ev; // old IE support
-      const delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
-      if (delta > 0) {
-        this.svgTransformer.zoomIn(event);
-      } else if (delta < 0) {
-        this.svgTransformer.zoomOut(event);
-      }
-      // for IE
-      event.returnValue = false;
-      // for Chrome and Firefox
-      if (event.preventDefault) {
-        event.preventDefault();
       }
     },
 

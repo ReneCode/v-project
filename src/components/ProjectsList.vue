@@ -18,8 +18,8 @@
 import Headline from './Headline.vue'
 import ProjectCard from './ProjectCard';
 import Search from './Search';
-import { UrlService } from '../service/url-service'
-import { ProjectService } from '../service/project-service';
+import { UrlService } from '../services/url-service'
+import { ProjectService } from '../services/project-service';
 
 export default {
   name: '',

@@ -43,9 +43,18 @@ class SvgTransformer {
     this.zoom(pt, scale);
   }
 
+  pan(delta) {
+    this.transformData.tx += delta.x;
+    this.transformData.ty += delta.y;
+    this.updateTransform();
+  }
+
   // ----------
 
   getSVGPoint(event) {
+    if (!event) {
+      throw new Error("getSVGPoint: event missing");
+    }
     const svg = this.svgElement;
     let pt = svg.createSVGPoint();
 
@@ -65,6 +74,10 @@ class SvgTransformer {
     this.transformData.sc = scale;
     this.transformData.tx -= deltaScale * pt.x;
     this.transformData.ty -= deltaScale * pt.y;
+    this.updateTransform();
+  }
+
+  updateTransform() {
     if (this.transformCallback) {
       this.transformCallback(this.transformData.getTransform());
     }

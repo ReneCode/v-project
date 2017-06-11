@@ -7,7 +7,7 @@ import PageList from '@/components/PageList'
 import Page from '@/components/Page'
 import Callback from '@/components/Callback'
 
-import authService from '../service/auth-service';
+import authService from '../services/auth-service';
 
 Vue.use(Router)
 

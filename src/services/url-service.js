@@ -6,16 +6,18 @@ export class UrlService {
   links = {};
 
   constructor() {
-    const host = process.env.BACKEND_HOST;
+    const hostProject = process.env.BACKEND_PROJECT_HOST;
+    const hostPicture = process.env.BACKEND_PICTURE_HOST;
 
     this.urls = {
-      projects:                   `${host}/api/v1/projects`,
-      projectById:                `${host}/api/v1/projects/{1}`,
+      projects:                   `${hostProject}/api/v1/projects`,
+      projectById:                `${hostProject}/api/v1/projects/{1}`,
 
-      pagesByProjectId:           `${host}/api/v1/projects/{1}/pages`,
-      pageByProjectIdAndPageId:   `${host}/api/v1/projects/{1}/pages/{2}`,
+      pagesByProjectId:           `${hostProject}/api/v1/projects/{1}/pages`,
+      pageByProjectIdAndPageId:   `${hostProject}/api/v1/projects/{1}/pages/{2}`,
 
-      svgByProjectIdAndSortId:    `${host}/api/v1/projects/{1}/svg/{2}.svg`
+      svgByProjectIdAndSortId:    `${hostPicture}/api/v1/svgs/{1}/{2}.svg`,
+      svgPngByProjectIdAndSortId: `${hostPicture}/api/v1/svgs/{1}/{2}.svg/png`
     };
 
     this.links = {

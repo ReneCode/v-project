@@ -2,14 +2,16 @@
   <div>
     <headline :title="title"></headline>
     <div class="headline-gap"></div>
+    <toolbar></toolbar>
     <page-svg class="svg-page"
-      :projectId="projectId" :pageId="pageId" :width="600" :height="400" >
+      :projectId="projectId" :pageId="pageId" :width="500" :height="400" >
       </page-svg>
   </div>
 </template>
 
 <script>
 import Headline from './Headline.vue'
+import Toolbar from './Toolbar.vue'
 import PageSvg from './PageSvg.vue'
 
 export default {
@@ -24,7 +26,8 @@ export default {
   },
   components: {
     Headline,
-    PageSvg
+    PageSvg,
+    Toolbar
   },
   beforeMount() {
     this.projectId = this.$route.params.projectId;

@@ -3,5 +3,6 @@ var prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  BACKEND_HOST: '"http://localhost:3000"' 
+  BACKEND_PROJECT_HOST: '"http://localhost:3001"',
+  BACKEND_PICTURE_HOST: '"http://localhost:3002"' 
 })

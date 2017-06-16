@@ -2,10 +2,12 @@
   <div>
     <headline :title="title"></headline>
     <div class="headline-gap"></div>
-    <toolbar></toolbar>
-    <page-svg class="svg-page"
-      :projectId="projectId" :pageId="pageId" :width="500" :height="400" >
+    <div class="flex-container">
+      <toolbar></toolbar>
+      <page-svg class="svg-page"
+        :projectId="projectId" :pageId="pageId" :width="500" :height="400" >
       </page-svg>
+    </div>
   </div>
 </template>
 
@@ -49,6 +51,11 @@ export default {
   text-align: center;
   padding: 10px;
   background-color: #eee;
+  flex-grow:1;
+}
+.flex-container {
+  display: flex;
+  flex-direction: row;
 }
 </style>
 

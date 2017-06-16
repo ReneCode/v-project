@@ -1,8 +1,24 @@
 <template>
   <div id="toolbar">
-    <i @click="addNote" class="glyphicon glyphicon-plus"></i>
-    <i @click="toggleFavorite" class="glyphicon glyphicon-star"></i>
-    <i @click="deleteNote" class="glyphicon glyphicon-remove"></i>
+    <ul>
+      <li>
+        <i @click="addText" class="glyphicon glyphicon-font"></i>
+      </li>
+      <li>
+        <i @click="editItem" class="glyphicon glyphicon-pencil"></i>
+      </li>
+      <li>
+        <i @click="deleteItem" class="glyphicon glyphicon-trash"></i>
+      </li>
+
+      
+      <li>
+        <i @click="previousPage" class="glyphicon glyphicon-arrow-left"></i>
+      </li>
+      <li>
+        <i @click="nextPage" class="glyphicon glyphicon-arrow-right"></i>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -10,21 +26,32 @@
 export default {
 
   methods: {
-    addNote() { },
-    toggleFavorite() { },
-    deleteNote() { }
+    addText() { },
+    editItem() { },
+    deleteItem() { },
+    previousPage() { },
+    nextPage() { }
   }
 }
 </script>
 
-<style>
+<style scoped>
+
 #toolbar {
-  float: left;
-  width: 80px;
-  height: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
   background-color: #555;
   color: #777;
-  padding: 35px 25px 25px 25px;
+  padding-top: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+ul {
+  height: 100%;
+  list-style: none;
+  flex-grow: 1;
+  padding-left: 0px;
 }
 
 
@@ -32,7 +59,7 @@ export default {
   font-size: 30px;
   margin-bottom: 35px;
   cursor: pointer;
-  color: #ccc;
+  color: #ddd;
   opacity: 0.4;
   transition: opacity 0.2s ease;
 }
@@ -40,5 +67,4 @@ export default {
 #toolbar i:hover {
   opacity: 1;
 }
-
 </style>

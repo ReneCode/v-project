@@ -32,16 +32,12 @@ export default {
       });
 
     let svgService = new SvgService();
-    console.log("getPicture");
     svgService.getSvgAsImage(this.project.id, "1")
       .then((image) => {
-        console.log("got the Picture:", image);
         let array = new Uint8Array(image);
-        console.log("got the Picture:", array);
         let blob = new Blob([array]);
         const urlCreator = window.URL || window.webkitURL || window;
         const imageUrl = urlCreator.createObjectURL(blob);
-        console.log(imageUrl);
         this.pageImage = imageUrl;
         // var encoded = new TextEncoderLite('utf-8').encode(image);
         // console.log(encoded);

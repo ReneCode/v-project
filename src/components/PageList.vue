@@ -72,7 +72,6 @@ export default {
     },
 
     onSearch(value) {
-      console.log("page search");
       this.searchValue = value;
     }
   }

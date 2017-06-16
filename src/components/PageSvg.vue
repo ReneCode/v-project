@@ -2,9 +2,10 @@
 
 <template>
   <svg width="1200" height="700" :viewBox="viewBox" >
-    <g :transform="transform">
+    <g :transform="transform">     
       <g v-if="svg" v-svg-loader="{svg:svg, callback:svgLoaderCallback}">
       </g>
+      <svg-item v-for="item in items" :key="item.id" :item="item"></svg-item>
     </g>
   </svg>
 </template>
@@ -14,6 +15,8 @@ import { ProjectService } from '../services/project-service'
 import SvgLoader from '../directives/svg-loader'
 import SvgTransformer from '../util/svg-transformer'
 import SvgInteraction from '../util/svg-interaction'
+import EventBus from '../util/event-bus';
+import SvgItem from './SvgItem';
 
 export default {
   name: 'page-svg',
@@ -26,14 +29,17 @@ export default {
     return {
       svg: undefined,
       viewBox: undefined,
-      transform: undefined
+      transform: undefined,
+      items: []
     }
   },
   components: {
-    SvgLoader
+    SvgLoader,
+    SvgItem
   },
   beforeMount() {
     this.projectService = new ProjectService();
+    EventBus.on('addTextItem', this.addText);
 
     if (!this.page) {
       this.projectService.getPage(this.projectId, this.pageId)
@@ -43,6 +49,10 @@ export default {
     } else {
       this.getPageData(this.page);
     }
+  },
+
+  beforeDestroy() {
+    EventBus.off('addTextItem', this.addText);
   },
 
   mounted() {
@@ -67,6 +77,17 @@ export default {
         .then((svg) => {
           this.svg = svg;
         });
+    },
+
+    addText(textValue) {
+      let text = {
+        type: "text",
+        text: textValue,
+        x: Math.floor(Math.random() * 400),
+        y: Math.floor(Math.random() * 300),
+        fontSize: 5 + Math.floor(Math.random() * 20)
+      };
+      this.items.push(text);
     }
   }
 

@@ -2,7 +2,7 @@
   <div id="toolbar">
     <ul>
       <li>
-        <i @click="addText" class="glyphicon glyphicon-font"></i>
+        <i @click="addTextItem" class="glyphicon glyphicon-font"></i>
       </li>
       <li>
         <i @click="editItem" class="glyphicon glyphicon-pencil"></i>
@@ -10,8 +10,7 @@
       <li>
         <i @click="deleteItem" class="glyphicon glyphicon-trash"></i>
       </li>
-
-      
+  
       <li>
         <i @click="previousPage" class="glyphicon glyphicon-arrow-left"></i>
       </li>
@@ -23,20 +22,28 @@
 </template>
 
 <script>
+
+import EventBus from '../util/event-bus';
+
 export default {
 
   methods: {
-    addText() { },
+    addTextItem() {
+      EventBus.emit('addTextItem', "new text");
+    },
     editItem() { },
     deleteItem() { },
-    previousPage() { },
-    nextPage() { }
+    previousPage() {
+      EventBus.emit('previousPage');
+    },
+    nextPage() {
+      EventBus.emit('nextPage');
+    }
   }
 }
 </script>
 
 <style scoped>
-
 #toolbar {
   text-align: center;
   display: flex;
@@ -47,6 +54,7 @@ export default {
   padding-left: 15px;
   padding-right: 15px;
 }
+
 ul {
   height: 100%;
   list-style: none;

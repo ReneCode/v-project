@@ -52,7 +52,7 @@ export default {
   color: #777;
   padding-top: 30px;
   padding-left: 15px;
-  padding-right: 15px;
+  padding-right: 20px;
 }
 
 ul {

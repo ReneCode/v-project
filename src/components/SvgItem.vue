@@ -5,10 +5,6 @@ export default {
   name: 'svg-item',
   props: ['item'],
 
-  constructor() {
-    console.log("abc");
-  },
-
   render(createElement) {
     var options = this.getRenderOptions(this.item);
     if (options) {
@@ -40,22 +36,6 @@ export default {
       }
     }
   }
-
-  // updated() {
-  //   let svg = this.$el.querySelector('svg');
-  //   if (svg) {
-  //     if (this.width) {
-  //       svg.setAttribute("width", this.width);
-  //     }
-  //     if (this.height) {
-  //       svg.setAttribute("height", this.height)
-  //     }
-  //     svg.setAttribute("transform", "scale(1)")
-
-  //     //      svg.setAttribute('mouse-wheel', "");
-  //   }
-  // }
-
 }
 </script>
 

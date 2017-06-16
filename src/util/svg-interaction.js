@@ -7,7 +7,6 @@ class SvgInteraction {
   iaList = [];
 
   constructor(el, svgTransformer) {
-    console.log("svgInteraction constructor")
     this.el = el;
     this.svgTransformer = svgTransformer;
     let self = this;

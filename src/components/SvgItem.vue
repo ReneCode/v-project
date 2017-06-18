@@ -28,7 +28,8 @@ export default {
         attrs: {
           x: item.x,
           y: item.y,
-          'font-size': item.fontSize
+          'font-size': item.fontSize,
+          fill: item.fill
         },
         domProps: {
           innerHTML: item.text

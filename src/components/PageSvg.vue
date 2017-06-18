@@ -1,11 +1,13 @@
 // wait for svg-loader directive until svg is loaded
 
 <template>
-  <svg width="1200" height="700" :viewBox="viewBox" >
-    <g :transform="transform">     
+  <svg width="1200" height="700" :viewBox="viewBox">
+    <g :transform="transform">
       <g v-if="svg" v-svg-loader="{svg:svg, callback:svgLoaderCallback}">
       </g>
-      <svg-item v-for="item in items" :key="item.id" :item="item"></svg-item>
+      <g class="redlining">
+        <svg-item v-for="item in items" :key="item.id" :item="item"></svg-item>
+      </g>
     </g>
   </svg>
 </template>
@@ -22,12 +24,10 @@ export default {
   name: 'page-svg',
   props: [
     'page',
-    'projectId', 'pageId',
     'width', 'height'
   ],
   data() {
     return {
-      redlinings: [],
       svg: undefined,
       viewBox: undefined,
       transform: undefined,
@@ -42,16 +42,7 @@ export default {
     this.projectService = new ProjectService();
     EventBus.on('addTextItem', this.addText);
 
-    if (!this.page) {
-      this.projectService.getPage(this.projectId, this.pageId)
-        .then((page) => {
-          this.getPageData(page);
-          this.getRedlinings(page);
-        });
-    } else {
-      this.getPageData(this.page);
-      this.getRedlinings(this.page);
-    }
+    this.getPageData();
   },
 
   beforeDestroy() {
@@ -71,19 +62,41 @@ export default {
       switch (ev.msg) {
         case "viewBox":
           this.viewBox = ev.val;
+          this.getRedlinings()
       }
     },
 
-    getPageData(page) {
-      this.title = `${page.properties[11000]} ${page.properties[11011]}`;
-      return this.projectService.getSvg(page.projectId, page.sortId)
+    getPageData() {
+      if (!this.page) {
+        throw new Error("page not set")
+      }
+      this.title = `${this.page.properties[11000]} ${this.page.properties[11011]}`;
+      return this.projectService.getSvg(this.page.projectId, this.page.sortId)
         .then((svg) => {
           this.svg = svg;
         });
     },
 
-    getRedlinings(page) {
-      return this.projectService.getRedlinings(page.projectId, page.tblObjectId)
+    getTranslateY() {
+      if (!this.viewBox) {
+        throw new Error("viewBox not set")
+      }
+      const coords = this.viewBox.split(' ');
+      if (coords.length === 4) {
+        return coords[3];
+      }
+      return undefined;
+    },
+
+    getRedlinings() {
+      if (!this.page) {
+        throw new Error("page not set")
+      }
+      let options = {
+        pageTblObjectId: this.page.tblObjectId,
+        translateY: this.getTranslateY()
+      };
+      return this.projectService.getRedlinings(this.page.projectId, options)
         .then((redlinings) => {
           this.items = redlinings;
         });
@@ -95,7 +108,8 @@ export default {
         text: textValue,
         x: Math.floor(Math.random() * 400),
         y: Math.floor(Math.random() * 300),
-        fontSize: 5 + Math.floor(Math.random() * 20)
+        fontSize: 5 + Math.floor(Math.random() * 20),
+        fill: "#6ad"
       };
       this.items.push(text);
     }
@@ -106,7 +120,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-text {
+
+.redlining {
   cursor: pointer;
 }
 </style>

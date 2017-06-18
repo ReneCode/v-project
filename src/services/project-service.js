@@ -104,12 +104,13 @@ export class ProjectService {
         });
     }
 
-    getRedlinings(projectId, pageTblObjectId) {
+    getRedlinings(projectId, opt) {
         return new Promise((resolve, reject) => {
             const url = this.urlService.getUrl('redliningsByProject', projectId);
             const options = {
                 params: {
-                    pageTblObjectId: pageTblObjectId
+                    pageTblObjectId: opt.pageTblObjectId,
+                    translateY: opt.translateY
                 }
             }
             this.authAxios.get(url, options)

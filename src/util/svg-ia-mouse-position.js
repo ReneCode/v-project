@@ -5,8 +5,9 @@ class SvgInteractionMousePosition {
   }
 
   onMouseMove(event) {
-    // let currentPoint = this.svgTransformer.getSVGPoint(event);
-    // console.log("position:", currentPoint)
+    // let p1 = this.svgTransformer.getPoint(event);
+    // let p2 = this.svgTransformer.getUntransformedPoint(event);
+    // console.log("position:", p1, p2)
   }
 }
 

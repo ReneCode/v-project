@@ -7,7 +7,7 @@
 
 <script>
 import SvgService from "../services/svg-service";
-import { ProjectService } from "../services/project-service";
+import ProjectService from "../services/project-service";
 import { UrlService } from "../services/url-service";
 
 export default {

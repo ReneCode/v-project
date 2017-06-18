@@ -18,7 +18,7 @@
 import Headline from './Headline.vue'
 import PageCard from './PageCard.vue'
 import Search from './Search.vue'
-import { ProjectService } from "../services/project-service";
+import ProjectService from "../services/project-service";
 import { UrlService } from "../services/url-service";
 
 export default {
@@ -59,7 +59,7 @@ export default {
     selectPage(page) {
       const urlService = new UrlService();
       const link = urlService.getLink('pageByProjectIdAndPageId', this.projectId, page.id);
-      this.$router.push(link);
+      this.$router.push({ path: link, query: { q: this.searchValue } });
     },
 
     onSearch(value) {

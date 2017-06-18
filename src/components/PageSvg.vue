@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { ProjectService } from '../services/project-service'
+import ProjectService from '../services/project-service'
 import SvgLoader from '../directives/svg-loader'
 import SvgTransformer from '../util/svg-transformer'
 import SvgInteraction from '../util/svg-interaction'
@@ -54,6 +54,12 @@ export default {
     this.svgInteraction = new SvgInteraction(this.$el, this.svgTransformer);
   },
 
+  watch: {
+    page(val) {
+      this.getPageData();
+    }
+  },
+
   methods: {
     updateTransform(transform) {
       this.transform = transform;
@@ -70,10 +76,12 @@ export default {
       if (!this.page) {
         throw new Error("page not set")
       }
-      this.title = `${this.page.properties[11000]} ${this.page.properties[11011]}`;
       return this.projectService.getSvg(this.page.projectId, this.page.sortId)
         .then((svg) => {
-          this.svg = svg;
+          this.svg = undefined;
+          this.$nextTick(() => {
+            this.svg = svg;
+          })
         });
     },
 
@@ -120,7 +128,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-
 .redlining {
   cursor: pointer;
 }

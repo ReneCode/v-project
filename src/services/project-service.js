@@ -4,7 +4,7 @@ import { UrlService } from "./url-service";
 import auth from "./auth-service";
 import axios from 'axios';
 
-export class ProjectService {
+class ProjectService {
 
     urlService = undefined;
     httpOption = undefined;
@@ -18,14 +18,6 @@ export class ProjectService {
                 'Authorization': "Bearer " + auth.getIdToken()
             }
         })
-        /*
-        axios.defaults.headers.common['Authorization'] = "Bearer " + auth.getIdToken();
-        this.httpOption = {
-            headers: {
-                "Content-Type": 'application/json'
-            }
-        };
-        */
     }
 
     getProjects(q) {
@@ -140,3 +132,5 @@ export class ProjectService {
         });
     }
 }
+
+export default ProjectService;

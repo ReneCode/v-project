@@ -19,7 +19,7 @@ import Headline from './Headline.vue'
 import ProjectCard from './ProjectCard';
 import Search from './Search';
 import { UrlService } from '../services/url-service'
-import { ProjectService } from '../services/project-service';
+import ProjectService from '../services/project-service';
 
 export default {
   name: '',

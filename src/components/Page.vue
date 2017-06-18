@@ -14,33 +14,89 @@
 import Headline from './Headline.vue'
 import Toolbar from './Toolbar.vue'
 import PageSvg from './PageSvg.vue'
-import { ProjectService } from '../services/project-service'
+import EventBus from '../util/event-bus';
+import ProjectService from '../services/project-service';
+import PageListService from '../services/page-list-service'
+import { UrlService } from "../services/url-service";
 
 export default {
   name: '',
   data() {
     return {
-      title: undefined,
       page: undefined
     }
   },
+
   components: {
     Headline,
     PageSvg,
     Toolbar
   },
-  beforeMount() {
-    const projectId = this.$route.params.projectId;
-    const pageId = this.$route.params.pageId;
 
-    const projectService = new ProjectService();
-    projectService.getPage(projectId, pageId)
-      .then((page) => {
-        this.page = page;
-      });
+  beforeMount() {
+    this.projectService = new ProjectService();
+    this.pageListService = new PageListService();
+    this.urlService = new UrlService();
+    this.updatePage(this.$route);
+  },
+
+  watch: {
+    $route(to, from) {
+      this.updatePage(to);
+    }
+  },
+
+  computed: {
+    title() {
+      if (this.page) {
+        return `${this.page.properties[11000]} ${this.page.properties[11011]}`;
+      }
+    }
+  },
+
+  mounted() {
+    EventBus.on('previousPage', this.previousPage);
+    EventBus.on('nextPage', this.nextPage);
+  },
+
+  beforeDestroy() {
+    EventBus.off('previousPage', this.previousPage);
+    EventBus.off('nextPage', this.nextPage);
   },
 
   methods: {
+    updatePage(route) {
+      this.projectId = route.params.projectId;
+      const pageId = route.params.pageId;
+      const query = route.query;
+      this.q = query.q;
+
+      this.projectService.getPage(this.projectId, pageId)
+        .then((page) => {
+          this.page = page;
+        });
+
+      this.pageListService.getPreviousAndNextPageId(this.projectId, pageId, this.q)
+        .then((previousAndNextPageIds) => {
+          this.previousAndNextPageIds = previousAndNextPageIds;
+        });
+    },
+
+    previousPage() {
+      this.toPage(0);
+    },
+
+    nextPage() {
+      this.toPage(1);
+    },
+
+    toPage(idx) {
+      const pageId = this.previousAndNextPageIds[idx];
+      if (pageId) {
+        const link = this.urlService.getLink('pageByProjectIdAndPageId', this.projectId, pageId);
+        this.$router.push({ path: link, query: { q: this.q } });
+      }
+    }
   }
 
 }

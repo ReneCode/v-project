@@ -6,7 +6,7 @@
     <search title="Projects" @search="onSearch" />
 
     <div class="flex-container">
-      <div v-for="project in filteredProjects" class="flex-item project-preview" v-on:click="selectProject(project)">
+      <div v-for="project in projects" class="flex-item project-preview" v-on:click="selectProject(project)">
         <project-card :project="project">
         </project-card>
       </div>
@@ -34,14 +34,6 @@ export default {
       searchValue: ''
     }
   },
-  computed: {
-    filteredProjects() {
-      const val = this.searchValue.toUpperCase()
-      return this.projects.filter((p) => {
-        return p.name.toUpperCase().indexOf(val) >= 0;
-      });
-    }
-  },
 
   beforeMount() {
     this.loadProjects();
@@ -50,7 +42,7 @@ export default {
   methods: {
     loadProjects() {
       const projectService = new ProjectService();
-      projectService.getProjects()
+      projectService.getProjects(this.searchValue)
       .then((projects) => {
         this.projects = projects;
       },
@@ -67,6 +59,7 @@ export default {
 
     onSearch(value) {
       this.searchValue = value;
+      this.loadProjects();
     }
   }
 }

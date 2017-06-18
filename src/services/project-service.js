@@ -28,10 +28,15 @@ export class ProjectService {
         */
     }
 
-    getProjects() {
+    getProjects(q) {
         return new Promise((resolve, reject) => {
             const url = this.urlService.getUrl("projects");
-            this.authAxios.get(url)
+            const options = {
+                params: {
+                    q: q
+                }
+            }
+            this.authAxios.get(url, options)
                 .then((response) => {
                     resolve(response.data);
                 })

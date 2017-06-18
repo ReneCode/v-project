@@ -104,6 +104,24 @@ export class ProjectService {
         });
     }
 
+    getRedlinings(projectId, pageTblObjectId) {
+        return new Promise((resolve, reject) => {
+            const url = this.urlService.getUrl('redliningsByProject', projectId);
+            const options = {
+                params: {
+                    pageTblObjectId: pageTblObjectId
+                }
+            }
+            this.authAxios.get(url, options)
+                .then((response) => {
+                    resolve(response.data);
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+        });
+    }
+
     getSvg(projectId, svgName) {
         return new Promise((resolve, reject) => {
             const url = this.urlService.getUrl('svgByProjectIdAndSortId', projectId, svgName);

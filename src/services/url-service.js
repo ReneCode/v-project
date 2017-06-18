@@ -16,6 +16,8 @@ export class UrlService {
       pagesByProjectId:           `${hostProject}/api/v1/projects/{1}/pages`,
       pageByProjectIdAndPageId:   `${hostProject}/api/v1/projects/{1}/pages/{2}`,
 
+      redliningsByProject:        `${hostProject}/api/v1/projects/{1}/redlinings`,
+
       svgByProjectIdAndSortId:    `${hostPicture}/api/v1/svgs/{1}/{2}.svg`,
       svgPngByProjectIdAndSortId: `${hostPicture}/api/v1/svgs/{1}/{2}.svg/png`
     };

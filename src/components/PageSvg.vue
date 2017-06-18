@@ -27,6 +27,7 @@ export default {
   ],
   data() {
     return {
+      redlinings: [],
       svg: undefined,
       viewBox: undefined,
       transform: undefined,
@@ -45,9 +46,11 @@ export default {
       this.projectService.getPage(this.projectId, this.pageId)
         .then((page) => {
           this.getPageData(page);
+          this.getRedlinings(page);
         });
     } else {
       this.getPageData(this.page);
+      this.getRedlinings(this.page);
     }
   },
 
@@ -76,6 +79,13 @@ export default {
       return this.projectService.getSvg(page.projectId, page.sortId)
         .then((svg) => {
           this.svg = svg;
+        });
+    },
+
+    getRedlinings(page) {
+      return this.projectService.getRedlinings(page.projectId, page.tblObjectId)
+        .then((redlinings) => {
+          this.items = redlinings;
         });
     },
 

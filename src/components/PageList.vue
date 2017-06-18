@@ -1,15 +1,15 @@
 <template>
   <div>
     <headline :title="title"></headline>
-
+  
     <div class="headline-gap"></div>
-
+  
     <search title="Pages" @search="onSearch" />
-
+  
     <div class="flex-container">
-     <div v-for="page in filteredPages" class="flex-item page-preview" v-on:click="selectPage(page)">
-       <page-card :page="page" />
-     </div>
+      <div v-for="page in pages" class="flex-item page-preview" v-on:click="selectPage(page)">
+        <page-card :page="page" />
+      </div>
     </div>
   </div>
 </template>
@@ -37,34 +37,25 @@ export default {
     }
   },
 
-  computed: {
-    filteredPages() {
-      const val = this.searchValue.toUpperCase();
-      return this.pages.filter((p) => {
-        if (!p.properties) {
-          return true;
-        }
-        return p.properties[11000].toUpperCase().indexOf(val) >= 0 ||
-               p.properties[11011].toUpperCase().indexOf(val) >= 0;
-      });
-    }
-  },
-
   beforeMount() {
     this.projectId = this.$route.params.projectId;
-    const projectService = new ProjectService();
-    projectService.getPages(this.projectId)
-    .then((pages) => {
-      this.pages = pages;
-    })
+    this.projectService = new ProjectService();
+    this.loadPages();
 
-    projectService.getProject(this.projectId)
-    .then(project => {
-      this.title = `${project.name} [${project.version}]`;
-    })
+    this.projectService.getProject(this.projectId)
+      .then(project => {
+        this.title = `${project.name} [${project.version}]`;
+      })
   },
 
   methods: {
+    loadPages() {
+      this.projectService.getPages(this.projectId, this.searchValue)
+        .then((pages) => {
+          this.pages = pages;
+        })
+    },
+
     selectPage(page) {
       const urlService = new UrlService();
       const link = urlService.getLink('pageByProjectIdAndPageId', this.projectId, page.id);
@@ -73,6 +64,7 @@ export default {
 
     onSearch(value) {
       this.searchValue = value;
+      this.loadPages();
     }
   }
 }
@@ -81,7 +73,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .headline-gap {
-    margin-top: 50px;
+  margin-top: 50px;
 }
 
 .flex-container {
@@ -107,5 +99,4 @@ export default {
   cursor: pointer;
   font-size: 12px;
 }
-
 </style>

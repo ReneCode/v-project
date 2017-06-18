@@ -77,10 +77,15 @@ export class ProjectService {
         });
     }
 
-    getPages(projectId) {
+    getPages(projectId, q) {
         return new Promise((resolve, reject) => {
             const url = this.urlService.getUrl("pagesByProjectId", projectId);
-            this.authAxios.get(url)
+            const options = {
+                params: {
+                    q: q
+                }
+            }
+            this.authAxios.get(url, options)
                 .then((response) => {
                     resolve(response.data);
                 })
@@ -88,12 +93,6 @@ export class ProjectService {
                     reject(err);
                 });
         });
-        // .then((response) => {
-        //   console.log(response.body);
-        // },
-        // (err) => {
-        //   console.log("error", err);
-        // });
     }
 
     getPage(projectId, pageId) {

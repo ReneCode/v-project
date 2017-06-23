@@ -131,6 +131,22 @@ class ProjectService {
                 });
         });
     }
+
+    loadImage(projectId, imageName) {
+        return new Promise((resolve, reject) => {
+            const url = this.urlService.getUrl('imageByProjectIdAndName', projectId, imageName);
+            const options = {
+                responseType: "blob"
+            };
+            this.authAxios.get(url, options)
+                .then((response) => {
+                    resolve(response.data);
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+        })
+    }
 }
 
 export default ProjectService;

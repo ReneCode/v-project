@@ -12,7 +12,8 @@ Vue.directive('svg-loader', {
           el.appendChild(e);
         }
       })
-      binding.value.callback({ msg: "viewBox", val: viewBox })
+      binding.value.callback({ msg: "svgElement", val: el });
+      binding.value.callback({ msg: "viewBox", val: viewBox });
     }
   }
 });

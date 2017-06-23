@@ -16,6 +16,7 @@
 import { mapGetters } from 'vuex';
 
 import ProjectService from '../services/project-service'
+import SvgService from '../services/svg-service'
 import SvgLoader from '../directives/svg-loader'
 import SvgTransformer from '../util/svg-transformer'
 import SvgInteraction from '../util/svg-interaction'
@@ -46,6 +47,7 @@ export default {
   },
   beforeMount() {
     this.projectService = new ProjectService();
+    this.svgService = new SvgService();
     this.getPageData();
   },
 
@@ -56,7 +58,6 @@ export default {
 
   watch: {
     page(val) {
-      console.log("watch-page")
       this.getPageData();
     }
   },
@@ -69,7 +70,11 @@ export default {
       switch (ev.msg) {
         case "viewBox":
           this.viewBox = ev.val;
-          this.getRedlinings()
+          this.getRedlinings();
+          break;
+        case "svgElement":
+          this.svgService.adjustImages(this.page.projectId, ev.val);
+          break;
       }
     },
 
@@ -114,6 +119,7 @@ export default {
           this.$store.commit(SET_ITEMS, redlinings);
         });
     }
+
   }
 }
 </script>

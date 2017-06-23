@@ -19,7 +19,9 @@ export class UrlService {
       redliningsByProject:        `${hostProject}/api/v1/projects/{1}/redlinings`,
 
       svgByProjectIdAndSortId:    `${hostPicture}/api/v1/svgs/{1}/{2}.svg`,
-      svgPngByProjectIdAndSortId: `${hostPicture}/api/v1/svgs/{1}/{2}.svg/png`
+      svgPngByProjectIdAndSortId: `${hostPicture}/api/v1/svgs/{1}/{2}.svg/png`,
+
+      imageByProjectIdAndName:  `${hostPicture}/api/v1/images/{1}/{2}`
     };
 
     this.links = {

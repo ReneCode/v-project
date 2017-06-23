@@ -2,6 +2,7 @@
 import { UrlService } from "./url-service";
 import auth from "./auth-service";
 import axios from 'axios';
+import ProjectService from './project-service';
 
 export default class SvgService {
 
@@ -17,6 +18,7 @@ export default class SvgService {
         'Authorization': "Bearer " + auth.getIdToken()
       }
     });
+    this.projectService = new ProjectService();
   }
 
   getSvgAsImage(projectId, svgFile) {
@@ -31,6 +33,27 @@ export default class SvgService {
           reject(err);
         })
     });
+  }
+
+  adjustImages(projectId, svgElement) {
+    if (!projectId || !svgElement) {
+      return;
+    }
+    const images = svgElement.getElementsByTagName("image");
+    for (let image of images) {
+      this.adjustImage(projectId, image);
+    };
+  }
+
+  adjustImage(projectId, imageElement) {
+    const href = imageElement.getAttribute("xlink:href");
+    imageElement.setAttribute("xlink:href", "");
+
+    return this.projectService.loadImage(projectId, href)
+      .then((image) => {
+        const objUrl = window.URL.createObjectURL(image);
+        imageElement.setAttribute("xlink:href", objUrl);
+      });
   }
 }
 

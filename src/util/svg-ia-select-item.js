@@ -8,10 +8,6 @@ class SvgInteractionSelectItem {
   }
 
   onClick(event) {
-    let p1 = this.svgTransformer.getPoint(event);
-    let p2 = this.svgTransformer.getUntransformedPoint(event);
-    console.log("position:", p1, p2)
-
     const pt = this.getPoint(event);
     const element = document.elementFromPoint(pt.x, pt.y);
     if (element && element.nodeName === "text") {

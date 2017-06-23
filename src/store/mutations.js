@@ -1,7 +1,8 @@
 
 import Vue from 'vue';
 
-import { SET_ITEMS, CLEAR_ITEMS, ADD_ITEM, TOGGLE_SELECT_ITEM } from './mutation-types';
+import { SET_ITEMS, CLEAR_ITEMS, ADD_ITEM,
+        TOGGLE_SELECT_ITEM, DELETE_ITEMS } from './mutation-types';
 
 const mutations = {
   [CLEAR_ITEMS](state) {
@@ -18,7 +19,15 @@ const mutations = {
     if (it) {
       Vue.set(it, 'selected', !it.selected);
     }
+  },
+
+  [DELETE_ITEMS](state, items) {
+    const deleteIds = items.map(i => i.id);
+    state.items = state.items.filter(i => {
+      return deleteIds.indexOf(i.id) < 0;
+    })
   }
+
 }
 
 export default mutations;

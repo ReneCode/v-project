@@ -24,6 +24,7 @@
 <script>
 
 import EventBus from '../util/event-bus';
+import store from '@/store';
 
 export default {
 
@@ -32,7 +33,12 @@ export default {
       EventBus.emit('addTextItem', "new text");
     },
     editItem() { },
-    deleteItem() { },
+    deleteItem() {
+      const selectedItems = store.getters.selectedItems;
+      if (selectedItems.length > 0) {
+        EventBus.emit('deleteItems', selectedItems);
+      }
+    },
     previousPage() {
       EventBus.emit('previousPage');
     },
@@ -62,12 +68,11 @@ ul {
   padding-left: 0px;
 }
 
-
 #toolbar i {
   font-size: 30px;
   margin-bottom: 35px;
   cursor: pointer;
-  color: #ddd;
+  color: #eee;
   opacity: 0.4;
   transition: opacity 0.2s ease;
 }
@@ -75,4 +80,5 @@ ul {
 #toolbar i:hover {
   opacity: 1;
 }
+
 </style>

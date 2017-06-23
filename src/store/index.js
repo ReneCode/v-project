@@ -10,6 +10,9 @@ const storeConfig = {
   getters: {
     svgItems: (state) => {
       return state.items;
+    },
+    selectedItems: (state) => {
+      return state.items.filter(i => i.selected === true);
     }
   },
   mutations: mutations

@@ -2,12 +2,13 @@
 import EventBus from '../util/event-bus';
 import store from '../store';
 
-import { ADD_ITEM } from '../store/mutation-types';
+import { ADD_ITEM, DELETE_ITEMS } from '../store/mutation-types';
 
 class EventHandler {
 
   constructor() {
     EventBus.on('addTextItem', this.addText);
+    EventBus.on('deleteItems', this.deleteItems);
   }
 
   addText(textValue) {
@@ -23,6 +24,11 @@ class EventHandler {
     text.id = "id_" + Math.floor(Math.random() * 10E9);
     store.commit(ADD_ITEM, text);
   }
+
+  deleteItems(items) {
+    store.commit(DELETE_ITEMS, items);
+  }
+
 }
 
 const eventHandler = new EventHandler();

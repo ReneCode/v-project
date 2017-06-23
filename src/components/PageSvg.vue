@@ -13,12 +13,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 import ProjectService from '../services/project-service'
 import SvgLoader from '../directives/svg-loader'
 import SvgTransformer from '../util/svg-transformer'
 import SvgInteraction from '../util/svg-interaction'
-import EventBus from '../util/event-bus';
 import SvgItem from './SvgItem';
+import { SET_ITEMS, CLEAR_ITEMS } from '../store/mutation-types';
 
 export default {
   name: 'page-svg',
@@ -30,9 +32,13 @@ export default {
     return {
       svg: undefined,
       viewBox: undefined,
-      transform: undefined,
-      items: []
+      transform: undefined
     }
+  },
+  computed: {
+    ...mapGetters({
+      items: 'svgItems'
+    })
   },
   components: {
     SvgLoader,
@@ -40,13 +46,7 @@ export default {
   },
   beforeMount() {
     this.projectService = new ProjectService();
-    EventBus.on('addTextItem', this.addText);
-
     this.getPageData();
-  },
-
-  beforeDestroy() {
-    EventBus.off('addTextItem', this.addText);
   },
 
   mounted() {
@@ -56,6 +56,7 @@ export default {
 
   watch: {
     page(val) {
+      console.log("watch-page")
       this.getPageData();
     }
   },
@@ -78,6 +79,8 @@ export default {
       }
       return this.projectService.getSvg(this.page.projectId, this.page.sortId)
         .then((svg) => {
+          // restart the svg-loader by set the svg-property to undefined
+          // and on nextTick set the new value
           this.svg = undefined;
           this.$nextTick(() => {
             this.svg = svg;
@@ -106,23 +109,12 @@ export default {
       };
       return this.projectService.getRedlinings(this.page.projectId, options)
         .then((redlinings) => {
-          this.items = redlinings;
+          // this.items = redlinings;
+          this.$store.commit(CLEAR_ITEMS);
+          this.$store.commit(SET_ITEMS, redlinings);
         });
-    },
-
-    addText(textValue) {
-      let text = {
-        type: "text",
-        text: textValue,
-        x: Math.floor(Math.random() * 400),
-        y: Math.floor(Math.random() * 300),
-        fontSize: 5 + Math.floor(Math.random() * 20),
-        fill: "#6ad"
-      };
-      this.items.push(text);
     }
   }
-
 }
 </script>
 

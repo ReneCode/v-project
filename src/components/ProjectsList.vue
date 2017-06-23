@@ -3,10 +3,10 @@
   <headline></headline>
     <div class="headline-gap"></div>
 
-    <search title="Projects" @search="onSearch" />
+    <search title="Projects" @search="onSearch"></search>
 
     <div class="flex-container">
-      <div v-for="project in projects" class="flex-item project-preview" v-on:click="selectProject(project)">
+      <div v-for="project in projects" :key="project.id" class="flex-item project-preview" v-on:click="selectProject(project)">
         <project-card :project="project">
         </project-card>
       </div>

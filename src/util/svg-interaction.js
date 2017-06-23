@@ -2,6 +2,7 @@
 import SvgInteractionZoom from './svg-ia-zoom';
 import SvgInteractionPanning from './svg-ia-panning';
 import SvgInteractionMousePosition from './svg-ia-mouse-position';
+import SvgInteractionSelectItem from './svg-ia-select-item';
 
 class SvgInteraction {
   iaList = [];
@@ -19,6 +20,7 @@ class SvgInteraction {
     this.iaList.push(new SvgInteractionZoom(svgTransformer));
     this.iaList.push(new SvgInteractionPanning(svgTransformer));
     this.iaList.push(new SvgInteractionMousePosition(svgTransformer));
+    this.iaList.push(new SvgInteractionSelectItem(svgTransformer));
   }
 
   onClick(ev) {

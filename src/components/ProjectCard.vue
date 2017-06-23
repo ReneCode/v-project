@@ -2,6 +2,7 @@
   <div>
     {{project.name}} [{{project.version}}] / {{countPages}}
     <img :src="pageImage" alt="first page">
+    <!--<img src="http://localhost:3002/api/v1/svgs/fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3/1.svg/png">-->
   </div>
 </template>
 

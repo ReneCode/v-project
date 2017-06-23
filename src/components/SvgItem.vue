@@ -22,10 +22,11 @@ export default {
     },
 
     getTextRenderOptions(item) {
-      return {
+      let obj = {
         on: {
         },
         attrs: {
+          gid: item.id,
           x: item.x,
           y: item.y,
           'font-size': item.fontSize,
@@ -34,7 +35,11 @@ export default {
         domProps: {
           innerHTML: item.text
         }
+      };
+      if (item.selected) {
+        obj.attrs["font-weight"] = 'bolder';
       }
+      return obj;
     }
   }
 }

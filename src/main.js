@@ -6,6 +6,8 @@ import router from './router'
 import store from './store';
 import eventHandler from './util/event-handler'
 
+require('./util/polyfill');
+
 Vue.config.productionTip = false
 
 if (!eventHandler) {

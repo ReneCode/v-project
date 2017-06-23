@@ -1,5 +1,5 @@
 
-import { TOGGLE_SELECT_ITEM } from '@/store/mutation-types';
+import * as types from '@/store/mutation-types';
 import store from '@/store';
 
 class SvgInteractionSelectItem {
@@ -13,7 +13,7 @@ class SvgInteractionSelectItem {
     if (element && element.nodeName === "text") {
       let id = element.getAttribute("gid");
 
-      store.commit(TOGGLE_SELECT_ITEM, id)
+      store.commit(types.TOGGLE_SELECT_ITEM, id)
     }
   }
 

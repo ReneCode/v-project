@@ -2,7 +2,7 @@
 import EventBus from '../util/event-bus';
 import store from '../store';
 
-import { ADD_ITEM, DELETE_ITEMS } from '../store/mutation-types';
+import * as types from '../store/mutation-types';
 
 class EventHandler {
 
@@ -22,11 +22,11 @@ class EventHandler {
       selected: false
     };
     text.id = "id_" + Math.floor(Math.random() * 10E9);
-    store.commit(ADD_ITEM, text);
+    store.commit(types.ADD_ITEM, text);
   }
 
   deleteItems(items) {
-    store.commit(DELETE_ITEMS, items);
+    store.commit(types.DELETE_ITEMS, items);
   }
 
 }

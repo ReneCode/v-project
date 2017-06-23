@@ -21,7 +21,7 @@ import SvgLoader from '../directives/svg-loader'
 import SvgTransformer from '../util/svg-transformer'
 import SvgInteraction from '../util/svg-interaction'
 import SvgItem from './SvgItem';
-import { SET_ITEMS, CLEAR_ITEMS } from '../store/mutation-types';
+import * as types from '../store/mutation-types';
 
 export default {
   name: 'page-svg',
@@ -115,8 +115,8 @@ export default {
       return this.projectService.getRedlinings(this.page.projectId, options)
         .then((redlinings) => {
           // this.items = redlinings;
-          this.$store.commit(CLEAR_ITEMS);
-          this.$store.commit(SET_ITEMS, redlinings);
+          this.$store.commit(types.CLEAR_ITEMS);
+          this.$store.commit(types.SET_ITEMS, redlinings);
         });
     }
 

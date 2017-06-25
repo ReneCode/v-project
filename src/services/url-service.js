@@ -18,6 +18,8 @@ export class UrlService {
 
       redliningsByProject:        `${hostProject}/api/v1/projects/{1}/redlinings`,
 
+      functionsByProjectId:       `${hostProject}/api/v1/projects/{1}/functions`,
+
       svgByProjectIdAndSortId:    `${hostPicture}/api/v1/svgs/{1}/{2}.svg`,
       svgPngByProjectIdAndSortId: `${hostPicture}/api/v1/svgs/{1}/{2}.svg/png`,
 

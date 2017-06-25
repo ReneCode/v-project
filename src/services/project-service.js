@@ -147,6 +147,24 @@ class ProjectService {
                 })
         })
     }
+
+    loadFunctions(projectId, q) {
+        return new Promise((resolve, reject) => {
+            const url = this.urlService.getUrl('functionsByProjectId', projectId);
+            const options = {
+                params: {
+                    q: q
+                }
+            };
+            this.authAxios.get(url, options)
+                .then((response) => {
+                    resolve(response.data);
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+        })
+    }
 }
 
 export default ProjectService;

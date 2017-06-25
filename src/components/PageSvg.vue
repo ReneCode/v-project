@@ -1,21 +1,27 @@
 // wait for svg-loader directive until svg is loaded
 
 <template>
-  <svg width="1200" height="700" :viewBox="viewBox">
-    <g :transform="transform">
-      <g v-if="svg" v-svg-loader="{svg:svg, callback:svgLoaderCallback}">
+  <div>
+    <search @search="onSearch"></search>
+  
+    <svg ref="svg" width="1200" height="700" :viewBox="viewBox">
+      <g :transform="transform">
+        <g v-if="svg" v-svg-loader="{svg:svg, callback:svgLoaderCallback}">
+        </g>
+        <g class="redlining">
+          <svg-item v-for="item in items" :key="item.id" :item="item"></svg-item>
+        </g>
       </g>
-      <g class="redlining">
-        <svg-item v-for="item in items" :key="item.id" :item="item"></svg-item>
-      </g>
-    </g>
-  </svg>
+    </svg>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
+import Search from './Search';
 import ProjectService from '../services/project-service'
+import FunctionListService from '../services/function-list-service'
 import SvgService from '../services/svg-service'
 import SvgLoader from '../directives/svg-loader'
 import SvgTransformer from '../util/svg-transformer'
@@ -33,7 +39,8 @@ export default {
     return {
       svg: undefined,
       viewBox: undefined,
-      transform: undefined
+      transform: undefined,
+      highlightedFunctions: undefined
     }
   },
   computed: {
@@ -43,22 +50,28 @@ export default {
   },
   components: {
     SvgLoader,
-    SvgItem
+    SvgItem,
+    Search
   },
   beforeMount() {
     this.projectService = new ProjectService();
     this.svgService = new SvgService();
+    this.functionListService = new FunctionListService();
     this.getPageData();
   },
 
   mounted() {
-    this.svgTransformer = new SvgTransformer(this.$el, this.updateTransform)
-    this.svgInteraction = new SvgInteraction(this.$el, this.svgTransformer);
+    this.svgTransformer = new SvgTransformer(this.$refs.svg, this.updateTransform)
+    this.svgInteraction = new SvgInteraction(this.$refs.svg, this.svgTransformer);
   },
 
   watch: {
     page(val) {
       this.getPageData();
+    },
+    highlightedFunctions(newVal, oldVal) {
+      this.removeHighlight(oldVal);
+      this.setHighlight(newVal);
     }
   },
 
@@ -118,8 +131,42 @@ export default {
           this.$store.commit(types.CLEAR_ITEMS);
           this.$store.commit(types.SET_ITEMS, redlinings);
         });
-    }
+    },
 
+    onSearch(searchString) {
+      this.searchString = searchString;
+      this.functionListService.getFunctions(this.page, searchString)
+        .then(functions => {
+          this.highlightedFunctions = functions;
+        })
+    },
+
+    removeHighlight(functions) {
+      if (!functions) {
+        return;
+      }
+      functions.forEach(f => {
+        let objId = f.objectId;
+        objId = objId.replace("/", "_");
+        const domId = `Id${objId}`;
+        let element = this.$refs.svg.getElementById(domId);
+        if (element) {
+          element.classList.remove('highlighted');
+        }
+      });
+    },
+
+    setHighlight(functions) {
+      functions.forEach(f => {
+        let objId = f.objectId;
+        objId = objId.replace("/", "_");
+        const domId = `Id${objId}`;
+        let element = this.$refs.svg.getElementById(domId);
+        if (element) {
+          element.classList.add('highlighted');
+        }
+      });
+    }
   }
 }
 </script>
@@ -128,6 +175,30 @@ export default {
 <style>
 .redlining {
   cursor: pointer;
+}
+
+@keyframes blinkAnimation {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
+
+
+/*#Id17_28300,
+#Id17_27224,
+#Id17_40461,*/
+
+.highlighted {
+  opacity: 0;
+  animation: blinkAnimation 1.2s infinite;
 }
 </style>
 

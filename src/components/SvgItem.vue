@@ -6,41 +6,65 @@ export default {
   props: ['item'],
 
   render(createElement) {
-    var options = this.getRenderOptions(this.item);
-    if (options) {
-      let svgElement = createElement(this.item.type, options)
-      return svgElement;
-    }
+    return this.renderElement(createElement, this.item);
+    // var options = this.getRenderOptions(createElement, this.item);
+    // if (options) {
+    //   let svgElement = createElement(this.item.type, options)
+    //   return svgElement;
+    // }
   },
 
   methods: {
-    getRenderOptions(item) {
+    renderElement(createElement, item) {
       switch (item.type) {
         case "text":
-          return this.getTextRenderOptions(this.item);
+          return this.renderText(createElement, item);
       }
     },
 
-    getTextRenderOptions(item) {
+    renderText(createElement, item) {
+      let lines = item.text.split('\n');
+
+      let childElements = [];
+      if (lines.length > 1) {
+        lines.forEach(l => {
+          let options = {
+            attrs: {
+              x: 0,
+              dy: "1em"
+            },
+            domProps: {
+              innerHTML: l
+            }
+          };
+          let tspan = createElement('tspan', options);
+          childElements.push(tspan);
+        });
+      }
+      // main text-element
       let obj = {
         on: {
         },
         attrs: {
           gid: item.id,
-          x: item.x,
-          y: item.y,
+          transform: `matrix(1,0,0,1,${item.x},${item.y})`,
           'font-size': item.fontSize,
           fill: item.fill
-        },
-        domProps: {
-          innerHTML: item.text
         }
       };
+      if (lines.length === 1) {
+        obj.domProps = {
+          innerHTML: item.text
+        }
+      }
       if (item.selected) {
         obj.attrs["font-weight"] = 'bolder';
       }
-      return obj;
+
+      let textObject = createElement(this.item.type, obj, childElements);
+      return textObject;
     }
+
   }
 }
 </script>

@@ -10,10 +10,22 @@ class SvgInteractionSelectItem {
   onClick(event) {
     const pt = this.getPoint(event);
     const element = document.elementFromPoint(pt.x, pt.y);
-    if (element && element.nodeName === "text") {
-      let id = element.getAttribute("gid");
+    if (element) {
+      let ele;
+      switch (element.nodeName) {
+        case "text":
+          ele = element;
+          break;
+        case "tspan":
+          if (element.parentElement && element.parentElement.nodeName === "text") {
+            ele = element.parentElement;
+          }
+      }
 
-      store.commit(types.TOGGLE_SELECT_ITEM, id)
+      if (ele) {
+        let id = ele.getAttribute("gid");
+        store.commit(types.TOGGLE_SELECT_ITEM, id)
+      }
     }
   }
 

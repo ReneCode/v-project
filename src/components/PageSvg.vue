@@ -9,7 +9,7 @@
         <g v-if="svg" v-svg-loader="{svg:svg, callback:svgLoaderCallback}">
         </g>
         <g class="redlining">
-          <svg-item v-for="item in items" :key="item.id" :item="item"></svg-item>
+          <svg-item v-for="item in items" :key="item.gid" :item="item"></svg-item>
         </g>
       </g>
     </svg>

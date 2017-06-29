@@ -35,13 +35,14 @@ export default {
     // there a some caching-problems. (wrong bbox on other page)
     bbox() {
       if (this.$refs.textitem) {
-        let bbox = this.$refs.textitem.getBBox();
+        const bbox = this.$refs.textitem.getBBox();
         const margin = 2;
-        bbox.x -= margin;
-        bbox.width += 2 * margin;
-        bbox.y -= margin;
-        bbox.height += 2 * margin;
-        return bbox;
+        return {
+          x: bbox.x - margin,
+          y: bbox.y - margin,
+          width: bbox.width + 2 * margin,
+          height: bbox.height + 2 * margin
+        }
       } else {
         return {};
       }

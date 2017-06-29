@@ -7,11 +7,11 @@ Vue.directive('svg-loader', {
     var svgEle = template.querySelector("svg")
     if (svgEle) {
       const viewBox = svgEle.getAttribute("viewBox");
-      svgEle.childNodes.forEach(e => {
-        if (e.localName) {
-          el.appendChild(e);
+      for (let child of svgEle.childNodes) {
+        if (child.localName) {
+          el.appendChild(child);
         }
-      })
+      }
       binding.value.callback({ msg: "svgElement", val: el });
       binding.value.callback({ msg: "viewBox", val: viewBox });
     }

@@ -4,6 +4,8 @@
 
 > A Vue.js project
 
+* 6/2017  some improvements for IE (polyfill, ...)
+
 ## Build Setup
 
 ``` bash

@@ -40,9 +40,9 @@ export default class SvgService {
       return;
     }
     const images = svgElement.getElementsByTagName("image");
-    for (let image of images) {
+    images.forEach(image => {
       this.adjustImage(projectId, image);
-    };
+    });
   }
 
   adjustImage(projectId, imageElement) {

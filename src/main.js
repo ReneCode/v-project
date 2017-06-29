@@ -7,6 +7,7 @@ import store from './store';
 import eventHandler from './util/event-handler'
 
 require('./util/polyfill');
+require('es6-promise').polyfill();
 
 Vue.config.productionTip = false
 

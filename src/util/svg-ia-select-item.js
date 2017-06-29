@@ -17,8 +17,8 @@ class SvgInteractionSelectItem {
           ele = element;
           break;
         case "tspan":
-          if (element.parentElement && element.parentElement.nodeName === "text") {
-            ele = element.parentElement;
+          if (element.parentNode && element.parentNode.nodeName === "text") {
+            ele = element.parentNode;
           }
       }
 

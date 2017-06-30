@@ -4,6 +4,7 @@ import SvgInteractionPanning from './svg-ia-panning';
 import SvgInteractionMousePosition from './svg-ia-mouse-position';
 import SvgInteractionSelectItem from './svg-ia-select-item';
 import SvgInteractionMoveItem from './svg-ia-move-item';
+import SvgInteractionPreprocess from './svg-ia-preprocess';
 
 class SvgInteraction {
   iaList = [];
@@ -23,11 +24,35 @@ class SvgInteraction {
     this.iaList.push(new SvgInteractionMousePosition(svgTransformer));
     this.iaList.push(new SvgInteractionSelectItem(svgTransformer));
     this.iaList.push(new SvgInteractionMoveItem(svgTransformer));
+
+    this.iaList.push(new SvgInteractionPreprocess(svgTransformer, this));
+
+    this.debugIa();
+  }
+
+  debugIa() {
+    this.iaList.forEach(ia => {
+      let name = ia.constructor.name + " - ";
+      if (ia.dispatch) {
+        name += "dispatch";
+      } else {
+        name += "on...";
+      }
+      console.log(name);
+    })
+  }
+
+  dispatch(msg, payload) {
+    this.iaList.forEach(ia => {
+      if (ia.dispatch) {
+        ia.dispatch(msg, payload);
+      }
+    })
   }
 
   onClick(ev) {
     this.iaList.forEach(ia => {
-      if (ia.onClick) {
+      if (ia.onClick && !ia.dispatch) {
         ia.onClick(ev);
       }
     })
@@ -37,7 +62,7 @@ class SvgInteraction {
     const event = window.event || ev; // old IE support
 
     this.iaList.forEach(ia => {
-      if (ia.onMouseMove) {
+      if (ia.onMouseMove && !ia.dispatch) {
         ia.onMouseMove(event);
       }
     });
@@ -48,7 +73,7 @@ class SvgInteraction {
     const event = window.event || ev; // old IE support
 
     this.iaList.forEach(ia => {
-      if (ia.onMouseDown) {
+      if (ia.onMouseDown && !ia.dispatch) {
         ia.onMouseDown(event);
       }
     })
@@ -59,7 +84,7 @@ class SvgInteraction {
     const event = window.event || ev; // old IE support
 
     this.iaList.forEach(ia => {
-      if (ia.onMouseUp) {
+      if (ia.onMouseUp && !ia.dispatch) {
         ia.onMouseUp(event);
       }
     })
@@ -70,7 +95,7 @@ class SvgInteraction {
     const event = window.event || ev; // old IE support
 
     this.iaList.forEach(ia => {
-      if (ia.onMouseWheel) {
+      if (ia.onMouseWheel && !ia.dispatch) {
         ia.onMouseWheel(event);
       }
     })

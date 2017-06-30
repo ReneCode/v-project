@@ -2,10 +2,21 @@
 import * as types from '@/store/mutation-types';
 import store from '@/store';
 
+import * as msgs from './ia-message';
+
 class SvgInteractionSelectItem {
   constructor(svgTransformer) {
     this.svgTransformer = svgTransformer;
   }
+
+  dispatch(msg, event) {
+    switch (msg) {
+      case msgs.CLICK:
+        this.onClick(event);
+    }
+  }
+
+  // ----------------
 
   onClick(event) {
     const pt = this.getPoint(event);
@@ -20,6 +31,7 @@ class SvgInteractionSelectItem {
           if (element.parentNode && element.parentNode.nodeName === "text") {
             ele = element.parentNode;
           }
+          break;
       }
 
       if (ele) {

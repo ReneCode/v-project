@@ -22,25 +22,6 @@ const mutations = {
       throw new Error("store.item error");
     }
     Vue.set(it, 'selected', !it.selected);
-
-    // // move to items
-    // let fromItems = state.items;
-    // let toItems = state.workItems;
-    // if (!it.selected) {
-    //   // move back to items
-    //   fromItems = state.workItems;
-    //   toItems = state.items;
-    // }
-
-    // const idx = fromItems.findIndex(i => i.id === id);
-    // if (idx < 0) {
-    //   throw new Error("store.item error");
-    // }
-    // let removedItems = fromItems.splice(idx, 1);
-    // // do not use .concat (there is no vue-implementation for it)
-    // removedItems.forEach(it => {
-    //   toItems.push(it);
-    // })
   },
 
   [types.CLEAR_SELECTION](state) {

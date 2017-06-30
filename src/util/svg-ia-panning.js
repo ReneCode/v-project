@@ -1,31 +1,28 @@
 
-import SvgInteractionBase from "./svg-ia-base"
+import SvgInteractionBase from "./svg-ia-base";
+import * as msgs from './ia-message';
 
 class SvgInteractionPanning extends SvgInteractionBase {
-
-  onMouseDown(event) {
-    super.startTranslation(event)
-    // this.startTranslate = this.svgTransformer.getTranslate();
-    // this.startPoint = this.svgTransformer.getPoint(event);
+  /* eslint-disable no-useless-constructor */
+  constructor(svgTransformer) {
+    super(svgTransformer);
   }
 
-  onMouseUp(event) {
-    super.stopTranslation(event);
-    // this.onMouseMove(event);
-    // this.startPoint = undefined;
-  }
+  dispatch(msg, event) {
+    switch (msg) {
+      case msgs.START_DRAGGING:
+        super.startTranslation(event);
+        break;
 
-  onMouseMove(event) {
-    super.updateTranslation(event);
-    // if (this.startPoint) {
-    //   this.counter++;
-    //   let currentPoint = this.svgTransformer.getPoint(event);
-    //   let newTranslate = {
-    //     x: currentPoint.x - this.startPoint.x + this.startTranslate.x,
-    //     y: currentPoint.y - this.startPoint.y + this.startTranslate.y
-    //   }
+      case msgs.STOP_DRAGGING:
+        super.stopTranslation(event);
+        break;
 
-    this.svgTransformer.setTranslate(super.getTranslation());
+      case msgs.UPDATE_DRAGGING:
+        super.updateTranslation(event);
+        this.svgTransformer.setTranslate(super.getTranslation());
+        break;
+    }
   }
 }
 

@@ -18,7 +18,13 @@ export default {
 
   computed: {
     transformMatrix() {
-      return `matrix(1,0,0,1,${this.item.x},${this.item.y})`;
+      let x = this.item.x;
+      let y = this.item.y;
+      if (this.item.temp) {
+        x += this.item.temp.dx;
+        y += this.item.temp.dy;
+      }
+      return `matrix(1,0,0,1,${x},${y})`;
     },
 
     lines() {

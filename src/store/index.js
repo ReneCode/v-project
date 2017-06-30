@@ -15,6 +15,7 @@ const storeConfig = {
       return state.items.filter(i => i.selected === true);
     }
   },
+
   mutations: mutations
 };
 

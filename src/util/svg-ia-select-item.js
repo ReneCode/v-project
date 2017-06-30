@@ -25,6 +25,11 @@ class SvgInteractionSelectItem {
       if (ele) {
         let id = ele.getAttribute("gid");
         store.commit(types.TOGGLE_SELECT_ITEM, id)
+      } else {
+        // no element selected
+        if (store.getters.selectedItems.length > 0) {
+          store.commit(types.CLEAR_SELECTION);
+        }
       }
     }
   }

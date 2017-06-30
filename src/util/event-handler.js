@@ -19,7 +19,8 @@ class EventHandler {
       y: Math.floor(Math.random() * 300),
       fontSize: 5 + Math.floor(Math.random() * 20),
       fill: "#6ad",
-      selected: false
+      selected: false,
+      work: false
     };
     text.id = "id_" + Math.floor(Math.random() * 10E9);
     store.commit(types.ADD_ITEM, text);

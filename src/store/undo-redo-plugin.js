@@ -7,6 +7,7 @@ import undoRedoHistory from './undo-redo-history';
 let cloneDeep = require('lodash.clonedeep');
 
 const undoRedoPlugin = (store) => {
+  // initialize and save the starting stage
   undoRedoHistory.init(store);
   let firstState = cloneDeep(store.state);
   undoRedoHistory.addState(firstState);

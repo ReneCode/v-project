@@ -2,6 +2,9 @@
 // import store from '@/store';
 import * as msgs from './ia-message'
 
+import * as types from '@/store/mutation-types';
+import store from '@/store';
+
 const DELTA_LIMIT = 3;
 
 const MODE_NONE = 0;
@@ -26,7 +29,7 @@ class SvgInteractionPreprocess {
     // copy the event - we will need it later
     this.mouseDownEvent = new event.constructor(event.type, event);
     this.mode = MODE_START;
-    this.pickedElement = this.pickElement(event)
+    this.pickedElementId = this.getPickedElementId(event)
   }
 
   onMouseUp(event) {
@@ -36,7 +39,7 @@ class SvgInteractionPreprocess {
     if (this.getMouseDelta(event) <= DELTA_LIMIT) {
       this.interactionRoot.dispatch(msgs.CLICK, this.mouseDownEvent);
     } else {
-      if (this.pickedElement) {
+      if (this.pickedElementId) {
         this.interactionRoot.dispatch(msgs.STOP_MOVING, event);
       } else {
         this.interactionRoot.dispatch(msgs.STOP_DRAGGING, event);
@@ -49,7 +52,8 @@ class SvgInteractionPreprocess {
     switch (this.mode) {
       case MODE_START:
         if (this.getMouseDelta(event) >= DELTA_LIMIT) {
-          if (this.pickedElement) {
+          if (this.pickedElementId) {
+            store.commit(types.SELECT_ITEM, this.pickedElementId);
             this.interactionRoot.dispatch(msgs.START_MOVING, this.mouseDownEvent);
             this.mode = MODE_MOVING;
           } else {
@@ -79,7 +83,7 @@ class SvgInteractionPreprocess {
     return delta;
   }
 
-  pickElement(event) {
+  getPickedElementId(event) {
     const pt = this.getPoint(event);
     const element = document.elementFromPoint(pt.x, pt.y);
     if (element) {
@@ -94,7 +98,14 @@ class SvgInteractionPreprocess {
           }
           break;
       }
-      return pickedElement;
+
+      if (pickedElement) {
+        const id = pickedElement.getAttribute("gid");
+        if (id) {
+          return id;
+        }
+      }
+      return undefined;
     } else {
       return undefined;
     }

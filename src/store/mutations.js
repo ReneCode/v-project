@@ -16,6 +16,14 @@ const mutations = {
     state.items.push(item);
   },
 
+  [types.SELECT_ITEM](state, id) {
+    let it = state.items.find(i => i.id === id);
+    if (!it) {
+      throw new Error(`store: ${types.SELECT_ITEM} error`);
+    }
+    Vue.set(it, 'selected', true);
+  },
+
   [types.TOGGLE_SELECT_ITEM](state, id) {
     let it = state.items.find(i => i.id === id);
     if (!it) {

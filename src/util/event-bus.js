@@ -1,22 +1,22 @@
-import Vue from 'vue';
+import Emitter from './emitter';
 
 // inspired by:
 // https://alligator.io/vuejs/global-event-bus/
 class EventBus {
   constructor() {
-    this.vue = new Vue();
+    this.emitter = new Emitter();
   }
 
   on(event, callback) {
-    this.vue.$on(event, callback);
+    this.emitter.on(event, callback);
   }
 
   off(event, callback) {
-    this.vue.$off(event, callback);
+    this.emitter.off(event, callback);
   }
 
   emit(event, ...args) {
-    this.vue.$emit(event, ...args);
+    this.emitter.emit(event, ...args);
   }
 }
 

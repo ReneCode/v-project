@@ -2,13 +2,20 @@
   <div id="toolbar">
     <ul>
       <li>
+        <i @click="undo" class="fa fa-undo" :disabled="!canUndo" aria-hidden="true" title="undo"></i>
+      </li>
+      <li>
+        <i @click="redo" class="fa fa-repeat" :disabled="!canRedo" aria-hidden="true" title="redo"></i>
+      </li>
+  
+      <li>
         <i @click="addTextItem" class="glyphicon glyphicon-font"></i>
       </li>
       <li>
         <i @click="editItem" class="glyphicon glyphicon-pencil"></i>
       </li>
       <li>
-        <i @click="deleteItem" class="glyphicon glyphicon-trash"></i>
+        <i @click="deleteItem" class="glyphicon glyphicon-trash" title="delete"></i>
       </li>
   
       <li>
@@ -22,13 +29,32 @@
 </template>
 
 <script>
-
+import undoRedoHistory from '../store/undo-redo-history';
 import EventBus from '../util/event-bus';
 import store from '@/store';
 
 export default {
 
+  mounted() {
+    undoRedoHistory.onUpdate(this.updateUndoRedo);
+  },
+
+  data() {
+    return {
+      canUndo: false,
+      canRedo: false
+    }
+  },
+
   methods: {
+    undo() {
+      EventBus.emit('undo');
+      this.updateUndoRedo();
+    },
+    redo() {
+      EventBus.emit('redo');
+      this.updateUndoRedo();
+    },
     addTextItem() {
       EventBus.emit('addTextItem', "new text");
     },
@@ -44,6 +70,11 @@ export default {
     },
     nextPage() {
       EventBus.emit('nextPage');
+    },
+
+    updateUndoRedo() {
+      this.canUndo = undoRedoHistory.canUndo();
+      this.canRedo = undoRedoHistory.canRedo();
     }
   }
 }
@@ -72,8 +103,8 @@ ul {
   font-size: 30px;
   margin-bottom: 35px;
   cursor: pointer;
-  color: #eee;
-  opacity: 0.4;
+  color: #FFF;
+  opacity: 0.6;
   transition: opacity 0.2s ease;
 }
 
@@ -81,4 +112,9 @@ ul {
   opacity: 1;
 }
 
+#toolbar i[disabled] {
+  color: #666 !important;
+  opacity: 0.5 !important;
+  cursor: auto !important;
+}
 </style>

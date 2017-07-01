@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import mutations from './mutations';
+import undoRedoPlugin from './undo-redo-plugin';
 
 const storeConfig = {
   state: {
@@ -15,6 +16,8 @@ const storeConfig = {
       return state.items.filter(i => i.selected === true);
     }
   },
+
+  plugins: [undoRedoPlugin],
 
   mutations: mutations
 };

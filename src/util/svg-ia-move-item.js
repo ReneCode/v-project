@@ -4,14 +4,13 @@ import * as types from '@/store/mutation-types';
 import store from '@/store';
 
 import * as msgs from './ia-message';
-import SvgInteractionBase from "./svg-ia-base"
 
-class SvgInteractionMoveItem extends SvgInteractionBase {
+class SvgInteractionMoveItem {
   active = false;
 
   /* eslint-disable no-useless-constructor */
   constructor(svgTransformer) {
-    super(svgTransformer);
+    this.svgTransformer = svgTransformer;
   }
 
   dispatch(msg, event) {
@@ -35,31 +34,39 @@ class SvgInteractionMoveItem extends SvgInteractionBase {
   startMove(event) {
     this.active = store.getters.selectedItems.length > 0;
     if (this.active) {
-      super.startTranslation(event);
+      this.startPoint = this.svgTransformer.getSVGPoint(event);
     }
   }
 
   stopMove(event) {
     if (this.active) {
       this.active = false;
-      super.stopTranslation(event);
       store.getters.selectedItems.forEach(item => {
         Vue.set(item, 'temp', undefined);
       });
 
+      const currentPoint = this.svgTransformer.getSVGPoint(event);
+      const translation = {
+        x: currentPoint.x - this.startPoint.x,
+        y: currentPoint.y - this.startPoint.y
+      }
+
       store.commit(types.MOVE_ITEMS,
         {
           items: store.getters.selectedItems,
-          translation: super.getTranslation()
+          translation: translation
         });
     }
   }
 
   updateMove(event) {
     if (this.active) {
-      super.updateTranslation(event);
+      const currentPoint = this.svgTransformer.getSVGPoint(event);
+      const translation = {
+        x: currentPoint.x - this.startPoint.x,
+        y: currentPoint.y - this.startPoint.y
+      }
 
-      const translation = super.getTranslation();
       store.getters.selectedItems.forEach(item => {
         Vue.set(item, 'temp', {
           dx: translation.x,

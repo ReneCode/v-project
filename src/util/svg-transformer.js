@@ -33,13 +33,13 @@ class SvgTransformer {
 
   zoomIn(event) {
     const scale = this.transformData.sc * (1 + ZOOM_FACTOR);
-    const pt = this.getUntransformedPoint(event);
+    const pt = this.getSVGPoint(event);
     this.zoom(pt, scale);
   }
 
   zoomOut(event) {
     const scale = this.transformData.sc * (1 - ZOOM_FACTOR);
-    const pt = this.getUntransformedPoint(event);
+    const pt = this.getSVGPoint(event);
     this.zoom(pt, scale);
   }
 
@@ -70,7 +70,7 @@ class SvgTransformer {
     return pt;
   }
 
-  getUntransformedPoint(event) {
+  getSVGPoint(event) {
     let pt = this.getPoint(event);
     // return pt as "un-transformed" data
     let untransformedPt = new SvgPoint(

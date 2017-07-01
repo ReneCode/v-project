@@ -58,9 +58,9 @@ class SvgTransformer {
 
   // ----------
 
-  getPoint(event) {
+  getScreenPoint(event) {
     if (!event) {
-      throw new Error("getPoint: event missing");
+      throw new Error("getScreenPoint: event missing");
     }
     const svg = this.svgElement;
     let pt = svg.createSVGPoint();
@@ -71,13 +71,15 @@ class SvgTransformer {
   }
 
   getSVGPoint(event) {
-    let pt = this.getPoint(event);
-    // return pt as "un-transformed" data
-    let untransformedPt = new SvgPoint(
+    if (!event) {
+      throw new Error("getSVGPoint: event missing");
+    }
+    let pt = this.getScreenPoint(event);
+    let svgPt = new SvgPoint(
       (pt.x - this.transformData.tx) / this.transformData.sc,
       (pt.y - this.transformData.ty) / this.transformData.sc
     );
-    return untransformedPt;
+    return svgPt;
   }
 
   zoom(pt, scale) {

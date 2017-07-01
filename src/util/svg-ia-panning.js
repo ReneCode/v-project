@@ -1,26 +1,34 @@
 
-import SvgInteractionBase from "./svg-ia-base";
 import * as msgs from './ia-message';
 
-class SvgInteractionPanning extends SvgInteractionBase {
-  /* eslint-disable no-useless-constructor */
+class SvgInteractionPanning {
+  startScreenPoint = undefined;
+  currentTranslate = undefined;
+
   constructor(svgTransformer) {
-    super(svgTransformer);
+    this.svgTransformer = svgTransformer;
   }
 
   dispatch(msg, event) {
     switch (msg) {
       case msgs.START_DRAGGING:
-        super.startTranslation(event);
+        this.startScreenPoint = this.svgTransformer.getScreenPoint(event);
+        this.currentTranslate = this.svgTransformer.getTranslate();
         break;
 
       case msgs.STOP_DRAGGING:
-        super.stopTranslation(event);
+        this.startScreenPoint = undefined;
+        this.currentTranslate = undefined;
         break;
 
       case msgs.UPDATE_DRAGGING:
-        super.updateTranslation(event);
-        this.svgTransformer.setTranslate(super.getTranslation());
+        const currentScreenPoint = this.svgTransformer.getScreenPoint(event);
+        const translation = {
+          x: currentScreenPoint.x - this.startScreenPoint.x + this.currentTranslate.x,
+          y: currentScreenPoint.y - this.startScreenPoint.y + this.currentTranslate.y
+        }
+
+        this.svgTransformer.setTranslate(translation);
         break;
     }
   }

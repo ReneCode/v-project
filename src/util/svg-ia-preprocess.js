@@ -27,7 +27,7 @@ class SvgInteractionPreprocess {
 
     this.mouseDownPoint = this.getPoint(event);
     // copy the event - we will need it later
-    this.mouseDownEvent = new event.constructor(event.type, event);
+    this.mouseDownEvent = this.copyEvent(event);
     this.mode = MODE_START;
     this.pickedElementId = this.getPickedElementId(event)
   }
@@ -116,6 +116,19 @@ class SvgInteractionPreprocess {
       x: event.clientX,
       y: event.clientY
     };
+  }
+
+  copyEvent(event) {
+    if (typeof event.constructor === 'function') {
+      return new event.constructor(event.type, event);
+    } else {
+      // IE11 event.constructor does not work
+      let newEvent = {};
+      for (let key in event) {
+        newEvent[key] = event[key];
+      }
+      return newEvent;
+    }
   }
 }
 

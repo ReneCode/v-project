@@ -1,7 +1,7 @@
 
 <template>
   <g>
-    <rect v-if="item.selected" class="selection" :x="bbox().x" :y="bbox().y" :width="bbox().width" :height="bbox().height" :transform="transformMatrix"></rect>
+    <rect v-if="selected(item)" class="selection" :x="bbox().x" :y="bbox().y" :width="bbox().width" :height="bbox().height" :transform="transformMatrix"></rect>
   
     <text ref="textitem" v-if="lines.length===1" :gid="item.id" :transform="transformMatrix" :font-size="item.fontSize" :fill="item.fill">{{item.text}}</text>
     <text ref="textitem" v-else :gid="item.id" :transform="transformMatrix" :font-size="item.fontSize" :fill="item.fill">
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import ItemHelper from '@/util/item-helper';
 
 export default {
   name: 'svg-text-item',
@@ -20,9 +21,10 @@ export default {
     transformMatrix() {
       let x = this.item.x;
       let y = this.item.y;
-      if (this.item.temp) {
-        x += this.item.temp.dx;
-        y += this.item.temp.dy;
+      let translation = ItemHelper.getTranslation(this.item);
+      if (translation) {
+        x += translation.dx;
+        y += translation.dy;
       }
       return `matrix(1,0,0,1,${x},${y})`;
     },
@@ -52,6 +54,10 @@ export default {
       } else {
         return {};
       }
+    },
+
+    selected(item) {
+      return ItemHelper.isSelected(item);
     }
   }
 }

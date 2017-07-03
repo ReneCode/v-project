@@ -1,9 +1,10 @@
-import Vue from 'vue';
 import * as types from '@/store/mutation-types';
 
 import store from '@/store';
 
 import * as msgs from './ia-message';
+import pickedElementId from './picked-element-id';
+import ItemHelper from '@/util/item-helper';
 
 class SvgInteractionMoveItem {
   active = false;
@@ -32,18 +33,19 @@ class SvgInteractionMoveItem {
   // -----------
 
   startMove(event) {
-    this.active = store.getters.selectedItems.length > 0;
-    if (this.active) {
-      this.startPoint = this.svgTransformer.getSVGPoint(event);
+    this.pickedElementId = pickedElementId(event);
+    if (!this.pickedElementId) {
+      return;
     }
+    this.active = true;
+    store.dispatch(types.SELECT_ITEM_BY_ID, this.pickedElementId)
+    this.startPoint = this.svgTransformer.getSVGPoint(event);
   }
 
   stopMove(event) {
     if (this.active) {
       this.active = false;
-      store.getters.selectedItems.forEach(item => {
-        Vue.set(item, 'temp', undefined);
-      });
+      store.getters.selectedItems.forEach(item => ItemHelper.deleteTranslation(item));
 
       const currentPoint = this.svgTransformer.getSVGPoint(event);
       const translation = {
@@ -63,15 +65,12 @@ class SvgInteractionMoveItem {
     if (this.active) {
       const currentPoint = this.svgTransformer.getSVGPoint(event);
       const translation = {
-        x: currentPoint.x - this.startPoint.x,
-        y: currentPoint.y - this.startPoint.y
-      }
-
-      store.getters.selectedItems.forEach(item => {
-        Vue.set(item, 'temp', {
-          dx: translation.x,
-          dy: translation.y
-        });
+        dx: currentPoint.x - this.startPoint.x,
+        dy: currentPoint.y - this.startPoint.y
+      };
+      store.dispatch(types.SET_TRANSLATION_BY_ID, {
+        itemId: this.pickedElementId,
+        translation: translation
       });
     }
   }

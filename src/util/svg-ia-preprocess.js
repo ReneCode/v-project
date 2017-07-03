@@ -1,9 +1,10 @@
 
 // import store from '@/store';
 import * as msgs from './ia-message'
+import pickedElementId from './picked-element-id';
 
-import * as types from '@/store/mutation-types';
-import store from '@/store';
+// import * as types from '@/store/mutation-types';
+// import store from '@/store';
 
 const DELTA_LIMIT = 3;
 
@@ -29,7 +30,7 @@ class SvgInteractionPreprocess {
     // copy the event - we will need it later
     this.mouseDownEvent = this.copyEvent(event);
     this.mode = MODE_START;
-    this.pickedElementId = this.getPickedElementId(event)
+    this.pickedElementId = pickedElementId(event)
   }
 
   onMouseUp(event) {
@@ -53,7 +54,7 @@ class SvgInteractionPreprocess {
       case MODE_START:
         if (this.getMouseDelta(event) >= DELTA_LIMIT) {
           if (this.pickedElementId) {
-            store.commit(types.SELECT_ITEM, this.pickedElementId);
+            // store.commit(types.SELECT_ITEM, this.pickedElementId);
             this.interactionRoot.dispatch(msgs.START_MOVING, this.mouseDownEvent);
             this.mode = MODE_MOVING;
           } else {
@@ -83,33 +84,33 @@ class SvgInteractionPreprocess {
     return delta;
   }
 
-  getPickedElementId(event) {
-    const pt = this.getPoint(event);
-    const element = document.elementFromPoint(pt.x, pt.y);
-    if (element) {
-      let pickedElement;
-      switch (element.nodeName) {
-        case "text":
-          pickedElement = element;
-          break;
-        case "tspan":
-          if (element.parentNode && element.parentNode.nodeName === "text") {
-            pickedElement = element.parentNode;
-          }
-          break;
-      }
+  // getPickedElementId(event) {
+  //   const pt = this.getPoint(event);
+  //   const element = document.elementFromPoint(pt.x, pt.y);
+  //   if (element) {
+  //     let pickedElement;
+  //     switch (element.nodeName) {
+  //       case "text":
+  //         pickedElement = element;
+  //         break;
+  //       case "tspan":
+  //         if (element.parentNode && element.parentNode.nodeName === "text") {
+  //           pickedElement = element.parentNode;
+  //         }
+  //         break;
+  //     }
 
-      if (pickedElement) {
-        const id = pickedElement.getAttribute("gid");
-        if (id) {
-          return id;
-        }
-      }
-      return undefined;
-    } else {
-      return undefined;
-    }
-  }
+  //     if (pickedElement) {
+  //       const id = pickedElement.getAttribute("gid");
+  //       if (id) {
+  //         return id;
+  //       }
+  //     }
+  //     return undefined;
+  //   } else {
+  //     return undefined;
+  //   }
+  // }
 
   getPoint(event) {
     return {

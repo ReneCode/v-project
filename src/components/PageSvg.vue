@@ -128,8 +128,8 @@ export default {
       return this.projectService.getRedlinings(this.page.projectId, options)
         .then((redlinings) => {
           // this.items = redlinings;
-          this.$store.commit(types.CLEAR_ITEMS);
-          this.$store.commit(types.SET_ITEMS, redlinings);
+          this.$store.dispatch(types.CLEAR_ITEMS);
+          this.$store.dispatch(types.SET_ITEMS, redlinings);
         });
     },
 

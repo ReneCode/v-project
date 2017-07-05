@@ -27,6 +27,7 @@ export class UrlService {
     };
 
     this.links = {
+      projects:                    '/projects',
       projectByProjectId:          '/project/{1}',
       pageByProjectIdAndPageId:    '/project/{1}/page/{2}'
     }

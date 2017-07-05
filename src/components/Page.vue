@@ -4,14 +4,19 @@
     <div class="headline-gap"></div>
     <div class="flex-container">
       <toolbar></toolbar>
-      <page-svg v-if="page" class="svg-page" :page="page" :width="500" :height="400">
-      </page-svg>
+      <div class="flex-column">
+        <bread-crumb :crumbs="crumbs"></bread-crumb>
+        <page-svg v-if="page" class="svg-page" :page="page" :width="500" :height="400">
+        </page-svg>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Headline from './Headline.vue'
+import BreadCrumb from './BreadCrumb';
+
 import Toolbar from './Toolbar.vue'
 import PageSvg from './PageSvg.vue'
 import EventBus from '../util/event-bus';
@@ -23,6 +28,7 @@ export default {
   name: '',
   data() {
     return {
+      project: undefined,
       page: undefined
     }
   },
@@ -30,7 +36,8 @@ export default {
   components: {
     Headline,
     PageSvg,
-    Toolbar
+    Toolbar,
+    BreadCrumb
   },
 
   beforeMount() {
@@ -51,7 +58,26 @@ export default {
       if (this.page) {
         return `${this.page.properties[11000]} ${this.page.properties[11011]}`;
       }
+    },
+
+    crumbs() {
+      let crumbs = [];
+      if (this.project && this.page) {
+        crumbs.push({
+          name: this.project.name,
+          url: this.urlService.getLink('projects')
+        });
+        crumbs.push({
+          name: this.project.version,
+          url: this.urlService.getLink('projectByProjectId', this.project.id)
+        });
+        crumbs.push({
+          name: this.page.properties[11011]
+        });
+      }
+      return crumbs;
     }
+
   },
 
   mounted() {
@@ -70,6 +96,11 @@ export default {
       const pageId = route.params.pageId;
       const query = route.query;
       this.q = query.q;
+
+      this.projectService.getProject(this.projectId)
+        .then(project => {
+          this.project = project;
+        });
 
       this.projectService.getPage(this.projectId, pageId)
         .then((page) => {
@@ -118,6 +149,11 @@ export default {
 .flex-container {
   display: flex;
   flex-direction: row;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
 }
 </style>
 

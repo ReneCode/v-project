@@ -3,7 +3,6 @@
 <template>
   <div>
     <search @search="onSearch"></search>
-  
     <svg ref="svg" width="1200" height="700" :viewBox="viewBox">
       <g :transform="transform">
         <g v-if="svg" v-svg-loader="{svg:svg, callback:svgLoaderCallback}">
@@ -192,6 +191,8 @@ export default {
 
 
 
+
+
 /*#Id17_28300,
 #Id17_27224,
 #Id17_40461,*/
@@ -200,5 +201,21 @@ export default {
   opacity: 0;
   animation: blinkAnimation 1.2s infinite;
 }
+
+
+
+/*
+
+group, that has attribute id, its value starts with "Id"
+
+g[id^=Id]:not(.highlighted) {
+  opacity: 0.1;
+}
+
+path[class^=P] {
+  opacity: 0.1;  
+}
+
+*/
 </style>
 

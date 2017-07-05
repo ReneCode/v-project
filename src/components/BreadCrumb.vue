@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="search container-fluid col-xs-12 text-left">
+    <div class="breadcrumb-header col-xs-12 text-left">
   
       <ul class="breadcrumb">
         <li v-for="(crumb, index) in crumbs" :key="crumb">
@@ -33,6 +33,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+.breadcrumb-header {
+  margin: 0px;
+}
 
+.breadcrumb {
+  margin: 0px;
+  background-color: transparent;
+}
 </style>
 

@@ -23,8 +23,8 @@
 
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href="#" v-show="isLoggedIn" v-on:click="logout()">Logout</a>
-          <a href="#" v-show="!isLoggedIn" v-on:click="login()">Login</a>
+          <a id="logout" href="#" v-show="isLoggedIn" v-on:click="logout()">Logout</a>
+          <a id="login" href="#" v-show="!isLoggedIn" v-on:click="login()">Login</a>
         </li>
       </ul>
       <p class="navbar-text navbar-right">{{username}}</p>

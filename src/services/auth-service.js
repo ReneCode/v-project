@@ -36,7 +36,7 @@ class AuthService {
           console.log("ERROR:", error)
           return;
         }
-        localStorage.setItem(ID_TOKEN_KEY, authResult.idToken);
+        this.setIdToken(authResult.idToken);
         localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
         window.location.href = '/';
       });
@@ -75,11 +75,15 @@ class AuthService {
   // Get and store id_token in local storage
   setIdTokenFromLocation() {
     let idToken = this.getParameterByName('id_token');
-    localStorage.setItem(ID_TOKEN_KEY, idToken);
+    this.setIdToken(idToken);
   }
 
   getIdToken() {
     return localStorage.getItem(ID_TOKEN_KEY);
+  }
+
+  setIdToken(idToken) {
+    localStorage.setItem(ID_TOKEN_KEY, idToken);
   }
 
   // Helper function that will allow us to extract the access_token and id_token

@@ -5,7 +5,7 @@
     <div class="flex-container">
       <toolbar></toolbar>
       <div class="flex-column">
-        <bread-crumb :crumbs="crumbs"></bread-crumb>
+        <!--<bread-crumb :crumbs="crumbs"></bread-crumb>-->
         <page-svg v-if="page" class="svg-page" :page="page" :width="500" :height="400">
         </page-svg>
       </div>

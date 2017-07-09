@@ -90,6 +90,7 @@ export default {
   padding-top: 30px;
   padding-left: 15px;
   padding-right: 20px;
+  height: 100vh;
 }
 
 ul {

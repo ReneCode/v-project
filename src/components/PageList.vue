@@ -4,11 +4,11 @@
   
     <div class="headline-gap"></div>
   
-    <search title="Pages" @search="onSearch" />
+    <search title="Pages" @search="onSearch"></search>
   
     <div class="flex-container">
       <div v-for="page in pages" class="flex-item page-preview" v-on:click="selectPage(page)">
-        <page-card :page="page" />
+        <page-card :page="page"></page-card>
       </div>
     </div>
   </div>
@@ -78,25 +78,22 @@ export default {
 
 .flex-container {
   margin: 30px auto;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
 .flex-item {
-  border: 1px solid #bbb;
   margin: 10px;
   height: 150px;
   width: 200px;
-  background-color: #eaeaea;
 }
 
 .page-preview {
   cursor: pointer;
   font-size: 12px;
+  border: 1px solid #bbb;
+  background-color: #eaeaea;  
 }
+
 </style>

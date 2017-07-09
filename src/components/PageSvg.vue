@@ -2,8 +2,7 @@
 
 <template>
   <div>
-    <search @search="onSearch"></search>
-    <svg ref="svg" width="1200" height="700" :viewBox="viewBox">
+    <svg ref="svg" :viewBox="viewBox">
       <g :transform="transform">
         <g v-if="svg" v-svg-loader="{svg:svg, callback:svgLoaderCallback}">
         </g>
@@ -18,12 +17,12 @@
 <script>
 import { mapGetters } from 'vuex';
 
-import Search from './Search';
 import ProjectService from '../services/project-service'
 import FunctionListService from '../services/function-list-service'
 import SvgService from '../services/svg-service'
 import SvgLoader from '../directives/svg-loader'
 import SvgTransformer from '../util/svg-transformer'
+import SvgHighlight from '../util/svg-highlight'
 import SvgInteraction from '../util/svg-interaction'
 import SvgItem from './SvgItem';
 import * as types from '../store/mutation-types';
@@ -32,14 +31,13 @@ export default {
   name: 'page-svg',
   props: [
     'page',
-    'width', 'height'
+    'search'
   ],
   data() {
     return {
       svg: undefined,
       viewBox: undefined,
-      transform: undefined,
-      highlightedFunctions: undefined
+      transform: undefined
     }
   },
   computed: {
@@ -49,10 +47,10 @@ export default {
   },
   components: {
     SvgLoader,
-    SvgItem,
-    Search
+    SvgItem
   },
   beforeMount() {
+    // window.addEventListener('resize', this.handleResize)
     this.projectService = new ProjectService();
     this.svgService = new SvgService();
     this.functionListService = new FunctionListService();
@@ -60,21 +58,44 @@ export default {
   },
 
   mounted() {
+    // this.updateWidthHeight();
     this.svgTransformer = new SvgTransformer(this.$refs.svg, this.updateTransform)
     this.svgInteraction = new SvgInteraction(this.$refs.svg, this.svgTransformer);
+    this.svgHighlight = new SvgHighlight(this.$refs.svg, 'highlighted');
   },
+
+  // beforeDestroy: function() {
+  //   window.removeEventListener('resize', this.handleResize)
+  // },
 
   watch: {
     page(val) {
       this.getPageData();
     },
-    highlightedFunctions(newVal, oldVal) {
-      this.removeHighlight(oldVal);
-      this.setHighlight(newVal);
+
+    search(val) {
+      console.log("search changed:", val)
+      this.onSearch(val);
     }
   },
 
   methods: {
+
+    // updateWidthHeight() {
+    //   const w = this.$refs.root.offsetWidth - 20;
+    //   const h = this.$refs.root.offsetHeight - 20;
+    //   this.width = w;
+    //   this.height = h;
+    //   // const r = this.$refs.root.getBoundingClientRect();
+    //   console.log("resize:", w, h);
+    // },
+
+    // handleResize(evt) {
+    //   this.updateWidthHeight();
+    //   // const r = this.$refs.root.getBoundingClientRect();
+    //   // console.log("resize:", w, h, r);
+    // },
+
     updateTransform(transform) {
       this.transform = transform;
     },
@@ -133,38 +154,20 @@ export default {
     },
 
     onSearch(searchString) {
-      this.searchString = searchString;
-      this.functionListService.getFunctions(this.page, searchString)
-        .then(functions => {
-          this.highlightedFunctions = functions;
-        })
-    },
-
-    removeHighlight(functions) {
-      if (!functions) {
-        return;
+      if (!searchString) {
+        this.svgHighlight.clear();
+      } else {
+        this.functionListService.getFunctions(this.page, searchString)
+          .then(functions => {
+            const ids = functions.map(f => {
+              let objId = f.objectId;
+              objId = objId.replace("/", "_");
+              const domId = `Id${objId}`;
+              return domId;
+            });
+            this.svgHighlight.highlightById(ids);
+          })
       }
-      functions.forEach(f => {
-        let objId = f.objectId;
-        objId = objId.replace("/", "_");
-        const domId = `Id${objId}`;
-        let element = this.$refs.svg.getElementById(domId);
-        if (element) {
-          element.classList.remove('highlighted');
-        }
-      });
-    },
-
-    setHighlight(functions) {
-      functions.forEach(f => {
-        let objId = f.objectId;
-        objId = objId.replace("/", "_");
-        const domId = `Id${objId}`;
-        let element = this.$refs.svg.getElementById(domId);
-        if (element) {
-          element.classList.add('highlighted');
-        }
-      });
     }
   }
 }
@@ -193,6 +196,9 @@ export default {
 
 
 
+
+
+
 /*#Id17_28300,
 #Id17_27224,
 #Id17_40461,*/
@@ -201,6 +207,9 @@ export default {
   opacity: 0;
   animation: blinkAnimation 1.2s infinite;
 }
+
+
+
 
 
 

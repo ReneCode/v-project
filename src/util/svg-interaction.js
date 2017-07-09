@@ -27,7 +27,7 @@ class SvgInteraction {
 
     this.iaList.push(new SvgInteractionPreprocess(svgTransformer, this));
 
-    this.debugIa();
+    // this.debugIa();
   }
 
   debugIa() {

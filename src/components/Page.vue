@@ -2,11 +2,12 @@
   <div>
     <headline :title="title"></headline>
     <div class="headline-gap"></div>
-    <div class="flex-container">
+    <div class="flex-container-row">
       <toolbar></toolbar>
-      <div class="flex-column">
+      <div class="flex-grow flex-container-column">
         <!--<bread-crumb :crumbs="crumbs"></bread-crumb>-->
-        <page-svg v-if="page" class="svg-page" :page="page" :width="500" :height="400">
+        <search @search="onSearch" :initialvalue="initialSearch"></search>
+        <page-svg v-if="page" class="svg-page" :search="search" :page="page" :width="400" :height="200">
         </page-svg>
       </div>
     </div>
@@ -18,6 +19,7 @@ import Headline from './Headline.vue'
 import BreadCrumb from './BreadCrumb';
 
 import Toolbar from './Toolbar.vue'
+import Search from './Search.vue'
 import PageSvg from './PageSvg.vue'
 import EventBus from '../util/event-bus';
 import ProjectService from '../services/project-service';
@@ -29,7 +31,9 @@ export default {
   data() {
     return {
       project: undefined,
-      page: undefined
+      page: undefined,
+      search: "",
+      initialSearch: ""
     }
   },
 
@@ -37,6 +41,7 @@ export default {
     Headline,
     PageSvg,
     Toolbar,
+    Search,
     BreadCrumb
   },
 
@@ -56,7 +61,7 @@ export default {
   computed: {
     title() {
       if (this.page) {
-        return `${this.page.properties[11000]} ${this.page.properties[11011]}`;
+        return `${this.page.properties[11000]} - ${this.page.properties[11011]}`;
       }
     },
 
@@ -97,6 +102,8 @@ export default {
       const query = route.query;
       this.q = query.q;
 
+      // this.setInitialSearch();
+
       this.projectService.getProject(this.projectId)
         .then(project => {
           this.project = project;
@@ -113,6 +120,18 @@ export default {
         });
     },
 
+    setInitialSearch() {
+      const query = this.$route.query;
+      const q = query.q;
+      if (q.indexOf("function:") >= 0) {
+        const functionSearch = q.replace('function:', '');
+        this.initialSearch = functionSearch;
+        this.search = functionSearch;
+      }
+      this.initialSearch = "";
+      this.search = "";
+    },
+
     previousPage() {
       this.toPage(0);
     },
@@ -127,6 +146,10 @@ export default {
         const link = this.urlService.getLink('pageByProjectIdAndPageId', this.projectId, pageId);
         this.$router.push({ path: link, query: { q: this.q } });
       }
+    },
+
+    onSearch(search) {
+      this.search = search;
     }
   }
 
@@ -140,20 +163,25 @@ export default {
 }
 
 .svg-page {
+  border: 1px solid #bbb;
+  background-color: #eaeaea;
   text-align: center;
-  padding: 10px;
-  background-color: #eee;
+  padding: 6px;
   flex-grow: 1;
 }
 
-.flex-container {
+.flex-container-row {
   display: flex;
   flex-direction: row;
 }
 
-.flex-column {
+.flex-container-column {
   display: flex;
   flex-direction: column;
+}
+
+.flex-grow {
+  flex-grow: 2;
 }
 </style>
 

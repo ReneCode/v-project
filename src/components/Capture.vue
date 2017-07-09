@@ -33,8 +33,8 @@ export default {
       const idToken = query.id_token;
       if (idToken) {
         auth.setIdToken(idToken);
+        // console.log("id:", auth.getIdToken());
       }
-      console.log("id:", auth.getIdToken());
     }
 
     this.projectService = new ProjectService();
@@ -65,9 +65,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .svg-page {
-  text-align: center;
-  padding: 10px;
-  background-color: #eee;
+  padding: 6px;
   flex-grow: 1;
 }
 

@@ -27,8 +27,8 @@ export default new Router({
   routes: [
     { path: '/hello', name: 'hello', component: Hello },
     { path: '/projects', name: 'projects', component: ProjectsList, beforeEnter: requireAuth },
-    { path: '/project/:projectId', name: 'project', component: PageList },
-    { path: '/project/:projectId/page/:pageId', name: 'page', component: Page },
+    { path: '/project/:projectId', name: 'project', component: PageList, beforeEnter: requireAuth },
+    { path: '/project/:projectId/page/:pageId', name: 'page', component: Page, beforeEnter: requireAuth },
     { path: '/project/:projectId/page/:pageId/capture', name: 'capture', component: Capture },
     { path: '/', name: 'home', component: Home },
     { path: '/callback', component: Callback }]

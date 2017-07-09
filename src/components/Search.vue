@@ -4,7 +4,7 @@
       <div v-if="title" class="h3">{{title}}</div>
       <div v-else class="height-15"></div>
       <div class="form-group has-feedback">
-        <input v-model.trim="value" v-on:keyup="keyUp" type="text" class="search-input form-control text-center" placeholder="Search" onfocus="this.placeholder=''" >
+        <input ref="input" :value="value" v-on:keyup="keyUp" type="text" class="search-input form-control text-center" placeholder="Search" onfocus="this.placeholder=''" >
         <span v-on:click="onClear()" class="form-control-clear form-control-feedback"><i class="fa fa-times" aria-hidden="true"></i></span>
       </div>
     </div>
@@ -17,19 +17,11 @@ export default {
   name: 'search',
   props: [
     'title',
-    'initialvalue'
+    'value'
   ],
   data () {
     return {
-      timeoutId: undefined,
-      value: ""
-    }
-  },
-  watch: {
-    initialvalue(val) {
-      console.log("set initial value:", val);
-      this.value = val;
-      this.emit(val);
+      timeoutId: undefined
     }
   },
   computed: {
@@ -41,19 +33,19 @@ export default {
   },
   methods: {
     onClear() {
-      this.value = "";
-      this.emit(this.value);
+      this.emit("");
     },
     keyUp() {
       if (this.timeoutId) {
         clearTimeout(this.timeoutId);
       }
       this.timeoutId = setTimeout(() => {
-        this.emit(this.value);
+        const input = this.$refs.input.value;
+        this.emit(input);
       }, this.debounceTime);
     },
     emit(val) {
-      this.$emit('search', val);
+      this.$emit('input', val);
     }
   }
 }

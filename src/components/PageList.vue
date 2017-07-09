@@ -4,10 +4,10 @@
   
     <div class="headline-gap"></div>
   
-    <search title="Pages" @search="onSearch"></search>
+    <search title="Pages" v-model="search"></search>
   
     <div class="flex-container">
-      <div v-for="page in pages" class="flex-item page-preview" v-on:click="selectPage(page)">
+      <div v-for="page in pages" :key="page.id" class="flex-item page-preview" v-on:click="selectPage(page)">
         <page-card :page="page"></page-card>
       </div>
     </div>
@@ -30,42 +30,66 @@ export default {
   },
   data() {
     return {
-      projectId: 0,
       title: "",
       pages: [],
-      searchValue: ''
+      search: '',
+      projectId: 0
     }
   },
 
-  beforeMount() {
-    this.projectId = this.$route.params.projectId;
-    this.projectService = new ProjectService();
-    this.loadPages();
+  watch: {
+    search(newVal) {
+      this.search = newVal;
+      const url = window.location.pathname;
+      this.$router.push({
+        path: url,
+        query: { q: newVal }
+      });
+    }
+  },
 
-    this.projectService.getProject(this.projectId)
-      .then(project => {
-        this.title = `${project.name} [${project.version}]`;
-      })
+  beforeRouteUpdate(to, from, next) {
+    this.updatePageList(to);
+    next();
+  },
+
+  beforeMount() {
+    this.projectService = new ProjectService();
+
+    this.updatePageList(this.$route);
   },
 
   methods: {
-    loadPages() {
-      this.projectService.getPages(this.projectId, this.searchValue)
-        .then((pages) => {
+    updatePageList(route) {
+      const query = route.query;
+      const q = query.q;
+      this.search = q;
+
+      this.projectId = this.$route.params.projectId;
+
+      this.projectService.getProject(this.projectId).then(
+        project => {
+          this.title = `${project.name} [${project.version}]`;
+        },
+        err => {
+          console.error(err);
+        });
+
+      this.projectService.getPages(this.projectId, q).then(
+        pages => {
           this.pages = pages;
-        })
+        },
+        err => {
+          console.error(err);
+        });
     },
 
     selectPage(page) {
       const urlService = new UrlService();
       const link = urlService.getLink('pageByProjectIdAndPageId', this.projectId, page.id);
-      this.$router.push({ path: link, query: { q: this.searchValue } });
-    },
-
-    onSearch(value) {
-      this.searchValue = value;
-      this.loadPages();
+      this.$router.push({ path: link, query: { q: this.search } });
     }
+
   }
 }
 </script>
@@ -93,7 +117,6 @@ export default {
   cursor: pointer;
   font-size: 12px;
   border: 1px solid #bbb;
-  background-color: #eaeaea;  
+  background-color: #eaeaea;
 }
-
 </style>

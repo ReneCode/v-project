@@ -1,10 +1,10 @@
 <template>
   <div>
-  <headline></headline>
+    <headline></headline>
     <div class="headline-gap"></div>
-
-    <search title="Projects" @search="onSearch"></search>
-
+  
+    <search title="Projects" v-model="search"></search>
+  
     <div class="flex-container">
       <div v-for="project in projects" :key="project.id" class="flex-item project-preview" v-on:click="selectProject(project)">
         <project-card :project="project">
@@ -28,38 +28,56 @@ export default {
     ProjectCard,
     Search
   },
-  data () {
+  data() {
     return {
       projects: [],
-      searchValue: ''
+      search: ''
     }
   },
 
+  watch: {
+    search(newVal, oldVal) {
+      this.search = newVal;
+      const url = window.location.pathname;
+      this.$router.push({
+        path: url,
+        query: { q: newVal }
+      });
+    }
+  },
+
+  // route will change
+  beforeRouteUpdate(to, from, next) {
+    this.updateProjectList(to);
+    // do'nt forget to call next()
+    next();
+  },
+
   beforeMount() {
-    this.loadProjects();
+    this.urlService = new UrlService();
+    this.projectService = new ProjectService();
+
+    this.updateProjectList(this.$route);
   },
 
   methods: {
-    loadProjects() {
-      const projectService = new ProjectService();
-      projectService.getProjects(this.searchValue)
-      .then((projects) => {
-        this.projects = projects;
-      },
-      (err) => {
-        console.log("error", err);
-      });
+    updateProjectList(route) {
+      const query = route.query;
+      const q = query.q;
+      this.search = q;
+
+      this.projectService.getProjects(q).then(
+        projects => {
+          this.projects = projects;
+        },
+        err => {
+          console.error(err);
+        });
     },
 
     selectProject(project) {
-      const urlService = new UrlService();
-      const link = urlService.getLink('projectByProjectId', project.id);
+      const link = this.urlService.getLink('projectByProjectId', project.id);
       this.$router.push(link);
-    },
-
-    onSearch(value) {
-      this.searchValue = value;
-      this.loadProjects();
     }
   }
 }
@@ -68,7 +86,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .headline-gap {
-    margin-top: 50px;
+  margin-top: 50px;
 }
 
 .flex-container {

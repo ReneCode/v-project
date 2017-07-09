@@ -58,15 +58,10 @@ export default {
   },
 
   mounted() {
-    // this.updateWidthHeight();
     this.svgTransformer = new SvgTransformer(this.$refs.svg, this.updateTransform)
     this.svgInteraction = new SvgInteraction(this.$refs.svg, this.svgTransformer);
     this.svgHighlight = new SvgHighlight(this.$refs.svg, 'highlighted');
   },
-
-  // beforeDestroy: function() {
-  //   window.removeEventListener('resize', this.handleResize)
-  // },
 
   watch: {
     page(val) {
@@ -74,28 +69,11 @@ export default {
     },
 
     search(val) {
-      console.log("search changed:", val)
       this.onSearch(val);
     }
   },
 
   methods: {
-
-    // updateWidthHeight() {
-    //   const w = this.$refs.root.offsetWidth - 20;
-    //   const h = this.$refs.root.offsetHeight - 20;
-    //   this.width = w;
-    //   this.height = h;
-    //   // const r = this.$refs.root.getBoundingClientRect();
-    //   console.log("resize:", w, h);
-    // },
-
-    // handleResize(evt) {
-    //   this.updateWidthHeight();
-    //   // const r = this.$refs.root.getBoundingClientRect();
-    //   // console.log("resize:", w, h, r);
-    // },
-
     updateTransform(transform) {
       this.transform = transform;
     },
@@ -122,6 +100,7 @@ export default {
           this.svg = undefined;
           this.$nextTick(() => {
             this.svg = svg;
+            this.onSearch(this.search);
           })
         });
     },
@@ -191,27 +170,10 @@ export default {
   }
 }
 
-
-
-
-
-
-
-
-
-/*#Id17_28300,
-#Id17_27224,
-#Id17_40461,*/
-
 .highlighted {
   opacity: 0;
-  animation: blinkAnimation 1.2s infinite;
+  animation: blinkAnimation 1s infinite;
 }
-
-
-
-
-
 
 /*
 

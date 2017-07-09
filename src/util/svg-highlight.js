@@ -2,11 +2,11 @@
 class SvgHighlight {
 
   highlightedIds = [];
-  className = 'highlighted';
+  className = "";
 
   constructor(svg, className) {
     this.svg = svg;
-    this.className = className;
+    this.className = className || 'highlighted';
   }
 
   clear() {
@@ -20,7 +20,6 @@ class SvgHighlight {
 
   highlightById(ids) {
     this.clear();
-
     this.highlightedIds = ids;
     ids.forEach(id => {
       let element = this.svg.getElementById(id);

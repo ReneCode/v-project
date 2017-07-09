@@ -6,8 +6,8 @@
       <toolbar></toolbar>
       <div class="flex-grow flex-container-column">
         <!--<bread-crumb :crumbs="crumbs"></bread-crumb>-->
-        <search @search="onSearch" :initialvalue="initialSearch"></search>
-        <page-svg v-if="page" class="svg-page" :search="search" :page="page" :width="400" :height="200">
+        <search v-model="search"></search>
+        <page-svg v-if="page" class="svg-page" :search="search" :page="page">
         </page-svg>
       </div>
     </div>
@@ -32,8 +32,7 @@ export default {
     return {
       project: undefined,
       page: undefined,
-      search: "",
-      initialSearch: ""
+      search: ""
     }
   },
 
@@ -44,18 +43,28 @@ export default {
     Search,
     BreadCrumb
   },
+  watch: {
+    search(newVal) {
+      this.search = newVal;
+      const url = window.location.pathname;
+      this.$router.push({
+        path: url,
+        query: { q: newVal }
+      });
+    }
+  },
+
+  beforeRouteUpdate(to, from, next) {
+    this.updatePage(to);
+    next();
+  },
 
   beforeMount() {
     this.projectService = new ProjectService();
     this.pageListService = new PageListService();
     this.urlService = new UrlService();
-    this.updatePage(this.$route);
-  },
 
-  watch: {
-    $route(to, from) {
-      this.updatePage(to);
-    }
+    this.updatePage(this.$route);
   },
 
   computed: {
@@ -100,9 +109,8 @@ export default {
       this.projectId = route.params.projectId;
       const pageId = route.params.pageId;
       const query = route.query;
-      this.q = query.q;
-
-      // this.setInitialSearch();
+      const q = query.q;
+      this.search = q;
 
       this.projectService.getProject(this.projectId)
         .then(project => {
@@ -114,22 +122,10 @@ export default {
           this.page = page;
         });
 
-      this.pageListService.getPreviousAndNextPageId(this.projectId, pageId, this.q)
+      this.pageListService.getPreviousAndNextPageId(this.projectId, pageId, q)
         .then((previousAndNextPageIds) => {
           this.previousAndNextPageIds = previousAndNextPageIds;
         });
-    },
-
-    setInitialSearch() {
-      const query = this.$route.query;
-      const q = query.q;
-      if (q.indexOf("function:") >= 0) {
-        const functionSearch = q.replace('function:', '');
-        this.initialSearch = functionSearch;
-        this.search = functionSearch;
-      }
-      this.initialSearch = "";
-      this.search = "";
     },
 
     previousPage() {
@@ -144,12 +140,8 @@ export default {
       const pageId = this.previousAndNextPageIds[idx];
       if (pageId) {
         const link = this.urlService.getLink('pageByProjectIdAndPageId', this.projectId, pageId);
-        this.$router.push({ path: link, query: { q: this.q } });
+        this.$router.push({ path: link, query: { q: this.search } });
       }
-    },
-
-    onSearch(search) {
-      this.search = search;
     }
   }
 

@@ -36,7 +36,7 @@ class AuthService {
           console.log("ERROR:", error)
           return;
         }
-        this.setIdToken(authResult.idToken);
+        self.setIdToken(authResult.idToken);
         localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
         window.location.href = '/';
       });

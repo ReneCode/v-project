@@ -40,10 +40,11 @@ export default class SvgService {
       return;
     }
     const images = svgElement.getElementsByTagName("image");
-    if (images) {
-      images.forEach(image => {
-        this.adjustImage(projectId, image);
-      });
+    // do not use images.forEach.
+    // that does not work with phantomjs
+    for (let i = 0; i < images.length; i++) {
+      let image = images[i];
+      this.adjustImage(projectId, image);
     }
   }
 

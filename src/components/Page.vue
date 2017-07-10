@@ -46,11 +46,6 @@ export default {
   watch: {
     search(newVal) {
       this.search = newVal;
-      const url = window.location.pathname;
-      this.$router.push({
-        path: url,
-        query: { q: newVal }
-      });
     }
   },
 
@@ -110,7 +105,11 @@ export default {
       const pageId = route.params.pageId;
       const query = route.query;
       const q = query.q;
-      this.search = q;
+
+      // if searched for function than
+      if (q.indexOf("function:") === 0) {
+        this.search = q.replace("function:", "");
+      }
 
       this.projectService.getProject(this.projectId)
         .then(project => {
@@ -140,7 +139,8 @@ export default {
       const pageId = this.previousAndNextPageIds[idx];
       if (pageId) {
         const link = this.urlService.getLink('pageByProjectIdAndPageId', this.projectId, pageId);
-        this.$router.push({ path: link, query: { q: this.search } });
+        const q = this.$route.query.q;
+        this.$router.push({ path: link, query: { q: q } });
       }
     }
   }

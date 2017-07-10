@@ -107,7 +107,7 @@ export default {
       const q = query.q;
 
       // if searched for function than
-      if (q.indexOf("function:") === 0) {
+      if (q && q.indexOf("function:") === 0) {
         this.search = q.replace("function:", "");
       }
 

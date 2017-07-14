@@ -3,7 +3,7 @@
     <headline :title="title"></headline>
     <div class="headline-gap"></div>
     <div class="flex-container-row">
-      <toolbar></toolbar>
+      <toolbar :hasPreviousPage="hasPreviousPage" :hasNextPage="hasNextPage"></toolbar>
       <div class="flex-grow flex-container-column">
         <!--<bread-crumb :crumbs="crumbs"></bread-crumb>-->
         <search v-model="search"></search>
@@ -32,7 +32,11 @@ export default {
     return {
       project: undefined,
       page: undefined,
-      search: ""
+      search: "",
+
+      hasPreviousPage: false,
+      hasNextPage: false
+
     }
   },
 
@@ -124,6 +128,8 @@ export default {
       this.pageListService.getPreviousAndNextPageId(this.projectId, pageId, q)
         .then((previousAndNextPageIds) => {
           this.previousAndNextPageIds = previousAndNextPageIds;
+          this.hasPreviousPage = !!this.previousAndNextPageIds[0];
+          this.hasNextPage = !!this.previousAndNextPageIds[1];
         });
     },
 

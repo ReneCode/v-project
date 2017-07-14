@@ -19,10 +19,10 @@
       </li>
   
       <li>
-        <i @click="previousPage" class="glyphicon glyphicon-arrow-left"></i>
+        <i @click="previousPage" :disabled="!hasPreviousPage" class="glyphicon glyphicon-arrow-left"></i>
       </li>
       <li>
-        <i @click="nextPage" class="glyphicon glyphicon-arrow-right"></i>
+        <i @click="nextPage" :disabled="!hasNextPage" class="glyphicon glyphicon-arrow-right"></i>
       </li>
     </ul>
   </div>
@@ -38,6 +38,11 @@ export default {
   mounted() {
     undoRedoHistory.onUpdate(this.updateUndoRedo);
   },
+
+  props: [
+    'hasPreviousPage',
+    'hasNextPage'
+  ],
 
   data() {
     return {

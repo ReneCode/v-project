@@ -15,7 +15,7 @@
         <i @click="editItem" class="glyphicon glyphicon-pencil"></i>
       </li>
       <li>
-        <i @click="deleteItem" class="glyphicon glyphicon-trash" title="delete"></i>
+        <i @click="deleteItem" :disabled="!hasSelectedItems" class="glyphicon glyphicon-trash" title="delete"></i>
       </li>
   
       <li>
@@ -51,7 +51,18 @@ export default {
     }
   },
 
+  computed: {
+    hasSelectedItems() {
+      if (store.getters.selectedItems && store.getters.selectedItems.length > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
+
   methods: {
+
     undo() {
       EventBus.emit('undo');
       this.updateUndoRedo();

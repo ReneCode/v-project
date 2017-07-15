@@ -11,9 +11,9 @@
       <li>
         <i @click="addTextItem" class="glyphicon glyphicon-font"></i>
       </li>
-      <li>
+      <!-- <li>
         <i @click="editItem" class="glyphicon glyphicon-pencil"></i>
-      </li>
+      </li> -->
       <li>
         <i @click="deleteItem" :disabled="!hasSelectedItems" class="glyphicon glyphicon-trash" title="delete"></i>
       </li>

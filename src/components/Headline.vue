@@ -71,9 +71,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .title {
-  color: #3ee;
   font-size: 18px;
   line-height: 20px;
   padding-left: 40px;

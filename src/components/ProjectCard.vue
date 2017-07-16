@@ -99,4 +99,5 @@ export default {
 img {
   padding: 5px;
 }
+
 </style>

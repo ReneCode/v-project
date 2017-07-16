@@ -1,7 +1,9 @@
 <template>
-  <div class="name">
-    {{page.properties[11000]}} {{page.properties[11011]}}
-    <img :src="pageImage" width="188" height="120" :alt="page.properties[11000]">
+  <div>
+    <div class="name">
+      {{page.properties[11000]}} {{page.properties[11011]}}
+    </div>
+    <img :src="pageImage" width="194" height="125" :alt="page.properties[11000]">
   </div>
 </template>
 
@@ -30,8 +32,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+img {
+  margin-left: 2px;
+  margin-top: 2px;
+}
 .name {
   margin-top: 5px;
   margin-left: 5px;
+  height: 1.2em;
+  /* white-space: nowrap; */
 }
 </style>

@@ -165,6 +165,20 @@ class ProjectService {
                 })
         })
     }
+
+    capturePage(projectId, pageId) {
+        let pageUrl = window.location.origin +
+            this.urlService.getLink('capturePageByProjectIdAndPageId', projectId, pageId) +
+            "?id_token=" + auth.getIdToken();
+
+        const data = {
+            projectId,
+            pageId,
+            url: pageUrl
+        };
+        const url = this.urlService.getUrl('capture');
+        return this.authAxios.post(url, data);
+    }
 }
 
 export default ProjectService;

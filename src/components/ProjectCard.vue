@@ -1,13 +1,12 @@
 <template>
   <div>
     {{project.name}} [{{project.version}}] / {{countPages}}
-    <img :src="pageImage" alt="first page">
+    <img :src="pageImage" width="295" height="180" alt="first page">
     <!--<img src="http://localhost:3002/api/v1/svgs/fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3/1.svg/png">-->
   </div>
 </template>
 
 <script>
-import SvgService from "../services/svg-service";
 import ProjectService from "../services/project-service";
 import { UrlService } from "../services/url-service";
 
@@ -32,35 +31,45 @@ export default {
         this.countPages = count;
       });
 
-    let svgService = new SvgService();
-    svgService.getSvgAsImage(this.project.id, "1")
-      .then((image) => {
-        let array = new Uint8Array(image);
-        let blob = new Blob([array]);
-        const urlCreator = window.URL || window.webkitURL || window;
-        const imageUrl = urlCreator.createObjectURL(blob);
-        this.pageImage = imageUrl;
-        // var encoded = new TextEncoderLite('utf-8').encode(image);
-        // console.log(encoded);
-        // var b64encoded = base64js.fromByteArray(encoded);
-        // console.log(b64encoded);
-        // let str = "data:image/png;base64," + b64encoded;
-        // console.log(str);
-        // this.pageImage = str;
+    projectService.getPages(this.project.id, "")
+      .then(pages => {
+        if (pages && pages.length > 0) {
+          const firstPage = pages[0];
+          const captureUrl = this.urlService.getUrl('capturePictureByProjectIdAndPageId', this.project.id, firstPage.id);
+          console.log(captureUrl)
+          this.pageImage = captureUrl;
+        }
+      });
+    // }
+    // let svgService = new SvgService();
+    // svgService.getSvgAsImage(this.project.id, "1")
+    //   .then((image) => {
+    //     let array = new Uint8Array(image);
+    //     let blob = new Blob([array]);
+    //     const urlCreator = window.URL || window.webkitURL || window;
+    //     const imageUrl = urlCreator.createObjectURL(blob);
+    //     this.pageImage = imageUrl;
+    // var encoded = new TextEncoderLite('utf-8').encode(image);
+    // console.log(encoded);
+    // var b64encoded = base64js.fromByteArray(encoded);
+    // console.log(b64encoded);
+    // let str = "data:image/png;base64," + b64encoded;
+    // console.log(str);
+    // this.pageImage = str;
 
-        // let ec = this.b64EncodeUnicode(image);
-        // console.log(ec);
-        // this.pageImage = "data:image/png;base64," + ec;
-        /*
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                  console.log(reader.result);
-                  this.pageImage = reader.result;
-                }
-                // reader.onerror = reject
-                reader.readAsDataURL(blob)
-                */
-      })
+    // let ec = this.b64EncodeUnicode(image);
+    // console.log(ec);
+    // this.pageImage = "data:image/png;base64," + ec;
+    /*
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              console.log(reader.result);
+              this.pageImage = reader.result;
+            }
+            // reader.onerror = reject
+            reader.readAsDataURL(blob)
+            */
+    // })
   },
 
   computed: {
@@ -87,5 +96,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+img {
+  padding: 5px;
+}
 </style>

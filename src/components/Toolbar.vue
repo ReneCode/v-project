@@ -24,6 +24,13 @@
       <li>
         <i @click="nextPage" :disabled="!hasNextPage" class="glyphicon glyphicon-arrow-right"></i>
       </li>
+
+      <li class="separator"></li>
+
+      <li>
+        <i @click="capture" class="glyphicon glyphicon-camera"></i>
+      </li>
+      
     </ul>
   </div>
 </template>
@@ -88,6 +95,10 @@ export default {
       EventBus.emit('nextPage');
     },
 
+    capture() {
+      EventBus.emit('capturePage');
+    },
+
     updateUndoRedo() {
       this.canUndo = undoRedoHistory.canUndo();
       this.canRedo = undoRedoHistory.canRedo();
@@ -134,4 +145,10 @@ ul {
   opacity: 0.5 !important;
   cursor: auto !important;
 }
+
+.separator {
+  height: 40px;
+  border-top: 2px solid #666;
+}
+
 </style>

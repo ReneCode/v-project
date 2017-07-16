@@ -96,11 +96,13 @@ export default {
   mounted() {
     EventBus.on('previousPage', this.previousPage);
     EventBus.on('nextPage', this.nextPage);
+    EventBus.on('capturePage', this.capturePage);
   },
 
   beforeDestroy() {
     EventBus.off('previousPage', this.previousPage);
     EventBus.off('nextPage', this.nextPage);
+    EventBus.off('capturePage', this.capturePage);
   },
 
   methods: {
@@ -139,6 +141,10 @@ export default {
 
     nextPage() {
       this.toPage(1);
+    },
+
+    capturePage() {
+      this.projectService.capturePage(this.projectId, this.page.id);
     },
 
     toPage(idx) {

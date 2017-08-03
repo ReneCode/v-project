@@ -3,7 +3,7 @@
   <g>
     <rect v-if="selected(item)" class="selection" :x="bbox().x" :y="bbox().y" :width="bbox().width" :height="bbox().height"></rect>
   
-    <rect ref="item" :gid="item.id" :x="x" :y="y" :width="width" :height="height" :stroke="item.stroke" :fill="item.fill"></rect>
+    <rect ref="item" :gid="item.id" :x="x" :y="y" :width="item.width" :height="item.height" :stroke="item.stroke" :fill="item.fill"></rect>
   </g>
 </template>
 
@@ -17,7 +17,7 @@ export default {
   computed: {
 
     x() {
-      let x = Math.min(this.item.x1, this.item.x2);
+      let x = this.item.x;
       let translation = ItemHelper.getTranslation(this.item);
       if (translation) {
         x += translation.dx;
@@ -25,18 +25,12 @@ export default {
       return x;
     },
     y() {
-      let y = Math.min(this.item.y1, this.item.y2);
+      let y = this.item.y;
       let translation = ItemHelper.getTranslation(this.item);
       if (translation) {
         y += translation.dy;
       }
       return y;
-    },
-    width() {
-      return Math.abs(this.item.x1 - this.item.x2);
-    },
-    height() {
-      return Math.abs(this.item.y1 - this.item.y2);
     }
   },
 

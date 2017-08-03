@@ -9,11 +9,12 @@ class SvgInteractionRectangle {
   constructor(svgTransformer) {
     this.svgTransformer = svgTransformer
     this.draw = false;
+    this.startPoint = null;
   }
 
   onMouseDown(event) {
-    const p1 = this.svgTransformer.getSVGPoint(event);
-    this.rectangle = this.createRectangle(p1, p1);
+    this.startPoint = this.svgTransformer.getSVGPoint(event);
+    this.rectangle = this.createRectangle(this.startPoint);
     store.commit(types.ADD_ITEM, this.rectangle);
     return "stop"
   }
@@ -34,13 +35,15 @@ class SvgInteractionRectangle {
   setPoint2(event) {
     if (this.rectangle) {
       const p2 = this.svgTransformer.getSVGPoint(event);
-      this.rectangle.x2 = p2.x;
-      this.rectangle.y2 = p2.y;
+      this.rectangle.x = Math.min(this.startPoint.x, p2.x);
+      this.rectangle.y = Math.min(this.startPoint.y, p2.y);
+      this.rectangle.width = Math.abs(this.startPoint.x - p2.x);
+      this.rectangle.height = Math.abs(this.startPoint.y - p2.y);
     }
   }
 
-  createRectangle(p1, p2) {
-    return new SvgRectangle(p1.x, p1.y, p2.x, p2.y);
+  createRectangle(pt) {
+    return new SvgRectangle(pt.x, pt.y, 0, 0);
 
     // let rectangle = {
     //   type: "rect",

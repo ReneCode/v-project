@@ -2,22 +2,20 @@
 import SvgItem from "./svg-item";
 
 class SvgRectangle extends SvgItem {
-  constructor(x1, y1, x2, y2) {
+  constructor(x, y, width, height) {
     super();
     this.type = "rect";
-    this.x1 = x1;
-    this.y1 = y1;
-    this.x2 = x2;
-    this.y2 = y2;
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
     this.stroke = "#333";
-    this.fill = "#5e2";
+    this.fill = "#decebe";
   }
 
   translate(dx, dy) {
-    this.x1 += dx;
-    this.y1 += dy;
-    this.x2 += dx;
-    this.y2 += dy;
+    this.x += dx;
+    this.y += dy;
   }
 }
 

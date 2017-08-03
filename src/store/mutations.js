@@ -11,6 +11,9 @@ const mutations = {
   },
 
   [types.ADD_ITEM](state, item) {
+    if (!item.id) {
+      item.id = "id_" + Math.floor(Math.random() * 10E9);
+    }
     state.items.push(item);
   },
 

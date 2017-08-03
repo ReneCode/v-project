@@ -6,6 +6,10 @@ import SvgInteractionSelectItem from './svg-ia-select-item';
 import SvgInteractionMoveItem from './svg-ia-move-item';
 import SvgInteractionPreprocess from './svg-ia-preprocess';
 
+import SvgInteractionRectangle from './svg-ia-rectangle';
+
+import EventBus from './event-bus';
+
 class SvgInteraction {
   iaList = [];
 
@@ -28,6 +32,10 @@ class SvgInteraction {
     this.iaList.push(new SvgInteractionPreprocess(svgTransformer, this));
 
     // this.debugIa();
+
+    EventBus.on("startIaRectangle", payload => {
+      this.startIaRectangle(payload);
+    });
   }
 
   debugIa() {
@@ -51,54 +59,35 @@ class SvgInteraction {
   }
 
   onClick(ev) {
-    this.iaList.forEach(ia => {
-      if (ia.onClick && !ia.dispatch) {
-        ia.onClick(ev);
-      }
-    })
+    this.route("onClick", ev);
   }
 
   onMouseMove(ev) {
-    const event = window.event || ev; // old IE support
-
-    this.iaList.forEach(ia => {
-      if (ia.onMouseMove && !ia.dispatch) {
-        ia.onMouseMove(event);
-      }
-    });
-    this.finishEvent(event)
+    this.route("onMouseMove", ev);
   }
 
   onMouseDown(ev) {
-    const event = window.event || ev; // old IE support
-
-    this.iaList.forEach(ia => {
-      if (ia.onMouseDown && !ia.dispatch) {
-        ia.onMouseDown(event);
-      }
-    })
-    this.finishEvent(event)
+    this.route("onMouseDown", ev);
   }
 
   onMouseUp(ev) {
-    const event = window.event || ev; // old IE support
-
-    this.iaList.forEach(ia => {
-      if (ia.onMouseUp && !ia.dispatch) {
-        ia.onMouseUp(event);
-      }
-    })
-    this.finishEvent(event)
+    this.route("onMouseUp", ev);
   }
 
   onMouseWheel(ev) {
+    this.route("onMouseWheel", ev);
+  }
+
+  route(method, ev) {
     const event = window.event || ev; // old IE support
 
-    this.iaList.forEach(ia => {
-      if (ia.onMouseWheel && !ia.dispatch) {
-        ia.onMouseWheel(event);
+    for (const ia of this.iaList) {
+      if (ia[method] && !ia.dispatch) {
+        if (ia[method](event) === "stop") {
+          break;
+        }
       }
-    })
+    };
     this.finishEvent(event)
   }
 
@@ -110,6 +99,15 @@ class SvgInteraction {
       event.preventDefault();
     }
   }
+
+  startInteraction(ia) {
+    this.iaList.unshift(ia);
+  }
+
+  startIaRectangle() {
+    this.startInteraction(new SvgInteractionRectangle(this.svgTransformer));
+  }
+
 }
 
 export default SvgInteraction;

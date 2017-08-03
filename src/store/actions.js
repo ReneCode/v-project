@@ -17,8 +17,18 @@ const actions = {
     }
   },
 
+  [types.ADD_ITEM]({ commit, state }, newItem) {
+    return new Promise((resolve, reject) => {
+      if (newItem) {
+        commit(types.ADD_ITEM, newItem);
+        resolve(newItem);
+      }
+      reject();
+    })
+  },
+
   [types.SELECT_ITEM_BY_ID]({ commit, state }, itemId) {
-    actions.clearSelection({commit, state})
+    actions.clearSelection({ commit, state })
 
     let items = state.items.filter(it => it.id === itemId);
     if (!items || items.length !== 1) {

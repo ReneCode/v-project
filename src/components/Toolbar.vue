@@ -11,6 +11,9 @@
       <li>
         <i @click="addTextItem" class="glyphicon glyphicon-font"></i>
       </li>
+      <li>
+        <i @click="addRectangleItem" class="glyphicon glyphicon-unchecked"></i>
+      </li>
       <!-- <li>
         <i @click="editItem" class="glyphicon glyphicon-pencil"></i>
       </li> -->
@@ -80,6 +83,9 @@ export default {
     },
     addTextItem() {
       EventBus.emit('addTextItem', "new text");
+    },
+    addRectangleItem() {
+      EventBus.emit('startIaRectangle');
     },
     editItem() { },
     deleteItem() {

@@ -1,6 +1,8 @@
 
 import * as types from './mutation-types';
 
+import SvgItem from "@/models/svg-item";
+
 const mutations = {
   [types.CLEAR_ITEMS](state) {
     state.items = [];
@@ -33,8 +35,12 @@ const mutations = {
     const ids = payload.items.map(i => i.id);
     let changeItems = state.items.filter(i => ids.indexOf(i.id) >= 0);
     changeItems.forEach(i => {
-      i.x += translation.x;
-      i.y += translation.y;
+      if (i instanceof SvgItem) {
+        i.translate(translation.x, translation.y);
+      } else {
+        i.x += translation.x;
+        i.y += translation.y;
+      }
     });
   }
 

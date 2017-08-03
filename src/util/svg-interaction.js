@@ -83,11 +83,26 @@ class SvgInteraction {
 
     for (const ia of this.iaList) {
       if (ia[method] && !ia.dispatch) {
-        if (ia[method](event) === "stop") {
+        let stopRoute = false;
+        const result = ia[method](event);
+        switch (result) {
+          case "stop":
+            stopRoute = true;
+            break;
+          case "finish":
+            stopRoute = true;
+            this.iaList = this.iaList.filter(i => i !== ia);
+            break;
+          case undefined:
+            break;
+          default:
+            throw new Error("unhandled ia result:", result);
+        }
+        if (stopRoute) {
           break;
         }
       }
-    };
+    }
     this.finishEvent(event)
   }
 
@@ -101,11 +116,17 @@ class SvgInteraction {
   }
 
   startInteraction(ia) {
-    this.iaList.unshift(ia);
+    return new Promise((resolve, reject) => {
+      this.iaList.unshift(ia);
+      resolve(ia);
+    });
   }
 
   startIaRectangle() {
-    this.startInteraction(new SvgInteractionRectangle(this.svgTransformer));
+    this.startInteraction(new SvgInteractionRectangle(this.svgTransformer))
+      .then(ia => {
+
+      });
   }
 
 }

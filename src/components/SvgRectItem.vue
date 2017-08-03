@@ -1,7 +1,7 @@
 
 <template>
   <g>
-    <rect v-if="selected(item)" class="selection" :x="bbox().x" :y="bbox().y" :width="bbox().width" :height="bbox().height" :transform="transformMatrix"></rect>
+    <rect v-if="selected(item)" class="selection" :x="bbox().x" :y="bbox().y" :width="bbox().width" :height="bbox().height"></rect>
   
     <rect ref="item" :gid="item.id" :x="x" :y="y" :width="width" :height="height" :stroke="item.stroke" :fill="item.fill"></rect>
   </g>
@@ -15,11 +15,22 @@ export default {
   props: ['item'],
 
   computed: {
+
     x() {
-      return Math.min(this.item.x1, this.item.x2);
+      let x = Math.min(this.item.x1, this.item.x2);
+      let translation = ItemHelper.getTranslation(this.item);
+      if (translation) {
+        x += translation.dx;
+      }
+      return x;
     },
     y() {
-      return Math.min(this.item.y1, this.item.y2);
+      let y = Math.min(this.item.y1, this.item.y2);
+      let translation = ItemHelper.getTranslation(this.item);
+      if (translation) {
+        y += translation.dy;
+      }
+      return y;
     },
     width() {
       return Math.abs(this.item.x1 - this.item.x2);

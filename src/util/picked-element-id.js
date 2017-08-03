@@ -13,6 +13,9 @@ function pickedElementId(event) {
           pickedElement = element.parentNode;
         }
         break;
+      case "rect":
+        pickedElement = element;
+        break;
     }
 
     if (pickedElement) {

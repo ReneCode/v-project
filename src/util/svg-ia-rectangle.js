@@ -2,6 +2,8 @@ import * as types from '@/store/mutation-types';
 
 import store from '@/store';
 
+import SvgRectangle from "@/models/svg-rectangle";
+
 class SvgInteractionRectangle {
 
   constructor(svgTransformer) {
@@ -13,11 +15,13 @@ class SvgInteractionRectangle {
     const p1 = this.svgTransformer.getSVGPoint(event);
     this.rectangle = this.createRectangle(p1, p1);
     store.commit(types.ADD_ITEM, this.rectangle);
+    return "stop"
   }
 
   onMouseUp(event) {
     this.setPoint2(event);
     this.rectangle = null;
+    return "finish"
   }
 
   onMouseMove(event) {
@@ -36,17 +40,19 @@ class SvgInteractionRectangle {
   }
 
   createRectangle(p1, p2) {
-    let rectangle = {
-      type: "rect",
-      x1: p1.x,
-      y1: p1.y,
-      x2: p2.x,
-      y2: p2.y,
-      stroke: "#333",
-      fill: "#ea4",
-      selected: false
-    };
-    return rectangle;
+    return new SvgRectangle(p1.x, p1.y, p2.x, p2.y);
+
+    // let rectangle = {
+    //   type: "rect",
+    //   x1: p1.x,
+    //   y1: p1.y,
+    //   x2: p2.x,
+    //   y2: p2.y,
+    //   stroke: "#333",
+    //   fill: "#ea4",
+    //   selected: false
+    // };
+    // return rectangle;
 
     // store.dispatch(types.ADD_ITEM, rectangle).then((data) => {
     //   console.log("finish create rectangle");

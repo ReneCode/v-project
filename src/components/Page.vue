@@ -26,6 +26,9 @@ import ProjectService from '../services/project-service';
 import PageListService from '../services/page-list-service'
 import { UrlService } from "../services/url-service";
 
+import * as msgs from "@/store/mutation-types";
+import store from "@/store";
+
 export default {
   name: '',
   data() {
@@ -108,6 +111,7 @@ export default {
   methods: {
     updatePage(route) {
       this.projectId = route.params.projectId;
+      store.dispatch(msgs.SET_PROJECTID, this.projectId);
       const pageId = route.params.pageId;
       const query = route.query;
       const q = query.q;

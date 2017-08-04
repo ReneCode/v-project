@@ -15,8 +15,11 @@
         <i @click="addRectangleItem" class="glyphicon glyphicon-unchecked"></i>
       </li>
       <!-- <li>
-        <i @click="editItem" class="glyphicon glyphicon-pencil"></i>
+        <i @click="testing" class="glyphicon glyphicon glyphicon-wrench"></i>
       </li> -->
+      <!-- <li>
+              <i @click="editItem" class="glyphicon glyphicon-pencil"></i>
+            </li> -->
       <li>
         <i @click="deleteItem" :disabled="!hasSelectedItems" class="glyphicon glyphicon-trash" title="delete"></i>
       </li>
@@ -27,13 +30,13 @@
       <li>
         <i @click="nextPage" :disabled="!hasNextPage" class="glyphicon glyphicon-arrow-right"></i>
       </li>
-
+  
       <li class="separator"></li>
-
+  
       <li>
         <i @click="capture" class="glyphicon glyphicon-camera"></i>
       </li>
-      
+  
     </ul>
   </div>
 </template>
@@ -105,6 +108,10 @@ export default {
       EventBus.emit('capturePage');
     },
 
+    testing() {
+      EventBus.emit("testing");
+    },
+
     updateUndoRedo() {
       this.canUndo = undoRedoHistory.canUndo();
       this.canRedo = undoRedoHistory.canRedo();
@@ -156,5 +163,4 @@ ul {
   height: 40px;
   border-top: 2px solid #666;
 }
-
 </style>

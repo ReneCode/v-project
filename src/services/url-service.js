@@ -27,7 +27,9 @@ export class UrlService {
       imageByProjectIdAndName:    `${hostPicture}/api/v1/images/{1}/{2}`,
 
       capture:                    `${hostCapture}/api/v1/captures`,
-      capturePictureByProjectIdAndPageId: `${hostCapture}/api/v1/captures/{1}/{2}`
+      capturePictureByProjectIdAndPageId: `${hostCapture}/api/v1/captures/{1}/{2}`,
+
+      graphicsByProjectId:          `${hostProject}/api/v1/projects/{1}/graphics`
     };
 
     this.links = {

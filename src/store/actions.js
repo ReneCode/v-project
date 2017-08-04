@@ -1,9 +1,16 @@
 
+import Vue from 'vue';
 import * as types from './mutation-types';
 
 import ItemHelper from '../util/item-helper';
 
+import graphicsService from '@/services/graphics-service';
+
 const actions = {
+
+  [types.SET_PROJECTID]({ commit, state }, projectId) {
+    commit(types.SET_PROJECTID, projectId);
+  },
 
   [types.CLEAR_ITEMS]({ commit, state }, id) {
     if (state.items.length > 0) {
@@ -19,11 +26,39 @@ const actions = {
 
   [types.ADD_ITEM]({ commit, state }, newItem) {
     return new Promise((resolve, reject) => {
-      if (newItem) {
-        commit(types.ADD_ITEM, newItem);
-        resolve(newItem);
+      if (!newItem) {
+        reject();
+      } else {
+        let projectId = state.projectId;
+        graphicsService.postItem(projectId, newItem)
+          .then(dbId => {
+            Vue.set(newItem, "_id", dbId);
+            commit(types.ADD_ITEM, newItem);
+            resolve(newItem);
+          })
+          .catch(err => {
+            console.error(err);
+            reject();
+          });
       }
-      reject();
+    })
+  },
+
+  [types.DELETE_ITEMS]({ commit, state }, items) {
+    return new Promise((resolve, reject) => {
+      if (!items) {
+        reject();
+      } else {
+        let projectId = state.projectId;
+        graphicsService.deleteItems(projectId, items)
+          .then(result => {
+            commit(types.DELETE_ITEMS, items);
+            resolve();
+          }, err => {
+            console.error(err);
+            reject();
+          });
+      }
     })
   },
 
@@ -32,7 +67,7 @@ const actions = {
 
     let items = state.items.filter(it => it.id === itemId);
     if (!items || items.length !== 1) {
-      throw new Error("Item not found");
+      console.error("Item not found");
     }
     ItemHelper.setSelected(items[0]);
   },

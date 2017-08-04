@@ -43,7 +43,7 @@ class EventHandler {
   }
 
   deleteItems(items) {
-    store.commit(types.DELETE_ITEMS, items);
+    store.dispatch(types.DELETE_ITEMS, items);
   }
 
 }

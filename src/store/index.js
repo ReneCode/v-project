@@ -9,9 +9,13 @@ import ItemHelper from '@/util/item-helper';
 
 const storeConfig = {
   state: {
-    items: []
+    items: [],
+    projectId: 0
   },
   getters: {
+    projectId: state => {
+      return state.projectId;
+    },
     svgItems: (state) => {
       return state.items;
     },

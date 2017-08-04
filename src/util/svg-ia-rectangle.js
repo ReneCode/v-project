@@ -2,6 +2,7 @@ import * as types from '@/store/mutation-types';
 
 import store from '@/store';
 
+import temporaryStore from "@/models/temporary-store";
 import SvgRectangle from "@/models/svg-rectangle";
 
 class SvgInteractionRectangle {
@@ -13,14 +14,26 @@ class SvgInteractionRectangle {
   }
 
   onMouseDown(event) {
-    this.startPoint = this.svgTransformer.getSVGPoint(event);
-    this.rectangle = this.createRectangle(this.startPoint);
-    store.commit(types.ADD_ITEM, this.rectangle);
+    let pt = this.svgTransformer.getSVGPoint(event);
+    this.startPoint = pt;
+    this.rectangle = new SvgRectangle(pt.x, pt.y, 0, 0);
+    temporaryStore.addItem(this.rectangle);
+
     return "stop"
   }
 
   onMouseUp(event) {
     this.setPoint2(event);
+
+    temporaryStore.removeItem(this.rectangle);
+
+    store.dispatch(types.ADD_ITEM, this.rectangle)
+      .then(data => {
+        console.log("finish create rectangle");
+      }, err => {
+        console.log("error:", err);
+      });
+
     this.rectangle = null;
     return "finish"
   }
@@ -40,27 +53,6 @@ class SvgInteractionRectangle {
       this.rectangle.width = Math.abs(this.startPoint.x - p2.x);
       this.rectangle.height = Math.abs(this.startPoint.y - p2.y);
     }
-  }
-
-  createRectangle(pt) {
-    return new SvgRectangle(pt.x, pt.y, 0, 0);
-
-    // let rectangle = {
-    //   type: "rect",
-    //   x1: p1.x,
-    //   y1: p1.y,
-    //   x2: p2.x,
-    //   y2: p2.y,
-    //   stroke: "#333",
-    //   fill: "#ea4",
-    //   selected: false
-    // };
-    // return rectangle;
-
-    // store.dispatch(types.ADD_ITEM, rectangle).then((data) => {
-    //   console.log("finish create rectangle");
-    //   this.rectangle = data;
-    // })
   }
 }
 

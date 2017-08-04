@@ -4,6 +4,11 @@ import * as types from './mutation-types';
 import SvgItem from "@/models/svg-item";
 
 const mutations = {
+  [types.SET_PROJECTID](state, projectId) {
+    state.projectId = projectId;
+    console.log("setProjectId:", projectId);
+  },
+
   [types.CLEAR_ITEMS](state) {
     state.items = [];
   },

@@ -15,3 +15,5 @@ export const MOVE_ITEMS = "moveItem";
 
 export const SET_WORK = "setWork";
 export const CLEAR_WORK = "clearWork";
+
+export const SET_PROJECTID = "setProjectId";

@@ -8,7 +8,9 @@
         </g>
         <g class="redlining">
           <svg-item v-for="item in items" :key="item.gid" :item="item"></svg-item>
+          <svg-item v-for="item in tempItems" :key="item.gid" :item="item"></svg-item>
         </g>
+
       </g>
     </svg>
   </div>
@@ -27,6 +29,8 @@ import SvgInteraction from '../util/svg-interaction'
 import SvgItem from './SvgItem';
 import * as types from '../store/mutation-types';
 
+import temporaryStore from "@/models/temporary-store";
+
 export default {
   name: 'page-svg',
   props: [
@@ -37,7 +41,8 @@ export default {
     return {
       svg: undefined,
       viewBox: undefined,
-      transform: undefined
+      transform: undefined,
+      tempItems: []
     }
   },
   computed: {
@@ -50,6 +55,8 @@ export default {
     SvgItem
   },
   beforeMount() {
+    temporaryStore.setItems(this.tempItems);
+
     // window.addEventListener('resize', this.handleResize)
     this.projectService = new ProjectService();
     this.svgService = new SvgService();

@@ -7,11 +7,11 @@ import pickedElementId from './picked-element-id';
 import ItemHelper from '@/util/item-helper';
 
 class SvgInteractionMoveItem {
-  active = false;
 
   /* eslint-disable no-useless-constructor */
   constructor(svgTransformer) {
     this.svgTransformer = svgTransformer;
+    this.pickedElement = undefined;
   }
 
   dispatch(msg, event) {
@@ -33,46 +33,48 @@ class SvgInteractionMoveItem {
   // -----------
 
   startMove(event) {
-    this.pickedElementId = pickedElementId(event);
-    if (!this.pickedElementId) {
+    const elementId = pickedElementId(event);
+    if (!elementId) {
       return;
     }
-    this.active = true;
-    store.dispatch(types.SELECT_ITEM_BY_ID, this.pickedElementId)
-    this.startPoint = this.svgTransformer.getSVGPoint(event);
+    this.pickedElement = store.getters.graphicItems.find(i => i.id === elementId);
+    if (this.pickedElement) {
+      // store.dispatch(types.SELECT_GRAPHIC_BY_ID, this.pickedElementId)
+      this.startPoint = this.svgTransformer.getSVGPoint(event);
+    }
   }
 
   stopMove(event) {
-    if (this.active) {
-      this.active = false;
-      store.getters.selectedItems.forEach(item => ItemHelper.deleteTranslation(item));
+    if (this.pickedElement) {
+      ItemHelper.deleteTranslation(this.pickedElement);
 
-      const currentPoint = this.svgTransformer.getSVGPoint(event);
-      const translation = {
-        x: currentPoint.x - this.startPoint.x,
-        y: currentPoint.y - this.startPoint.y
+      let translation = this.getTranslation(event);
+      if (this.pickedElement.translate) {
+        this.pickedElement.translate(translation.dx, translation.dy);
+      } else {
+        console.error("bad element", this.pickedElement);
       }
-
-      store.commit(types.MOVE_ITEMS,
-        {
-          items: store.getters.selectedItems,
-          translation: translation
-        });
+      store.dispatch(types.UPDATE_GRAPHIC, this.pickedElement)
+        .then(() => {
+          this.pickedElement = undefined;
+        })
     }
   }
 
   updateMove(event) {
-    if (this.active) {
-      const currentPoint = this.svgTransformer.getSVGPoint(event);
-      const translation = {
-        dx: currentPoint.x - this.startPoint.x,
-        dy: currentPoint.y - this.startPoint.y
-      };
-      store.dispatch(types.SET_TRANSLATION_BY_ID, {
-        itemId: this.pickedElementId,
-        translation: translation
-      });
+    if (this.pickedElement) {
+      let translation = this.getTranslation(event);
+      ItemHelper.setTranslation(this.pickedElement, translation);
     }
+  }
+
+  getTranslation(event) {
+    const currentPoint = this.svgTransformer.getSVGPoint(event);
+    const translation = {
+      dx: currentPoint.x - this.startPoint.x,
+      dy: currentPoint.y - this.startPoint.y
+    };
+    return translation;
   }
 }
 

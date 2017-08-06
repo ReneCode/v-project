@@ -3,6 +3,7 @@
 import * as types from './mutation-types';
 
 import ItemHelper from '../util/item-helper';
+import svgItemFactory from '@/models/svg-item-factory';
 
 import graphicsService from '@/services/graphics-service';
 
@@ -10,7 +11,10 @@ const actions = {
 
   [types.GET_ALL_GRAPHIC_ITEMS]({ commit, state }, payload) {
     graphicsService.getAllItems(payload.projectId, { pageId: payload.pageId })
-      .then(items => {
+      .then(objs => {
+        console.log(objs)
+        let items = svgItemFactory.createFromObject(objs);
+        console.log(items)
         commit(types.RECEIVE_GRAPHIC_ITEMS, items);
       });
   },
@@ -33,7 +37,8 @@ const actions = {
           newItem.pageId = state.pageId;
         }
         graphicsService.postItem(projectId, newItem)
-          .then(storedItem => {
+          .then(obj => {
+            let storedItem = svgItemFactory.createFromObject(obj);
             commit(types.ADD_GRAPHIC_ITEM, storedItem);
             resolve(storedItem);
           })
@@ -63,7 +68,25 @@ const actions = {
     })
   },
 
-  [types.SELECT_ITEM_BY_ID]({ commit, state }, itemId) {
+  [types.UPDATE_GRAPHIC]({ commit, state }, items) {
+    return new Promise((resolve, reject) => {
+      if (!items) {
+        reject(new Error("items missing"));
+      } else {
+        graphicsService.updateItems(items)
+          .then(result => {
+            commit(types.UPDATE_GRAPHIC, items);
+            resolve();
+          })
+          .catch(err => {
+            console.error(err);
+            reject();
+          });
+      }
+    });
+  },
+
+  [types.SELECT_GRAPHIC_BY_ID]({ commit, state }, itemId) {
     actions.clearSelection({ commit, state })
 
     let items = state.items.filter(it => it.id === itemId);

@@ -68,34 +68,27 @@ class GraphicsService {
     }
   }
 
-  // getFunctions(page, q) {
-  //   let self = this;
-  //   return new Promise((resolve, reject) => {
-  //     if (page.id !== self.pageId || q !== self.q) {
-  //       self.loadFunctionList(page, q)
-  //         .then(functions => {
-  //           self.functions = functions;
-  //           resolve(functions);
-  //         });
-  //     } else {
-  //       resolve(self.functions);
-  //     }
-  //   });
-  // }
+  updateItems(items) {
+    return new Promise((resolve, reject) => {
+      if (!Array.isArray(items)) {
+        items = [items];
+      }
+      this.updateOneAsync(items);
+      resolve();
+    });
+  }
 
-  // loadFunctionList(page, q) {
-  //   const projectService = new ProjectService();
-
-  //   return new Promise((resolve, reject) => {
-  //     projectService.loadFunctions(page.projectId, q)
-  //       .then(functions => {
-  //         resolve(functions);
-  //       })
-  //       .catch((err) => {
-  //         reject(err);
-  //       })
-  //   })
-  // }
+  async updateOneAsync(items) {
+    for (let item of items) {
+      try {
+        let url = this.urlService.getUrl("graphicsByProjectId", item.projectId);
+        url = url + "/" + item.id;
+        await this.authAxios.put(url, item);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
 }
 
 let graphicsService = new GraphicsService();

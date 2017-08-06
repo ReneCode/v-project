@@ -14,6 +14,10 @@ class TemporaryStore {
     this.items.push(item);
   }
 
+  clear() {
+    this.items.splice(0);
+  }
+
   removeItem(item) {
     console.log(this.items.length, "removeItem:", item);
     let index = this.items.indexOf(item);

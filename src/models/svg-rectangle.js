@@ -14,7 +14,6 @@ class SvgRectangle extends SvgItem {
   }
 
   translate(dx, dy) {
-    console.log("translate text")
     this.x += dx;
     this.y += dy;
   }

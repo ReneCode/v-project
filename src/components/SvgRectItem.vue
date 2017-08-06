@@ -53,7 +53,7 @@ export default {
     },
 
     selected(item) {
-      return ItemHelper.isSelected(item);
+      return item.selected;
     }
   }
 }

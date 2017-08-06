@@ -17,7 +17,7 @@ const storeConfig = {
     projectId: state => {
       return state.projectId;
     },
-    svgItems: (state) => {
+    graphicItems: (state) => {
       return state.items;
     },
     selectedItems: (state) => {

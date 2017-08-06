@@ -6,8 +6,10 @@
       <g :transform="transform">
         <g v-if="svg" v-svg-loader="{svg:svg, callback:svgLoaderCallback}">
         </g>
-        <g class="redlining">
-          <svg-item v-for="item in items" :key="item.gid" :item="item"></svg-item>
+        <g class="graphic">
+          <svg-item v-for="item in graphicItems" :key="item.gid" :item="item"></svg-item>
+        </g>
+        <g class="graphic temporary">
           <svg-item v-for="item in tempItems" :key="item.gid" :item="item"></svg-item>
         </g>
 
@@ -47,7 +49,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      items: 'svgItems'
+      graphicItems: 'graphicItems'
     })
   },
   components: {
@@ -159,7 +161,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-.redlining {
+.graphic {
   cursor: pointer;
 }
 

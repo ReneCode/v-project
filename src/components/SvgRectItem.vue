@@ -3,7 +3,7 @@
   <g>
     <rect v-if="selected(item)" class="selection" :x="bbox().x" :y="bbox().y" :width="bbox().width" :height="bbox().height"></rect>
   
-    <rect ref="item" :gid="item.id" :x="x" :y="y" :width="item.width" :height="item.height" :stroke="item.stroke" :fill="item.fill"></rect>
+    <rect ref="item" :gid="item._id" :x="x" :y="y" :width="item.width" :height="item.height" :stroke="item.stroke" :fill="item.fill"></rect>
   </g>
 </template>
 

@@ -27,7 +27,7 @@ class SvgInteractionRectangle {
 
     temporaryStore.removeItem(this.rectangle);
 
-    store.dispatch(types.ADD_ITEM, this.rectangle)
+    store.dispatch(types.ADD_GRAPHIC_ITEM, this.rectangle)
       .then(data => {
         console.log("finish create rectangle");
       }, err => {

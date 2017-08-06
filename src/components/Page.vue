@@ -111,7 +111,6 @@ export default {
   methods: {
     updatePage(route) {
       this.projectId = route.params.projectId;
-      store.dispatch(msgs.SET_PROJECTID, this.projectId);
       const pageId = route.params.pageId;
       const query = route.query;
       const q = query.q;
@@ -124,11 +123,18 @@ export default {
       this.projectService.getProject(this.projectId)
         .then(project => {
           this.project = project;
+          store.dispatch(msgs.SET_PROJECTID, this.projectId);
         });
 
       this.projectService.getPage(this.projectId, pageId)
         .then((page) => {
           this.page = page;
+          store.dispatch(msgs.SET_PAGE_ID, page.id);
+          store.dispatch(msgs.GET_ALL_GRAPHIC_ITEMS,
+            {
+              projectId: this.projectId,
+              pageId: page.id
+            });
         });
 
       this.pageListService.getPreviousAndNextPageId(this.projectId, pageId, q)

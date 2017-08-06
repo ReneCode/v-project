@@ -1,5 +1,5 @@
 
-import Vue from 'vue';
+// import Vue from 'vue';
 import * as types from './mutation-types';
 
 import ItemHelper from '../util/item-helper';
@@ -8,33 +8,34 @@ import graphicsService from '@/services/graphics-service';
 
 const actions = {
 
+  [types.GET_ALL_GRAPHIC_ITEMS]({ commit, state }, payload) {
+    graphicsService.getAllItems(payload.projectId, { pageId: payload.pageId })
+      .then(items => {
+        commit(types.RECEIVE_GRAPHIC_ITEMS, items);
+      });
+  },
+
   [types.SET_PROJECTID]({ commit, state }, projectId) {
     commit(types.SET_PROJECTID, projectId);
   },
 
-  [types.CLEAR_ITEMS]({ commit, state }, id) {
-    if (state.items.length > 0) {
-      commit(types.CLEAR_ITEMS);
-    }
+  [types.SET_PAGE_ID]({ commit, state }, pageId) {
+    commit(types.SET_PAGE_ID, pageId);
   },
 
-  [types.SET_ITEMS]({ commit, state }, items) {
-    if (items.length > 0) {
-      commit(types.SET_ITEMS, items);
-    }
-  },
-
-  [types.ADD_ITEM]({ commit, state }, newItem) {
+  [types.ADD_GRAPHIC_ITEM]({ commit, state }, newItem) {
     return new Promise((resolve, reject) => {
       if (!newItem) {
         reject();
       } else {
         let projectId = state.projectId;
+        if (!newItem.pageId) {
+          newItem.pageId = state.pageId;
+        }
         graphicsService.postItem(projectId, newItem)
-          .then(dbId => {
-            Vue.set(newItem, "_id", dbId);
-            commit(types.ADD_ITEM, newItem);
-            resolve(newItem);
+          .then(storedItem => {
+            commit(types.ADD_GRAPHIC_ITEM, storedItem);
+            resolve(storedItem);
           })
           .catch(err => {
             console.error(err);
@@ -65,7 +66,7 @@ const actions = {
   [types.SELECT_ITEM_BY_ID]({ commit, state }, itemId) {
     actions.clearSelection({ commit, state })
 
-    let items = state.items.filter(it => it.id === itemId);
+    let items = state.items.filter(it => it._id === itemId);
     if (!items || items.length !== 1) {
       console.error("Item not found");
     }
@@ -82,7 +83,7 @@ const actions = {
   },
 
   [types.SET_TRANSLATION_BY_ID]({ commit, state }, { itemId, translation }) {
-    let items = state.items.filter(it => it.id === itemId);
+    let items = state.items.filter(it => it._id === itemId);
     if (!items || items.length !== 1) {
       throw new Error("Item not found");
     }

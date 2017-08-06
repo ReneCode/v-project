@@ -14,13 +14,31 @@ class GraphicsService {
     });
   }
 
+  getAllItems(projectId, filter) {
+    return new Promise((resolve, reject) => {
+      let url = this.urlService.getUrl("graphicsByProjectId", projectId);
+      let options = {
+      }
+      if (filter) {
+        options.params = filter;
+      }
+      this.authAxios.get(url, options)
+        .then(result => {
+          resolve(result.data);
+        })
+        .catch(err => {
+          reject(err);
+        })
+    })
+  }
+
   postItem(projectId, newItem) {
     return new Promise((resolve, reject) => {
       let url = this.urlService.getUrl("graphicsByProjectId", projectId);
       this.authAxios.post(url, newItem)
         .then(result => {
           if (result.data.length > 0) {
-            resolve(result.data[0]._id);
+            resolve(result.data[0]);
           } else {
             reject();
           }

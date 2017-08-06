@@ -39,7 +39,7 @@ class EventHandler {
       work: false
     };
     text.id = "id_" + Math.floor(Math.random() * 10E9);
-    store.commit(types.ADD_ITEM, text);
+    store.dispatch(types.ADD_GRAPHIC_ITEM, text);
   }
 
   deleteItems(items) {

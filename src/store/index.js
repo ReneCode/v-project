@@ -10,7 +10,8 @@ import ItemHelper from '@/util/item-helper';
 const storeConfig = {
   state: {
     items: [],
-    projectId: 0
+    projectId: "",
+    pageId: ""
   },
   getters: {
     projectId: state => {

@@ -27,7 +27,7 @@ import SvgTransformer from '../util/svg-transformer'
 import SvgHighlight from '../util/svg-highlight'
 import SvgInteraction from '../util/svg-interaction'
 import SvgItem from './SvgItem';
-import * as types from '../store/mutation-types';
+// import * as types from '../store/mutation-types';
 
 import temporaryStore from "@/models/temporary-store";
 
@@ -134,8 +134,6 @@ export default {
       return this.projectService.getRedlinings(this.page.projectId, options)
         .then((redlinings) => {
           // this.items = redlinings;
-          this.$store.dispatch(types.CLEAR_ITEMS);
-          this.$store.dispatch(types.SET_ITEMS, redlinings);
         });
     },
 

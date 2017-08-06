@@ -9,25 +9,23 @@ const mutations = {
     console.log("setProjectId:", projectId);
   },
 
-  [types.CLEAR_ITEMS](state) {
-    state.items = [];
+  [types.SET_PAGE_ID](state, pageId) {
+    state.pageId = pageId;
+    console.log("setPageId:", pageId);
   },
 
-  [types.SET_ITEMS](state, items) {
+  [types.RECEIVE_GRAPHIC_ITEMS](state, items) {
     state.items = items;
   },
 
-  [types.ADD_ITEM](state, item) {
-    if (!item.id) {
-      item.id = "id_" + Math.floor(Math.random() * 10E9);
-    }
+  [types.ADD_GRAPHIC_ITEM](state, item) {
     state.items.push(item);
   },
 
   [types.DELETE_ITEMS](state, items) {
-    const deleteIds = items.map(i => i.id);
+    const deleteIds = items.map(i => i._id);
     state.items = state.items.filter(i => {
-      return deleteIds.indexOf(i.id) < 0;
+      return deleteIds.indexOf(i._id) < 0;
     })
   },
 
@@ -37,8 +35,8 @@ const mutations = {
     if (!items || !translation) {
       throw new Error("payload has to contain -items and -translation");
     }
-    const ids = payload.items.map(i => i.id);
-    let changeItems = state.items.filter(i => ids.indexOf(i.id) >= 0);
+    const ids = payload.items.map(i => i._id);
+    let changeItems = state.items.filter(i => ids.indexOf(i._id) >= 0);
     changeItems.forEach(i => {
       if (i instanceof SvgItem) {
         i.translate(translation.x, translation.y);

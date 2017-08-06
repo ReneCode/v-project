@@ -66,7 +66,7 @@ const actions = {
   [types.SELECT_ITEM_BY_ID]({ commit, state }, itemId) {
     actions.clearSelection({ commit, state })
 
-    let items = state.items.filter(it => it._id === itemId);
+    let items = state.items.filter(it => it.id === itemId);
     if (!items || items.length !== 1) {
       console.error("Item not found");
     }
@@ -83,7 +83,7 @@ const actions = {
   },
 
   [types.SET_TRANSLATION_BY_ID]({ commit, state }, { itemId, translation }) {
-    let items = state.items.filter(it => it._id === itemId);
+    let items = state.items.filter(it => it.id === itemId);
     if (!items || items.length !== 1) {
       throw new Error("Item not found");
     }

@@ -15,11 +15,11 @@
         <i @click="addRectangleItem" class="glyphicon glyphicon-unchecked"></i>
       </li>
       <!-- <li>
-        <i @click="testing" class="glyphicon glyphicon glyphicon-wrench"></i>
-      </li> -->
+          <i @click="testing" class="glyphicon glyphicon glyphicon-wrench"></i>
+        </li> -->
       <!-- <li>
-              <i @click="editItem" class="glyphicon glyphicon-pencil"></i>
-            </li> -->
+                <i @click="editItem" class="glyphicon glyphicon-pencil"></i>
+              </li> -->
       <li>
         <i @click="deleteItem" :disabled="!hasSelectedItems" class="glyphicon glyphicon-trash" title="delete"></i>
       </li>
@@ -85,10 +85,10 @@ export default {
       this.updateUndoRedo();
     },
     addTextItem() {
-      EventBus.emit('addTextItem', "new text");
+      EventBus.emit('startIaText', "new text")
     },
     addRectangleItem() {
-      EventBus.emit('startIaRectangle');
+      EventBus.emit('startIaRectangle', "new text");
     },
     editItem() { },
     deleteItem() {

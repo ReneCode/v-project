@@ -7,6 +7,7 @@ import SvgInteractionMoveItem from './svg-ia-move-item';
 import SvgInteractionPreprocess from './svg-ia-preprocess';
 
 import SvgInteractionRectangle from './svg-ia-rectangle';
+import SvgInteractionText from './svg-ia-text';
 
 import temporaryStore from "@/models/temporary-store";
 import SvgRectangle from "@/models/svg-rectangle";
@@ -38,6 +39,10 @@ class SvgInteraction {
 
     EventBus.on("startIaRectangle", payload => {
       this.startIaRectangle(payload);
+    });
+
+    EventBus.on("startIaText", payload => {
+      this.startIaText(payload);
     });
 
     EventBus.on("testing", payload => {
@@ -134,6 +139,11 @@ class SvgInteraction {
       .then(ia => {
 
       });
+  }
+
+  startIaText(payload) {
+    this.startInteraction(new SvgInteractionText(this.svgTransformer, payload))
+      .then(ia => { });
   }
 
   testing(payload) {

@@ -60,7 +60,7 @@ class GraphicsService {
     let url = this.urlService.getUrl("graphicsByProjectId", projectId);
     for (let item of items) {
       try {
-        let delUrl = url + "/" + item._id;
+        let delUrl = url + "/" + item.id;
         await this.authAxios.delete(delUrl);
       } catch (err) {
         console.error(err)

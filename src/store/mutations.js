@@ -6,12 +6,10 @@ import SvgItem from "@/models/svg-item";
 const mutations = {
   [types.SET_PROJECTID](state, projectId) {
     state.projectId = projectId;
-    console.log("setProjectId:", projectId);
   },
 
   [types.SET_PAGE_ID](state, pageId) {
     state.pageId = pageId;
-    console.log("setPageId:", pageId);
   },
 
   [types.RECEIVE_GRAPHIC_ITEMS](state, items) {
@@ -23,9 +21,9 @@ const mutations = {
   },
 
   [types.DELETE_ITEMS](state, items) {
-    const deleteIds = items.map(i => i._id);
+    const deleteIds = items.map(i => i.id);
     state.items = state.items.filter(i => {
-      return deleteIds.indexOf(i._id) < 0;
+      return deleteIds.indexOf(i.id) < 0;
     })
   },
 
@@ -35,8 +33,8 @@ const mutations = {
     if (!items || !translation) {
       throw new Error("payload has to contain -items and -translation");
     }
-    const ids = payload.items.map(i => i._id);
-    let changeItems = state.items.filter(i => ids.indexOf(i._id) >= 0);
+    const ids = payload.items.map(i => i.id);
+    let changeItems = state.items.filter(i => ids.indexOf(i.id) >= 0);
     changeItems.forEach(i => {
       if (i instanceof SvgItem) {
         i.translate(translation.x, translation.y);

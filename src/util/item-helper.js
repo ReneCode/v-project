@@ -9,22 +9,22 @@ class ItemHelper {
     }
   }
 
-  static setSelected(item) {
-    this.setTemp(item);
-    Vue.set(item.temp, 'selected', true);
-  }
+  // static setSelected(item) {
+  //   this.setTemp(item);
+  //   Vue.set(item.temp, 'selected', true);
+  // }
 
-  static deleteSelected(item) {
-    this.setTemp(item);
-    Vue.delete(item.temp, 'selected', true);
-  }
+  // static deleteSelected(item) {
+  //   this.setTemp(item);
+  //   Vue.delete(item.temp, 'selected', true);
+  // }
 
-  static isSelected(item) {
-    if (item.temp && item.temp.selected) {
-      return true;
-    }
-    return false;
-  }
+  // static isSelected(item) {
+  //   if (item.temp && item.temp.selected) {
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   static setTranslation(item, translation) {
     this.setTemp(item);

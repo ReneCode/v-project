@@ -1,9 +1,14 @@
 
 <template>
   <g>
-    <rect v-if="selected(item)" class="selection" :x="bbox().x" :y="bbox().y" :width="bbox().width" :height="bbox().height"></rect>
+    <!-- <rect v-if="selected" class="selection" :x="bbox().x" :y="bbox().y" :width="bbox().width" :height="bbox().height"></rect> -->
   
     <rect ref="item" :gid="item.id" :x="x" :y="y" :width="item.width" :height="item.height" :stroke="item.stroke" :fill="item.fill"></rect>
+  
+    <!-- <rect v-if="selected" class="resizer" gid="resize-tl" :x="x-resizerSize/2" :y="y-resizerSize/2" :width="resizerSize" :height="resizerSize"></rect>
+    <rect v-if="selected" class="resizer" gid="resize-bl" :x="x-resizerSize/2" :y="y+item.height-resizerSize/2" :width="resizerSize" :height="resizerSize"></rect>
+    <rect v-if="selected" class="resizer" gid="resize-tr" :x="x+item.width-resizerSize/2" :y="y-resizerSize/2" :width="resizerSize" :height="resizerSize"></rect>
+    <rect v-if="selected" class="resizer" gid="resize-br" :x="x+item.width-resizerSize/2" :y="y+item.height-resizerSize/2" :width="resizerSize" :height="resizerSize"></rect> -->
   </g>
 </template>
 
@@ -12,10 +17,12 @@ import ItemHelper from '@/util/item-helper';
 
 export default {
   name: 'svg-rect-item',
-  props: ['item'],
+  props: ['item', 'selected'],
 
   computed: {
-
+    resizerSize() {
+      return 8;
+    },
     x() {
       let x = this.item.x;
       let translation = ItemHelper.getTranslation(this.item);
@@ -35,6 +42,7 @@ export default {
   },
 
   methods: {
+    /*
     // if bbox() is below computed: than
     // there a some caching-problems. (wrong bbox on other page)
     bbox() {
@@ -50,20 +58,23 @@ export default {
       } else {
         return {};
       }
-    },
-
-    selected(item) {
-      return item.selected;
     }
+    */
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style scoped>
 .selection {
   fill: #99f;
   stroke: #66f;
   opacity: 0.3;
+}
+
+.resizer {
+  fill: #eee;
+  stroke: #333;
+  cursor: pointer;
 }
 </style>

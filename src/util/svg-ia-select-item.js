@@ -4,37 +4,88 @@ import store from '@/store';
 
 import temporaryStore from "@/models/temporary-store";
 // import ItemHelper from "@/util/item-helper";
-
-import * as msgs from './ia-message';
 import pickedElementId from './picked-element-id';
+
+// import * as msgs from './ia-message';
+
+const DELTA_LIMIT = 3;
 
 class SvgInteractionSelectItem {
   constructor(svgTransformer) {
     this.svgTransformer = svgTransformer;
   }
 
-  dispatch(msg, event) {
-    switch (msg) {
-      case msgs.CLICK:
-        const elementId = pickedElementId(event);
-        this.deselectAll();
-        if (elementId) {
-          temporaryStore.clear();
-          const item = store.getters.graphicItems.find(i => i.id === elementId);
-          if (item) {
-            item.selected = true;
-          }
+  onMouseDown(event) {
+    this.mouseDownPoint = this.getPoint(event);
+    // copy the event - we will need it later
+    this.mouseDownEvent = this.copyEvent(event);
+  }
+
+  onMouseUp(event) {
+    if (this.getMouseDelta(event) <= DELTA_LIMIT) {
+      const elementId = pickedElementId(event);
+      temporaryStore.clear();
+      if (elementId) {
+        const item = store.getters.graphicItems.find(i => i.id === elementId);
+        if (item) {
+          temporaryStore.addItem(item);
+          return "stop"
         }
-        break;
+      }
     }
   }
 
-  deselectAll() {
-    store.getters.graphicItems.forEach(i => {
-      i.selected = false;
-    });
+  copyEvent(event) {
+    if (typeof event.constructor === 'function') {
+      return new event.constructor(event.type, event);
+    } else {
+      // IE11 event.constructor does not work
+      let newEvent = {};
+      for (let key in event) {
+        newEvent[key] = event[key];
+      }
+      return newEvent;
+    }
   }
 
+  getMouseDelta(event) {
+    const mouseUpPoint = this.getPoint(event);
+    const xDelta = Math.abs(mouseUpPoint.x - this.mouseDownPoint.x);
+    const yDelta = Math.abs(mouseUpPoint.y - this.mouseDownPoint.y);
+    const delta = Math.max(xDelta, yDelta);
+    return delta;
+  }
+
+  getPoint(event) {
+    return {
+      x: event.clientX,
+      y: event.clientY
+    };
+  }
+
+  /*
+    dispatch(msg, event) {
+      switch (msg) {
+        case msgs.CLICK:
+          const elementId = pickedElementId(event);
+          this.deselectAll();
+          if (elementId) {
+            temporaryStore.clear();
+            const item = store.getters.graphicItems.find(i => i.id === elementId);
+            if (item) {
+              item.selected = true;
+            }
+          }
+          break;
+      }
+    }
+
+    deselectAll() {
+      store.getters.graphicItems.forEach(i => {
+        i.selected = false;
+      });
+    }
+  */
 }
 
 export default SvgInteractionSelectItem;

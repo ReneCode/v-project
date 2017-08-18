@@ -9,7 +9,7 @@ export const SELECT_GRAPHIC_BY_ID = "selectItemById";
 export const CLEAR_SELECTION = "clearSelection";
 export const UPDATE_GRAPHIC = "updateGraphic";
 
-export const SET_TRANSLATION_BY_ID = "setTranslation";
+// export const SET_TRANSLATION_BY_ID = "setTranslation";
 
 export const DELETE_ITEMS = "deleteItems";
 

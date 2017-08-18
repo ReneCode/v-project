@@ -1,7 +1,7 @@
 
 <template>
   <g>
-    <rect v-if="selected(item)" class="selection" :x="bbox().x" :y="bbox().y" :width="bbox().width" :height="bbox().height" :transform="transformMatrix"></rect>
+    <rect v-if="selected" class="selection" :x="bbox().x" :y="bbox().y" :width="bbox().width" :height="bbox().height" :transform="transformMatrix"></rect>
   
     <text ref="textitem" v-if="lines.length===1" :gid="item.id" :transform="transformMatrix" :font-size="item.fontSize" :fill="item.fill">{{item.text}}</text>
     <text ref="textitem" v-else :gid="item.id" :transform="transformMatrix" :font-size="item.fontSize" :fill="item.fill">
@@ -15,7 +15,7 @@ import ItemHelper from '@/util/item-helper';
 
 export default {
   name: 'svg-text-item',
-  props: ['item'],
+  props: ['item', 'selected'],
 
   computed: {
     transformMatrix() {
@@ -54,17 +54,13 @@ export default {
       } else {
         return {};
       }
-    },
-
-    selected(item) {
-      return item.selected;
     }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style scoped>
 .selection {
   fill: #99f;
   stroke: #66f;

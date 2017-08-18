@@ -4,10 +4,11 @@ import SvgInteractionPanning from './svg-ia-panning';
 import SvgInteractionMousePosition from './svg-ia-mouse-position';
 import SvgInteractionSelectItem from './svg-ia-select-item';
 import SvgInteractionMoveItem from './svg-ia-move-item';
-import SvgInteractionPreprocess from './svg-ia-preprocess';
+// import SvgInteractionPreprocess from './svg-ia-preprocess';
 
 import SvgInteractionRectangle from './svg-ia-rectangle';
 import SvgInteractionText from './svg-ia-text';
+import SvgInteractionResize from "./svg-ia-resize";
 
 import temporaryStore from "@/models/temporary-store";
 import SvgRectangle from "@/models/svg-rectangle";
@@ -32,8 +33,9 @@ class SvgInteraction {
     this.iaList.push(new SvgInteractionMousePosition(svgTransformer));
     this.iaList.push(new SvgInteractionSelectItem(svgTransformer));
     this.iaList.push(new SvgInteractionMoveItem(svgTransformer));
+    this.iaList.push(new SvgInteractionResize(svgTransformer));
 
-    this.iaList.push(new SvgInteractionPreprocess(svgTransformer, this));
+    // this.iaList.push(new SvgInteractionPreprocess(svgTransformer, this));
 
     // this.debugIa();
 

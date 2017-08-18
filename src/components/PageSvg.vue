@@ -7,19 +7,22 @@
         <g v-if="svg" v-svg-loader="{svg:svg, callback:svgLoaderCallback}">
         </g>
         <g class="graphic">
-          <svg-item v-for="item in graphicItems" :key="item.gid" :item="item"></svg-item>
+          <svg-item v-for="item in fixedItems" :key="item.gid" :selected="false" :item="item"></svg-item>
         </g>
-        <g class="graphic temporary">
-          <svg-item v-for="item in tempItems" :key="item.gid" :item="item"></svg-item>
+        <g class="graphic">
+          <svg-item v-for="item in temporaryItems" :key="item.gid" :selected="true" :item="item"></svg-item>
         </g>
-
+        <g v-if="temporaryData.selectionObject" class="selection">
+          <rect v-for="grip in grips" class="resizer" :gid="grip.name" :x="grip.x-resizerSize/2" :y="grip.y-resizerSize/2" :width="resizerSize" :height="resizerSize"></rect>
+        </g>
       </g>
     </svg>
+    Grips: {{ grips }}
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+// import { mapGetters } from 'vuex';
 
 import ProjectService from '../services/project-service'
 import FunctionListService from '../services/function-list-service'
@@ -44,20 +47,44 @@ export default {
       svg: undefined,
       viewBox: undefined,
       transform: undefined,
-      tempItems: []
+      temporaryData: {
+        items: [],
+        selectionObject: {}
+      }
     }
   },
   computed: {
-    ...mapGetters({
-      graphicItems: 'graphicItems'
-    })
+    resizerSize() {
+      return 10;
+    },
+    grips: function () {
+      if (this.temporaryData.selectionObject) {
+        return this.temporaryData.selectionObject.grips;
+      }
+      return null;
+    },
+
+    temporaryItems: function () {
+      return this.temporaryData.items;
+    },
+
+    fixedItems: function () {
+      return this.$store.getters.graphicItems.filter(gi => {
+        if (this.temporaryData.items.find(ti => gi.id === ti.id)) {
+          // item is in tempItems
+          console.log("found:", gi.id);
+          return false;
+        }
+        return true;
+      })
+    }
   },
   components: {
     SvgLoader,
     SvgItem
   },
   beforeMount() {
-    temporaryStore.setItems(this.tempItems);
+    temporaryStore.init(this.temporaryData);
 
     // window.addEventListener('resize', this.handleResize)
     this.projectService = new ProjectService();
@@ -83,6 +110,15 @@ export default {
   },
 
   methods: {
+    // grips() {
+    //   let selectionObject = temporaryStore.selectionObject;
+    //   console.log("selObj:", selectionObject)
+    //   if (selectionObject) {
+    //     return selectionObject.grips;
+    //   }
+    //   return null;
+    // },
+
     updateTransform(transform) {
       this.transform = transform;
     },
@@ -181,6 +217,32 @@ export default {
   opacity: 0;
   animation: blinkAnimation 1s infinite;
 }
+
+.selection {
+  fill: #66c;
+  stroke: #000;
+  opacity: 0.7;
+  cursor: pointer;
+  
+}
+
+/* .resizer {
+  fill: #eee;
+  stroke: #333;
+  cursor: pointer;
+} */
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 

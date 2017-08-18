@@ -5,7 +5,7 @@ import mutations from './mutations';
 import actions from './actions';
 import undoRedoPlugin from './undo-redo-plugin';
 
-import ItemHelper from '@/util/item-helper';
+// import ItemHelper from '@/util/item-helper';
 
 const storeConfig = {
   state: {
@@ -19,12 +19,12 @@ const storeConfig = {
     },
     graphicItems: (state) => {
       return state.items;
-    },
-    selectedItems: (state) => {
-      return state.items.filter(i => {
-        return ItemHelper.isSelected(i);
-      });
     }
+    // selectedItems: (state) => {
+    //   return state.items.filter(i => {
+    //     return ItemHelper.isSelected(i);
+    //   });
+    // }
   },
 
   plugins: [undoRedoPlugin],

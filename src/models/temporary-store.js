@@ -3,36 +3,37 @@
 class TemporaryStore {
   init(data) {
     this.data = data;
+    /*
+      items: []
+      selectionObject: null
+      resizeGripList: new ResizeGripList()
+    */
   }
 
   getGrip(name) {
-    if (!this.data.selectionObject) {
-      return null;
-    }
-    for (let grip of this.data.selectionObject.grips) {
-      if (grip.name === name) {
-        return grip;
-      }
-    }
-    return null;
+    return this.data.resizeGripList.getGrip(name);
   }
 
-  resize(grip) {
-    for (let item of this.data.items) {
-      item.resize(grip);
-      this.data.selectionObject = item.getSelectionObject();
+  initFromTwoPoints(p1, p2) {
+    this.data.resizeGripList.initFromTwoPoints(p1, p2);
+    for (let item of this.items) {
+      item.resizeFromGripList(this.data.resizeGripList);
     }
+  }
+
+  getOppositeGrip(grip) {
+    return this.data.resizeGripList.getOppositeGrip(grip);
   }
 
   addItem(item) {
-    // Vue.set(this, "selectionObject", item.getSelectionObject());
-    this.data.selectionObject = item.getSelectionObject();
+    item.setResizeGripList(this.data.resizeGripList);
     this.data.items.push(item);
   }
 
   clear() {
     this.data.selectionObject = null;
     this.data.items.splice(0);
+    this.data.resizeGripList.clear();
   }
 
   removeItem(item) {

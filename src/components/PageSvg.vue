@@ -12,8 +12,8 @@
         <g class="graphic">
           <svg-item v-for="item in temporaryItems" :key="item.gid" :selected="true" :item="item"></svg-item>
         </g>
-        <g v-if="temporaryData.selectionObject" class="selection">
-          <rect v-for="grip in grips" class="resizer" :gid="grip.name" :x="grip.x-resizerSize/2" :y="grip.y-resizerSize/2" :width="resizerSize" :height="resizerSize"></rect>
+        <g v-if="grips.length" class="selection">
+          <rect v-for="grip in grips" class="resizer" :gid="grip.name" :x="grip.x - resizerSize/2" :y="grip.y - resizerSize/2" :width="resizerSize" :height="resizerSize"></rect>
         </g>
       </g>
     </svg>
@@ -22,8 +22,6 @@
 </template>
 
 <script>
-// import { mapGetters } from 'vuex';
-
 import ProjectService from '../services/project-service'
 import FunctionListService from '../services/function-list-service'
 import SvgService from '../services/svg-service'
@@ -31,8 +29,8 @@ import SvgLoader from '../directives/svg-loader'
 import SvgTransformer from '../util/svg-transformer'
 import SvgHighlight from '../util/svg-highlight'
 import SvgInteraction from '../util/svg-interaction'
+import ResizeGripList from '@/util/resize-grip-list'
 import SvgItem from './SvgItem';
-// import * as types from '../store/mutation-types';
 
 import temporaryStore from "@/models/temporary-store";
 
@@ -49,7 +47,8 @@ export default {
       transform: undefined,
       temporaryData: {
         items: [],
-        selectionObject: {}
+        selectionObject: null,
+        resizeGripList: new ResizeGripList()
       }
     }
   },
@@ -58,10 +57,7 @@ export default {
       return 10;
     },
     grips: function () {
-      if (this.temporaryData.selectionObject) {
-        return this.temporaryData.selectionObject.grips;
-      }
-      return null;
+      return this.temporaryData.resizeGripList.getGripList();
     },
 
     temporaryItems: function () {
@@ -70,9 +66,9 @@ export default {
 
     fixedItems: function () {
       return this.$store.getters.graphicItems.filter(gi => {
+        // do not show items, that are in temporaryData
         if (this.temporaryData.items.find(ti => gi.id === ti.id)) {
           // item is in tempItems
-          console.log("found:", gi.id);
           return false;
         }
         return true;

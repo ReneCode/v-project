@@ -10,29 +10,40 @@ class SvgInteractionResize {
 
   constructor(svgTransformer) {
     this.svgTransformer = svgTransformer;
-    this.draw = false;
-    this.startPoint = null;
     this.grip = null;
-    this.pickDelta = { dx: 0, dy: 0 }
+    this.pickDelta = { x: 0, y: 0 }
   }
 
   onMouseDown(event) {
     const elementId = pickedElementId(event);
     if (elementId) {
-      console.log(elementId);
       if (this.isResizeElement(elementId)) {
-        this.startPoint = this.svgTransformer.getSVGPoint(event);
+        let startPoint = this.svgTransformer.getSVGPoint(event);
         this.grip = temporaryStore.getGrip(elementId);
-        this.pickDelta = {
-          x: this.grip.x - this.startPoint.x,
-          y: this.grip.y - this.startPoint.y
+        if (!this.grip) {
+          throw new Error("grip not found", elementId);
         }
+        this.pickDelta = {
+          x: this.grip.x - startPoint.x,
+          y: this.grip.y - startPoint.y
+        }
+        this.oppositeGrip = temporaryStore.getOppositeGrip(this.grip);
+        console.log(this.oppositeGrip)
         return "stop"
       }
     }
   }
 
   onMouseMove(event) {
+    this.updateGrip(event);
+  }
+
+  onMouseUp(event) {
+    this.updateGrip(event);
+    this.grip = null;
+  }
+
+  updateGrip(event) {
     if (!this.grip) {
       return;
     }
@@ -40,11 +51,7 @@ class SvgInteractionResize {
     this.grip.x = currentPoint.x + this.pickDelta.x;
     this.grip.y = currentPoint.y + this.pickDelta.y;
 
-    temporaryStore.resize(this.grip);
-  }
-
-  onMouseUp(event) {
-    this.grip = null;
+    temporaryStore.initFromTwoPoints(this.grip, this.oppositeGrip);
   }
 
   getTranslation(event) {

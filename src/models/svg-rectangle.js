@@ -1,5 +1,6 @@
 
 import SvgItem from "./svg-item";
+// import ResizeGripList from "@/util/resize-grip-list";
 
 class SvgRectangle extends SvgItem {
   constructor(x, y, width, height) {
@@ -50,19 +51,23 @@ class SvgRectangle extends SvgItem {
     }
   }
 
-  getSelectionObject() {
+  setResizeGripList(resizeGripList) {
+    resizeGripList.initFromRectangle(this);
+    /*
     return {
-      grips: [
-        { name: "grip-tl", x: this.x, y: this.y },
-        { name: "grip-tr", x: this.x + this.width, y: this.y },
-        { name: "grip-bl", x: this.x, y: this.y + this.height },
-        { name: "grip-br", x: this.x + this.width, y: this.y + this.height }
-      ],
+      resizeGripList: grips,
+      // grips: [
+      //   { name: "grip-tl", x: this.x, y: this.y },
+      //   { name: "grip-tr", x: this.x + this.width, y: this.y },
+      //   { name: "grip-bl", x: this.x, y: this.y + this.height },
+      //   { name: "grip-br", x: this.x + this.width, y: this.y + this.height }
+      // ],
       x: this.x,
       y: this.y,
       width: this.width,
       height: this.height
     }
+    */
   }
 
 }

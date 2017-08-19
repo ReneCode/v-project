@@ -9,7 +9,7 @@ class SvgItem {
     throw new Error("implementation missing");
   }
 
-  getSelectionObject() {
+  setResizeGripList(resizeGripList) {
     throw new Error("implementation missing");
   }
 }

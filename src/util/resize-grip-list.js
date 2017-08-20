@@ -12,6 +12,31 @@ class ResizeGripList {
     this.gripList = [];
   }
 
+  getBoundingBox() {
+    let minX, maxX, minY, maxY;
+    let first = true;
+    for (let grip of this.gripList) {
+      if (first) {
+        first = false;
+        minX = grip.x;
+        maxX = grip.x;
+        minY = grip.y;
+        maxY = grip.y;
+      } else {
+        minX = Math.min(minX, grip.x);
+        maxX = Math.max(maxX, grip.x);
+        minY = Math.min(minY, grip.y);
+        maxY = Math.max(maxY, grip.y);
+      }
+    }
+    return {
+      x: minX,
+      y: minY,
+      width: maxX - minX,
+      height: maxY - minY
+    }
+  }
+
   getGripList() {
     return this.gripList;
   }
@@ -77,7 +102,6 @@ class ResizeGripList {
 
   addGrips(minX, minY, maxX, maxY) {
     this.clear();
-    // console.log("addGrips:", minX, minY, maxX, maxY)
     this.gripList.push(new ResizeGrip("grip-tl", minX, minY));
     this.gripList.push(new ResizeGrip("grip-tr", maxX, minY));
     this.gripList.push(new ResizeGrip("grip-bl", minX, maxY));

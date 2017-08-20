@@ -63,29 +63,6 @@ class SvgInteractionSelectItem {
     };
   }
 
-  /*
-    dispatch(msg, event) {
-      switch (msg) {
-        case msgs.CLICK:
-          const elementId = pickedElementId(event);
-          this.deselectAll();
-          if (elementId) {
-            temporaryStore.clear();
-            const item = store.getters.graphicItems.find(i => i.id === elementId);
-            if (item) {
-              item.selected = true;
-            }
-          }
-          break;
-      }
-    }
-
-    deselectAll() {
-      store.getters.graphicItems.forEach(i => {
-        i.selected = false;
-      });
-    }
-  */
 }
 
 export default SvgInteractionSelectItem;

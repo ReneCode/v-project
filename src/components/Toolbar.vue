@@ -15,11 +15,11 @@
         <i @click="addRectangleItem" class="glyphicon glyphicon-unchecked"></i>
       </li>
       <!-- <li>
-          <i @click="testing" class="glyphicon glyphicon glyphicon-wrench"></i>
-        </li> -->
+            <i @click="testing" class="glyphicon glyphicon glyphicon-wrench"></i>
+          </li> -->
       <!-- <li>
-                <i @click="editItem" class="glyphicon glyphicon-pencil"></i>
-              </li> -->
+                  <i @click="editItem" class="glyphicon glyphicon-pencil"></i>
+                </li> -->
       <li>
         <i @click="deleteItem" :disabled="!hasSelectedItems" class="glyphicon glyphicon-trash" title="delete"></i>
       </li>
@@ -44,7 +44,9 @@
 <script>
 import undoRedoHistory from '../store/undo-redo-history';
 import EventBus from '../util/event-bus';
-import store from '@/store';
+import temporaryStore from '@/models/temporary-store';
+import * as types from '../store/mutation-types';
+import store from '../store';
 
 export default {
 
@@ -60,13 +62,14 @@ export default {
   data() {
     return {
       canUndo: false,
-      canRedo: false
+      canRedo: false,
+      selectedItems: temporaryStore.getItems()
     }
   },
 
   computed: {
     hasSelectedItems() {
-      if (store.getters.selectedItems && store.getters.selectedItems.length > 0) {
+      if (this.selectedItems.length > 0) {
         return true;
       } else {
         return false;
@@ -88,13 +91,15 @@ export default {
       EventBus.emit('startIaText', "new text")
     },
     addRectangleItem() {
-      EventBus.emit('startIaRectangle', "new text");
+      EventBus.emit('startIaRectangle');
     },
-    editItem() { },
     deleteItem() {
-      const selectedItems = store.getters.selectedItems;
-      if (selectedItems.length > 0) {
-        EventBus.emit('deleteItems', selectedItems);
+      if (this.selectedItems.length > 0) {
+        store.dispatch(types.DELETE_ITEMS, this.selectedItems)
+          .then(() => {
+            // clear selected items
+            temporaryStore.clear();
+          });
       }
     },
     previousPage() {

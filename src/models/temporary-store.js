@@ -1,51 +1,55 @@
 // import Vue from 'vue';
+import ResizeGripList from '@/util/resize-grip-list'
 
 class TemporaryStore {
-  init(data) {
-    this.data = data;
-    /*
-      items: []
-      selectionObject: null
-      resizeGripList: new ResizeGripList()
-    */
+  constructor() {
+    this.items = [];
+    this.gripList = new ResizeGripList();
   }
 
   getGrip(name) {
-    return this.data.resizeGripList.getGrip(name);
+    return this.gripList.getGrip(name);
+  }
+
+  getGripList() {
+    return this.gripList;
+  }
+
+  addItem(item) {
+    item.setGripList(this.gripList);
+    this.items.push(item);
+  }
+
+  getItems() {
+    return this.items;
   }
 
   initFromTwoPoints(p1, p2) {
-    this.data.resizeGripList.initFromTwoPoints(p1, p2);
+    this.gripList.initFromTwoPoints(p1, p2);
+  }
+
+  updateItemsFromGripList() {
     for (let item of this.items) {
-      item.resizeFromGripList(this.data.resizeGripList);
+      item.updateFromGripList(this.gripList);
     }
   }
 
   getOppositeGrip(grip) {
-    return this.data.resizeGripList.getOppositeGrip(grip);
-  }
-
-  addItem(item) {
-    item.setResizeGripList(this.data.resizeGripList);
-    this.data.items.push(item);
+    return this.gripList.getOppositeGrip(grip);
   }
 
   clear() {
-    this.data.selectionObject = null;
-    this.data.items.splice(0);
-    this.data.resizeGripList.clear();
+    this.items.splice(0);
+    this.gripList.clear();
   }
 
   removeItem(item) {
-    let index = this.data.items.indexOf(item);
+    let index = this.items.indexOf(item);
     if (index >= 0) {
-      this.data.items.splice(index, 1);
+      this.items.splice(index, 1);
     }
   }
 
-  getItems() {
-    return this.data.items;
-  }
 };
 
 let temporaryStore = new TemporaryStore();

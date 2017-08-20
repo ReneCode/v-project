@@ -19,40 +19,16 @@ class SvgRectangle extends SvgItem {
     this.y += dy;
   }
 
-  resize(grip) {
-    switch (grip.name) {
-      case "grip-br":
-        this.width = grip.x - this.x;
-        this.height = grip.y - this.y;
-        break;
-      case "grip-bl":
-        this.width -= grip.x - this.x;
-        this.x = grip.x
-        this.height = grip.y - this.y;
-        break;
-      case "grip-tl":
-        this.height -= grip.y - this.y;
-        this.width -= grip.x - this.x;
-        this.x = grip.x
-        this.y = grip.y
-        break;
-      case "grip-tr":
-        this.height -= grip.y - this.y;
-        this.width = grip.x - this.x;
-        this.y = grip.y
-        break;
-      default:
-        throw new Error("bad grip name");
-    }
-    if (this.width < 0) {
-      console.log("rect:", this, grip)
-      // this.x = grip.x;
-      // this.width = -this.width;
-    }
+  updateFromGripList(gripList) {
+    const bbox = gripList.getBoundingBox();
+    this.x = bbox.x;
+    this.y = bbox.y;
+    this.width = bbox.width;
+    this.height = bbox.height;
   }
 
-  setResizeGripList(resizeGripList) {
-    resizeGripList.initFromRectangle(this);
+  setGripList(gripList) {
+    gripList.initFromRectangle(this);
     /*
     return {
       resizeGripList: grips,

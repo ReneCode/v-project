@@ -10,7 +10,7 @@
           <svg-item v-for="item in fixedItems" :key="item.gid" :selected="false" :item="item"></svg-item>
         </g>
         <g class="graphic">
-          <svg-item v-for="item in temporaryItems" :key="item.gid" :selected="true" :item="item"></svg-item>
+          <svg-item v-for="item in tempItems" :key="item.gid" :selected="true" :item="item"></svg-item>
         </g>
         <g v-if="grips.length" class="selection">
           <rect v-for="grip in grips" class="resizer" :gid="grip.name" :x="grip.x - resizerSize/2" :y="grip.y - resizerSize/2" :width="resizerSize" :height="resizerSize"></rect>
@@ -29,7 +29,6 @@ import SvgLoader from '../directives/svg-loader'
 import SvgTransformer from '../util/svg-transformer'
 import SvgHighlight from '../util/svg-highlight'
 import SvgInteraction from '../util/svg-interaction'
-import ResizeGripList from '@/util/resize-grip-list'
 import SvgItem from './SvgItem';
 
 import temporaryStore from "@/models/temporary-store";
@@ -45,29 +44,24 @@ export default {
       svg: undefined,
       viewBox: undefined,
       transform: undefined,
-      temporaryData: {
-        items: [],
-        selectionObject: null,
-        resizeGripList: new ResizeGripList()
-      }
+      tempItems: temporaryStore.getItems(),
+      selectionObject: null,
+      gripList: temporaryStore.getGripList()
     }
   },
   computed: {
     resizerSize() {
-      return 10;
-    },
-    grips: function () {
-      return this.temporaryData.resizeGripList.getGripList();
+      return 8;
     },
 
-    temporaryItems: function () {
-      return this.temporaryData.items;
+    grips: function () {
+      return this.gripList.getGripList()
     },
 
     fixedItems: function () {
       return this.$store.getters.graphicItems.filter(gi => {
         // do not show items, that are in temporaryData
-        if (this.temporaryData.items.find(ti => gi.id === ti.id)) {
+        if (this.tempItems.find(ti => gi.id === ti.id)) {
           // item is in tempItems
           return false;
         }
@@ -80,8 +74,6 @@ export default {
     SvgItem
   },
   beforeMount() {
-    temporaryStore.init(this.temporaryData);
-
     // window.addEventListener('resize', this.handleResize)
     this.projectService = new ProjectService();
     this.svgService = new SvgService();
@@ -219,25 +211,15 @@ export default {
   stroke: #000;
   opacity: 0.7;
   cursor: pointer;
-  
 }
+
+
 
 /* .resizer {
   fill: #eee;
   stroke: #333;
   cursor: pointer;
 } */
-
-
-
-
-
-
-
-
-
-
-
 
 
 /*

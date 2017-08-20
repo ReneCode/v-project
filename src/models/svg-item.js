@@ -5,11 +5,11 @@ class SvgItem {
     throw new Error("implementation missing");
   }
 
-  resize(grip) {
+  updateFromGripList(gripList) {
     throw new Error("implementation missing");
   }
 
-  setResizeGripList(resizeGripList) {
+  setGripList(gripList) {
     throw new Error("implementation missing");
   }
 }

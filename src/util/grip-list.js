@@ -1,5 +1,5 @@
 
-class ResizeGrip {
+class Grip {
   constructor(name, x, y) {
     this.name = name;
     this.x = x;
@@ -7,7 +7,7 @@ class ResizeGrip {
   }
 }
 
-class ResizeGripList {
+class GripList {
   constructor() {
     this.gripList = [];
   }
@@ -66,20 +66,6 @@ class ResizeGripList {
       Math.max(p1.y, p2.y));
   }
 
-  updateGrip(newGrip) {
-    let minX = newGrip.x;
-    let maxX = newGrip.x;
-    let minY = newGrip.y;
-    let maxY = newGrip.y;
-    let oppisiteGrip = this.getGrip(this.getOppositeGripName(newGrip.name));
-    minX = Math.min(minX, oppisiteGrip.x);
-    maxX = Math.max(maxX, oppisiteGrip.x);
-    minY = Math.min(minY, oppisiteGrip.y);
-    maxY = Math.max(maxY, oppisiteGrip.y);
-    this.clear();
-    this.addGrips(minX, minY, maxX, maxY);
-  }
-
   getOppositeGrip(grip) {
     return this.getGrip(this.getOppositeGripName(grip.name));
   }
@@ -102,13 +88,13 @@ class ResizeGripList {
 
   addGrips(minX, minY, maxX, maxY) {
     this.clear();
-    this.gripList.push(new ResizeGrip("grip-tl", minX, minY));
-    this.gripList.push(new ResizeGrip("grip-tr", maxX, minY));
-    this.gripList.push(new ResizeGrip("grip-bl", minX, maxY));
-    this.gripList.push(new ResizeGrip("grip-br", maxX, maxY));
+    this.gripList.push(new Grip("grip-tl", minX, minY));
+    this.gripList.push(new Grip("grip-tr", maxX, minY));
+    this.gripList.push(new Grip("grip-bl", minX, maxY));
+    this.gripList.push(new Grip("grip-br", maxX, maxY));
   }
 
 }
 
-export { ResizeGrip };
-export default ResizeGripList;
+export { Grip };
+export default GripList;

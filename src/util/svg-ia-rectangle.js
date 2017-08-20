@@ -2,7 +2,7 @@ import * as types from '@/store/mutation-types';
 
 import store from '@/store';
 
-import temporaryStore from "@/models/temporary-store";
+import selectionStore from "@/util/selection-store";
 import SvgRectangle from "@/models/svg-rectangle";
 
 class SvgInteractionRectangle {
@@ -17,7 +17,7 @@ class SvgInteractionRectangle {
     let pt = this.svgTransformer.getSVGPoint(event);
     this.startPoint = pt;
     this.rectangle = new SvgRectangle(pt.x, pt.y, 0, 0);
-    temporaryStore.addItem(this.rectangle);
+    selectionStore.addItem(this.rectangle);
 
     return "stop"
   }
@@ -25,7 +25,7 @@ class SvgInteractionRectangle {
   onMouseUp(event) {
     this.setPoint2(event);
 
-    temporaryStore.removeItem(this.rectangle);
+    selectionStore.removeItem(this.rectangle);
 
     store.dispatch(types.ADD_GRAPHIC_ITEM, this.rectangle)
       .then(data => {

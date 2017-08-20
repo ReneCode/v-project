@@ -1,14 +1,10 @@
 // import Vue from 'vue';
-import ResizeGripList from '@/util/resize-grip-list'
+import GripList from '@/util/grip-list'
 
-class TemporaryStore {
+class SelectionStore {
   constructor() {
     this.items = [];
-    this.gripList = new ResizeGripList();
-  }
-
-  getGrip(name) {
-    return this.gripList.getGrip(name);
+    this.gripList = new GripList();
   }
 
   getGripList() {
@@ -24,18 +20,10 @@ class TemporaryStore {
     return this.items;
   }
 
-  initFromTwoPoints(p1, p2) {
-    this.gripList.initFromTwoPoints(p1, p2);
-  }
-
   updateItemsFromGripList() {
     for (let item of this.items) {
       item.updateFromGripList(this.gripList);
     }
-  }
-
-  getOppositeGrip(grip) {
-    return this.gripList.getOppositeGrip(grip);
   }
 
   clear() {
@@ -52,5 +40,5 @@ class TemporaryStore {
 
 };
 
-let temporaryStore = new TemporaryStore();
-export default temporaryStore;
+let selectionStore = new SelectionStore();
+export default selectionStore;

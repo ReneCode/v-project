@@ -10,9 +10,6 @@ import SvgInteractionRectangle from './svg-ia-rectangle';
 import SvgInteractionText from './svg-ia-text';
 import SvgInteractionResize from "./svg-ia-resize";
 
-import temporaryStore from "@/models/temporary-store";
-import SvgRectangle from "@/models/svg-rectangle";
-
 import EventBus from './event-bus';
 
 class SvgInteraction {
@@ -146,11 +143,6 @@ class SvgInteraction {
   startIaText(payload) {
     this.startInteraction(new SvgInteractionText(this.svgTransformer, payload))
       .then(ia => { });
-  }
-
-  testing(payload) {
-    let item = new SvgRectangle(30, 40, 100, 60);
-    temporaryStore.addItem(item);
   }
 
 }

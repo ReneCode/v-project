@@ -44,7 +44,7 @@
 <script>
 import undoRedoHistory from '../store/undo-redo-history';
 import EventBus from '../util/event-bus';
-import temporaryStore from '@/models/temporary-store';
+import selectionStore from "@/util/selection-store";
 import * as types from '../store/mutation-types';
 import store from '../store';
 
@@ -63,7 +63,7 @@ export default {
     return {
       canUndo: false,
       canRedo: false,
-      selectedItems: temporaryStore.getItems()
+      selectedItems: selectionStore.getItems()
     }
   },
 
@@ -98,7 +98,7 @@ export default {
         store.dispatch(types.DELETE_ITEMS, this.selectedItems)
           .then(() => {
             // clear selected items
-            temporaryStore.clear();
+            selectionStore.clear();
           });
       }
     },

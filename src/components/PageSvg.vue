@@ -31,7 +31,7 @@ import SvgHighlight from '../util/svg-highlight'
 import SvgInteraction from '../util/svg-interaction'
 import SvgItem from './SvgItem';
 
-import temporaryStore from "@/models/temporary-store";
+import selectionStore from "@/util/selection-store";
 
 export default {
   name: 'page-svg',
@@ -44,9 +44,9 @@ export default {
       svg: undefined,
       viewBox: undefined,
       transform: undefined,
-      tempItems: temporaryStore.getItems(),
+      tempItems: selectionStore.getItems(),
       selectionObject: null,
-      gripList: temporaryStore.getGripList()
+      gripList: selectionStore.getGripList()
     }
   },
   computed: {

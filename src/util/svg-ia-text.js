@@ -2,7 +2,7 @@ import * as types from '@/store/mutation-types';
 
 import store from '@/store';
 
-import temporaryStore from "@/models/temporary-store";
+import selectionStore from "@/util/selection-store";
 import SvgText from "@/models/svg-text";
 
 class SvgInteractionText {
@@ -10,13 +10,13 @@ class SvgInteractionText {
   constructor(svgTransformer, text) {
     this.svgTransformer = svgTransformer
     this.text = new SvgText(0, 0, text);
-    temporaryStore.addItem(this.text);
+    selectionStore.addItem(this.text);
   }
 
   onMouseDown(event) {
     this.setPosition(event);
 
-    temporaryStore.removeItem(this.text);
+    selectionStore.clear();
 
     store.dispatch(types.ADD_GRAPHIC_ITEM, this.text)
       .then(data => {

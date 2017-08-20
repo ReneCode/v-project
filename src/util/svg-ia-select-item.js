@@ -2,8 +2,7 @@
 // import * as types from '@/store/mutation-types';
 import store from '@/store';
 
-import temporaryStore from "@/models/temporary-store";
-// import ItemHelper from "@/util/item-helper";
+import selectionStore from "@/util/selection-store";
 import pickedElementId from './picked-element-id';
 
 // import * as msgs from './ia-message';
@@ -24,11 +23,11 @@ class SvgInteractionSelectItem {
   onMouseUp(event) {
     if (this.getMouseDelta(event) <= DELTA_LIMIT) {
       const elementId = pickedElementId(event);
-      temporaryStore.clear();
+      selectionStore.clear();
       if (elementId) {
         const item = store.getters.graphicItems.find(i => i.id === elementId);
         if (item) {
-          temporaryStore.addItem(item);
+          selectionStore.addItem(item);
           return "stop"
         }
       }

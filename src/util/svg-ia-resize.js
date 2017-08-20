@@ -2,7 +2,7 @@ import * as types from '@/store/mutation-types';
 
 import store from '@/store';
 
-import temporaryStore from "@/models/temporary-store";
+import selectionStore from "@/util/selection-store";
 import pickedElementId from './picked-element-id';
 
 class SvgInteractionResize {
@@ -10,7 +10,8 @@ class SvgInteractionResize {
   constructor(svgTransformer) {
     this.svgTransformer = svgTransformer;
     this.grip = null;
-    this.pickDelta = { x: 0, y: 0 }
+    this.pickDelta = { x: 0, y: 0 };
+    this.gripList = selectionStore.getGripList();
   }
 
   onMouseDown(event) {
@@ -18,7 +19,7 @@ class SvgInteractionResize {
     if (elementId) {
       if (this.isResizeElement(elementId)) {
         let startPoint = this.svgTransformer.getSVGPoint(event);
-        this.grip = temporaryStore.getGrip(elementId);
+        this.grip = this.gripList.getGrip(elementId);
         if (!this.grip) {
           throw new Error("grip not found", elementId);
         }
@@ -26,7 +27,7 @@ class SvgInteractionResize {
           x: this.grip.x - startPoint.x,
           y: this.grip.y - startPoint.y
         }
-        this.oppositeGrip = temporaryStore.getOppositeGrip(this.grip);
+        this.oppositeGrip = this.gripList.getOppositeGrip(this.grip);
         return "stop"
       }
     }
@@ -39,7 +40,7 @@ class SvgInteractionResize {
   onMouseUp(event) {
     this.updateGrip(event);
 
-    let items = temporaryStore.getItems();
+    let items = selectionStore.getItems();
     store.dispatch(types.UPDATE_GRAPHIC, items)
     .then(() => {
       this.grip = null;
@@ -54,8 +55,8 @@ class SvgInteractionResize {
     this.grip.x = currentPoint.x + this.pickDelta.x;
     this.grip.y = currentPoint.y + this.pickDelta.y;
 
-    temporaryStore.initFromTwoPoints(this.grip, this.oppositeGrip);
-    temporaryStore.updateItemsFromGripList();
+    this.gripList.initFromTwoPoints(this.oppositeGrip, this.grip);
+    selectionStore.updateItemsFromGripList();
   }
 
   getTranslation(event) {

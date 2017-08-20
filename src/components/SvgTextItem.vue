@@ -54,8 +54,6 @@ export default {
   },
 
   methods: {
-    // if bbox() is below computed: than
-    // there a some caching-problems. (wrong bbox on other page)
     getBoundingBox() {
       if (this.$refs.textitem) {
         const bbox = this.$refs.textitem.getBBox();

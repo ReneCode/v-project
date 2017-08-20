@@ -9,8 +9,8 @@ class SvgInteractionText {
 
   constructor(svgTransformer, text) {
     this.svgTransformer = svgTransformer
-    this.text = new SvgText(0, 0, text);
-    selectionStore.addItem(this.text);
+    this.textItem = new SvgText(0, 0, text);
+    selectionStore.addItem(this.textItem);
   }
 
   onMouseDown(event) {
@@ -18,13 +18,13 @@ class SvgInteractionText {
 
     selectionStore.clear();
 
-    store.dispatch(types.ADD_GRAPHIC_ITEM, this.text)
+    store.dispatch(types.ADD_GRAPHIC_ITEM, this.textItem)
       .then(data => {
       }, err => {
         console.log("error:", err);
       });
 
-    this.text = null;
+    this.textItem = null;
     return "finish"
   }
 
@@ -36,10 +36,10 @@ class SvgInteractionText {
   // -------------
 
   setPosition(event) {
-    if (this.text) {
+    if (this.textItem) {
       const p = this.svgTransformer.getSVGPoint(event);
-      this.text.x = p.x;
-      this.text.y = p.y;
+      this.textItem.x = p.x;
+      this.textItem.y = p.y;
     }
   }
 }

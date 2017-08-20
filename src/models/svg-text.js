@@ -16,6 +16,9 @@ class SvgText extends SvgItem {
     this.x += dx;
     this.y += dy;
   }
+
+  setGrips(gripList) {
+  }
 }
 
 export default SvgText;

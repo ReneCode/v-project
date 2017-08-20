@@ -7,17 +7,23 @@
         <g v-if="svg" v-svg-loader="{svg:svg, callback:svgLoaderCallback}">
         </g>
         <g class="graphic">
-          <svg-item v-for="item in fixedItems" :key="item.gid" :selected="false" :item="item"></svg-item>
+          <svg-item v-for="ai in allItems" :key="ai.item.gid" :selected="ai.selected" :item="ai.item"></svg-item>
         </g>
-        <g class="graphic">
-          <svg-item v-for="item in tempItems" :key="item.gid" :selected="true" :item="item"></svg-item>
+        <g class="temorary-graphic">
+          <svg-item v-for="item in temporaryItems" :key="item.gid" :selected="true" :item="item"></svg-item>
         </g>
-        <g v-if="grips.length" class="selection">
+        <g v-if="grips.length" class="grips">
           <rect v-for="grip in grips" class="resizer" :gid="grip.name" :x="grip.x - resizerSize/2" :y="grip.y - resizerSize/2" :width="resizerSize" :height="resizerSize"></rect>
         </g>
+  
+        <!-- <svg-item :selected="false" :item="tempItems[0]"></svg-item> -->
+  
       </g>
     </svg>
     Grips: {{ grips }}
+    <code>
+      Selected: {{ selectedItems }}
+    </code>
   </div>
 </template>
 
@@ -44,8 +50,7 @@ export default {
       svg: undefined,
       viewBox: undefined,
       transform: undefined,
-      tempItems: selectionStore.getItems(),
-      selectionObject: null,
+      selectedItems: selectionStore.getItems(),
       gripList: selectionStore.getGripList()
     }
   },
@@ -55,17 +60,32 @@ export default {
     },
 
     grips: function () {
-      return this.gripList.getGripList()
+      return this.gripList.getGrips()
     },
 
-    fixedItems: function () {
-      return this.$store.getters.graphicItems.filter(gi => {
-        // do not show items, that are in temporaryData
-        if (this.tempItems.find(ti => gi.id === ti.id)) {
-          // item is in tempItems
+    temporaryItems: function () {
+      let graphicItems = this.$store.getters.graphicItems;
+      return this.selectedItems.filter(selItem => {
+        if (graphicItems.find(gi => gi.id === selItem.id)) {
           return false;
         }
         return true;
+      })
+    },
+
+    allItems: function () {
+      return this.$store.getters.graphicItems.map(gi => {
+        let newItem = {
+          item: gi
+        }
+        // do not show items, that are in temporaryData
+        if (this.selectedItems.find(ti => gi.id === ti.id)) {
+          // item is in tempItems
+          newItem.selected = true;
+        } else {
+          newItem.selected = false;
+        }
+        return newItem;
       })
     }
   },
@@ -98,14 +118,6 @@ export default {
   },
 
   methods: {
-    // grips() {
-    //   let selectionObject = temporaryStore.selectionObject;
-    //   console.log("selObj:", selectionObject)
-    //   if (selectionObject) {
-    //     return selectionObject.grips;
-    //   }
-    //   return null;
-    // },
 
     updateTransform(transform) {
       this.transform = transform;
@@ -206,12 +218,15 @@ export default {
   animation: blinkAnimation 1s infinite;
 }
 
-.selection {
+.grips {
   fill: #66c;
   stroke: #000;
   opacity: 0.7;
   cursor: pointer;
 }
+
+
+
 
 
 

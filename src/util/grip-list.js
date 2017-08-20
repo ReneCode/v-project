@@ -9,13 +9,13 @@ class Grip {
 
 class GripList {
   constructor() {
-    this.gripList = [];
+    this.grips = [];
   }
 
   getBoundingBox() {
     let minX, maxX, minY, maxY;
     let first = true;
-    for (let grip of this.gripList) {
+    for (let grip of this.grips) {
       if (first) {
         first = false;
         minX = grip.x;
@@ -37,12 +37,12 @@ class GripList {
     }
   }
 
-  getGripList() {
-    return this.gripList;
+  getGrips() {
+    return this.grips;
   }
 
   getGrip(name) {
-    for (let grip of this.gripList) {
+    for (let grip of this.grips) {
       if (grip.name === name) {
         return grip;
       }
@@ -51,7 +51,11 @@ class GripList {
   }
 
   clear() {
-    this.gripList.splice(0);
+    this.grips.splice(0);
+  }
+
+  initFromItem(item) {
+    item.setGrips(this);
   }
 
   initFromRectangle(rect) {
@@ -88,10 +92,10 @@ class GripList {
 
   addGrips(minX, minY, maxX, maxY) {
     this.clear();
-    this.gripList.push(new Grip("grip-tl", minX, minY));
-    this.gripList.push(new Grip("grip-tr", maxX, minY));
-    this.gripList.push(new Grip("grip-bl", minX, maxY));
-    this.gripList.push(new Grip("grip-br", maxX, maxY));
+    this.grips.push(new Grip("grip-tl", minX, minY));
+    this.grips.push(new Grip("grip-tr", maxX, minY));
+    this.grips.push(new Grip("grip-bl", minX, maxY));
+    this.grips.push(new Grip("grip-br", maxX, maxY));
   }
 
 }

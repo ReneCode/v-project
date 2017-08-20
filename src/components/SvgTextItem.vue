@@ -1,7 +1,7 @@
 
 <template>
   <g>
-    <rect v-if="selected" class="selection" :x="bbox().x" :y="bbox().y" :width="bbox().width" :height="bbox().height" :transform="transformMatrix"></rect>
+    <rect v-if="selected" class="selection" :x="bbox.x" :y="bbox.y" :width="bbox.width" :height="bbox.height" :transform="transformMatrix"></rect>
   
     <text ref="textitem" v-if="lines.length===1" :gid="item.id" :transform="transformMatrix" :font-size="item.fontSize" :fill="item.fill">{{item.text}}</text>
     <text ref="textitem" v-else :gid="item.id" :transform="transformMatrix" :font-size="item.fontSize" :fill="item.fill">
@@ -17,8 +17,23 @@ export default {
   name: 'svg-text-item',
   props: ['item', 'selected'],
 
+  data() {
+    return {
+      bbox: {}
+    }
+  },
+
+  watch: {
+    selected: function (val) {
+      if (this.selected) {
+        this.bbox = this.getBoundingBox();
+      }
+    }
+  },
+
   computed: {
     transformMatrix() {
+      // console.log("render text:", this.selected, this.item)
       let x = this.item.x;
       let y = this.item.y;
       let translation = ItemHelper.getTranslation(this.item);
@@ -41,7 +56,7 @@ export default {
   methods: {
     // if bbox() is below computed: than
     // there a some caching-problems. (wrong bbox on other page)
-    bbox() {
+    getBoundingBox() {
       if (this.$refs.textitem) {
         const bbox = this.$refs.textitem.getBBox();
         const margin = 2;

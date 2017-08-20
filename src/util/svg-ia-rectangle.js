@@ -11,6 +11,7 @@ class SvgInteractionRectangle {
     this.svgTransformer = svgTransformer
     this.draw = false;
     this.startPoint = null;
+    this.gripList = selectionStore.getGripList();
   }
 
   onMouseDown(event) {
@@ -25,7 +26,7 @@ class SvgInteractionRectangle {
   onMouseUp(event) {
     this.setPoint2(event);
 
-    selectionStore.removeItem(this.rectangle);
+    selectionStore.clear();
 
     store.dispatch(types.ADD_GRAPHIC_ITEM, this.rectangle)
       .then(data => {

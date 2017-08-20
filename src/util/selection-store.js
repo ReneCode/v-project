@@ -12,7 +12,6 @@ class SelectionStore {
   }
 
   addItem(item) {
-    item.setGripList(this.gripList);
     this.items.push(item);
   }
 

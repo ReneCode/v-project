@@ -9,7 +9,7 @@ class SvgItem {
     throw new Error("implementation missing");
   }
 
-  setGripList(gripList) {
+  setGrips(gripList) {
     throw new Error("implementation missing");
   }
 }

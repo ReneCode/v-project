@@ -27,23 +27,8 @@ class SvgRectangle extends SvgItem {
     this.height = bbox.height;
   }
 
-  setGripList(gripList) {
+  setGrips(gripList) {
     gripList.initFromRectangle(this);
-    /*
-    return {
-      resizeGripList: grips,
-      // grips: [
-      //   { name: "grip-tl", x: this.x, y: this.y },
-      //   { name: "grip-tr", x: this.x + this.width, y: this.y },
-      //   { name: "grip-bl", x: this.x, y: this.y + this.height },
-      //   { name: "grip-br", x: this.x + this.width, y: this.y + this.height }
-      // ],
-      x: this.x,
-      y: this.y,
-      width: this.width,
-      height: this.height
-    }
-    */
   }
 
 }

@@ -28,6 +28,7 @@ class SvgInteractionSelectItem {
         const item = store.getters.graphicItems.find(i => i.id === elementId);
         if (item) {
           selectionStore.addItem(item);
+          selectionStore.getGripList().initFromItem(item);
           return "stop"
         }
       }
